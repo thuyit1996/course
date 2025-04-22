@@ -26,7 +26,18 @@ module.exports = {
         "theme-xl": ["20px", "30px"],
         "theme-sm": ["14px", "20px"],
         "theme-xs": ["12px", "18px"],
-        "xs": ["0.75rem", {lineHeight : '18px'}]
+        "xs": ["0.75rem", {lineHeight : '18px', letterSpacing: ''}],
+        "sm": ["0.875rem", {lineHeight : '20px', letterSpacing: ''}],
+        "base": ["1rem", {lineHeight : '24px', letterSpacing: ''}],
+        "lg": ["1.125rem", {lineHeight : '28px', letterSpacing: ''}],
+        "xl": ["1.25rem", {lineHeight : '30px', letterSpacing: ''}],
+        "2xl": ["1.5rem", {lineHeight : '32px', letterSpacing: ''}],
+        "3xl": ["1.875rem", {lineHeight : '38px', letterSpacing: ''}],
+        "4xl": ["2.25rem", {lineHeight : '44px', letterSpacing: ''}],
+        "5xl": ["3rem", {lineHeight : '60px', letterSpacing: '-2%'}],
+        "6xl": ["3.75rem", {lineHeight : '72px', letterSpacing: '-2%'}],
+        "7xl": ["4.5rem", {lineHeight : '90px', letterSpacing: '-2%'}],
+
       },
       colors: {
         current: "currentColor",
