@@ -13,8 +13,13 @@ module.exports = {
     screens: {
       "2xsm": "375px",
       xsm: "425px",
-      "3xl": "2000px",
+      // "3xl": "2000px",
       ...defaultTheme.screens,
+      sm: '375px',
+      md: '768px',
+      lg: '1024px',
+      '2xl': '1280px',
+      '3xl': '1440px',
     },
     extend: {
       fontSize: {
@@ -26,17 +31,17 @@ module.exports = {
         "theme-xl": ["20px", "30px"],
         "theme-sm": ["14px", "20px"],
         "theme-xs": ["12px", "18px"],
-        "xs": ["0.75rem", {lineHeight : '18px', letterSpacing: ''}],
-        "sm": ["0.875rem", {lineHeight : '20px', letterSpacing: ''}],
-        "base": ["1rem", {lineHeight : '24px', letterSpacing: ''}],
-        "lg": ["1.125rem", {lineHeight : '28px', letterSpacing: ''}],
-        "xl": ["1.25rem", {lineHeight : '30px', letterSpacing: ''}],
-        "2xl": ["1.5rem", {lineHeight : '32px', letterSpacing: ''}],
-        "3xl": ["1.875rem", {lineHeight : '38px', letterSpacing: ''}],
-        "4xl": ["2.25rem", {lineHeight : '44px', letterSpacing: ''}],
-        "5xl": ["3rem", {lineHeight : '60px', letterSpacing: '-2%'}],
-        "6xl": ["3.75rem", {lineHeight : '72px', letterSpacing: '-2%'}],
-        "7xl": ["4.5rem", {lineHeight : '90px', letterSpacing: '-2%'}],
+        "xs": ["0.75rem", { lineHeight: '18px', letterSpacing: '' }],
+        "sm": ["0.875rem", { lineHeight: '20px', letterSpacing: '' }],
+        "base": ["1rem", { lineHeight: '24px', letterSpacing: '' }],
+        "lg": ["1.125rem", { lineHeight: '28px', letterSpacing: '' }],
+        "xl": ["1.25rem", { lineHeight: '30px', letterSpacing: '' }],
+        "2xl": ["1.5rem", { lineHeight: '32px', letterSpacing: '' }],
+        "3xl": ["1.875rem", { lineHeight: '38px', letterSpacing: '' }],
+        "4xl": ["2.25rem", { lineHeight: '44px', letterSpacing: '' }],
+        "5xl": ["3rem", { lineHeight: '60px', letterSpacing: '-2%' }],
+        "6xl": ["3.75rem", { lineHeight: '72px', letterSpacing: '-2%' }],
+        "7xl": ["4.5rem", { lineHeight: '90px', letterSpacing: '-2%' }],
 
       },
       colors: {
@@ -58,91 +63,6 @@ module.exports = {
           900: "#262E89",
           950: "#161950",
         },
-        // "blue-light": {
-        //   25: "#F5FBFF",
-        //   50: "#F0F9FF",
-        //   100: "#E0F2FE",
-        //   200: "#B9E6FE",
-        //   300: "#7CD4FD",
-        //   400: "#36BFFA",
-        //   500: "#0BA5EC",
-        //   600: "#0086C9",
-        //   700: "#026AA2",
-        //   800: "#065986",
-        //   900: "#0B4A6F",
-        //   950: "#062C41",
-        // },
-        // gray: {
-        //   dark: "#1A2231",
-        //   25: "#FCFCFD",
-        //   50: "#F9FAFB",
-        //   100: "#F2F4F7",
-        //   200: "#E4E7EC",
-        //   300: "#D0D5DD",
-        //   400: "#98A2B3",
-        //   500: "#667085",
-        //   600: "#475467",
-        //   700: "#344054",
-        //   800: "#1D2939",
-        //   900: "#101828",
-        //   950: "#0C111D",
-        // },
-        // orange: {
-        //   25: "#FFFAF5",
-        //   50: "#FFF6ED",
-        //   100: "#FFEAD5",
-        //   200: "#FDDCAB",
-        //   300: "#FEB273",
-        //   400: "#FD853A",
-        //   500: "#FB6514",
-        //   600: "#EC4A0A",
-        //   700: "#C4320A",
-        //   800: "#9C2A10",
-        //   900: "#7E2410",
-        //   950: "#511C10",
-        // },
-        // success: {
-        //   25: "#F6FEF9",
-        //   50: "#ECFDF3",
-        //   100: "#D1FADF",
-        //   200: "#A6F4C5",
-        //   300: "#6CE9A6",
-        //   400: "#32D583",
-        //   500: "#12B76A",
-        //   600: "#039855",
-        //   700: "#027A48",
-        //   800: "#05603A",
-        //   900: "#054F31",
-        //   950: "#053321",
-        // },
-        // error: {
-        //   25: "#FFFBFA",
-        //   50: "#FEF3F2",
-        //   100: "#FEE4E2",
-        //   200: "#FECDCA",
-        //   300: "#FDA29B",
-        //   400: "#F97066",
-        //   500: "#F04438",
-        //   600: "#D92D20",
-        //   700: "#B42318",
-        //   800: "#912018",
-        //   900: "#7A271A",
-        //   950: "#55160C",
-        // },
-        // warning: {
-        //   25: "#FFFCF5",
-        //   50: "#FFFAEB",
-        //   100: "#FEF0C7",
-        //   200: "#FEDF89",
-        //   300: "#FEC84B",
-        //   400: "#FDB022",
-        //   500: "#F79009",
-        //   600: "#DC6803",
-        //   700: "#B54708",
-        //   800: "#93370D",
-        //   900: "#7A2E0E",
-        //   950: "#4E1D09",
-        // },
         "theme-pink": {
           500: "#EE46BC",
         },
@@ -162,8 +82,8 @@ module.exports = {
           800: "var(--gray-800)",
           900: "var(--gray-900)",
           950: "var(--gray-950)"
-      },
-      error: {
+        },
+        error: {
           25: "var(--error-25)",
           50: "var(--error-50)",
           100: "var(--error-100)",
@@ -176,8 +96,8 @@ module.exports = {
           800: "var(--error-800)",
           900: "var(--error-900)",
           950: "var(--error-950)"
-      },
-      warning: {
+        },
+        warning: {
           25: "var(--warning-25)",
           50: "var(--warning-50)",
           100: "var(--warning-100)",
@@ -190,8 +110,8 @@ module.exports = {
           800: "var(--warning-800)",
           900: "var(--warning-900)",
           950: "var(--warning-950)"
-      },
-      success: {
+        },
+        success: {
           25: "var(--success-25)",
           50: "var(--success-50)",
           100: "var(--success-100)",
@@ -204,8 +124,8 @@ module.exports = {
           800: "var(--success-800)",
           900: "var(--success-900)",
           950: "var(--success-950)"
-      },
-      "blue-gray": {
+        },
+        "blue-gray": {
           25: "var(--blue-gray-25)",
           50: "var(--blue-gray-50)",
           100: "var(--blue-gray-100)",
@@ -218,8 +138,8 @@ module.exports = {
           800: "var(--blue-gray-800)",
           900: "var(--blue-gray-900)",
           950: "var(--blue-gray-950)"
-      },
-      "blue-light": {
+        },
+        "blue-light": {
           25: "var(--blue-light-25)",
           50: "var(--blue-light-50)",
           100: "var(--blue-light-100)",
@@ -232,8 +152,8 @@ module.exports = {
           800: "var(--blue-light-800)",
           900: "var(--blue-light-900)",
           950: "var(--blue-light-950)"
-      },
-      blue: {
+        },
+        blue: {
           25: "var(--blue-25)",
           50: "var(--blue-50)",
           100: "var(--blue-100)",
@@ -246,8 +166,8 @@ module.exports = {
           800: "var(--blue-800)",
           900: "var(--blue-900)",
           950: "var(--blue-950)"
-      },
-      indigo: {
+        },
+        indigo: {
           25: "var(--indigo-25)",
           50: "var(--indigo-50)",
           100: "var(--indigo-100)",
@@ -260,8 +180,8 @@ module.exports = {
           800: "var(--indigo-800)",
           900: "var(--indigo-900)",
           950: "var(--indigo-950)"
-      },
-      purple: {
+        },
+        purple: {
           25: "var(--purple-25)",
           50: "var(--purple-50)",
           100: "var(--purple-100)",
@@ -274,8 +194,8 @@ module.exports = {
           800: "var(--purple-800)",
           900: "var(--purple-900)",
           950: "var(--purple-950)"
-      },
-      violet: {
+        },
+        violet: {
           25: "var(--violet-25)",
           50: "var(--violet-50)",
           100: "var(--violet-100)",
@@ -288,8 +208,8 @@ module.exports = {
           800: "var(--violet-800)",
           900: "var(--violet-900)",
           950: "var(--violet-950)"
-      },
-      pink: {
+        },
+        pink: {
           25: "var(--pink-25)",
           50: "var(--pink-50)",
           100: "var(--pink-100)",
@@ -302,8 +222,8 @@ module.exports = {
           800: "var(--pink-800)",
           900: "var(--pink-900)",
           950: "var(--pink-950)"
-      },
-      rose: {
+        },
+        rose: {
           25: "var(--rose-25)",
           50: "var(--rose-50)",
           100: "var(--rose-100)",
@@ -316,8 +236,8 @@ module.exports = {
           800: "var(--rose-800)",
           900: "var(--rose-900)",
           950: "var(--rose-950)"
-      },
-      orange: {
+        },
+        orange: {
           25: "var(--orange-25)",
           50: "var(--orange-50)",
           100: "var(--orange-100)",
@@ -330,7 +250,7 @@ module.exports = {
           800: "var(--orange-800)",
           900: "var(--orange-900)",
           950: "var(--orange-950)"
-      }
+        }
       },
       boxShadow: {
         "theme-md":
