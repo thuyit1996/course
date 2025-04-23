@@ -220,6 +220,18 @@
   }
 }
 
+.header-section {
+  transition: all 0.5s ease;
+}
+
+.header-section .nav {
+  transition: all 0.5s ease;
+}
+
+.header-section.header-sticky {
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -571,4 +583,12 @@ textarea:focus {
 
 .sidenav-menu:hover svg {
   fill: var(--rose-600);
+}
+
+.header-icon.active {
+  background-color: var(--indigo-100);
+  color: var(--indigo-600);
+}
+.header-icon.active svg{
+  fill: var(--indigo-600);
 }

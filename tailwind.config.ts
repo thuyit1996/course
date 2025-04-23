@@ -20,6 +20,7 @@ module.exports = {
       lg: '1024px',
       '2xl': '1280px',
       '3xl': '1440px',
+      '4xl': '1560px'
     },
     extend: {
       fontSize: {
