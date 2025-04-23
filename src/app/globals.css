@@ -560,3 +560,7 @@
 .header-icon:hover svg {
   fill: var(--indigo-600);
 }
+
+textarea:focus {
+  outline: none !important;
+}

@@ -64,16 +64,18 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
                         </div>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow mt-4">
-                        <div className="text-base font-semibold text-indigo-600 mb-4">ANSWER</div>
+                        <div className='flex justify-between mb-4'>
+                            <span className='text-base font-semibold text-indigo-600 mb-4'>ANSWER</span>
+                            <span className="text-blue-gray-400 text-sm">Word Count: 4</span>
+                        </div>
                         <textarea
-                            className="w-full h-40 border border-gray-300 rounded p-4 focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none"
+                            className="w-full h-[320px]  bg-gray-50 rounded-lg border-0 overflow-auto focus:outline-none text-lg text-[#262626] placeholder-gray-400 resize-none"
                             placeholder="Your ideas matter, share them here.. (Once you start typing, the timer will begin automatically)"
                         />
-                        <div className="text-sm text-right text-gray-500 mt-2">Word Count: {100}</div>
                     </div>
                 </div>
                 <div className='rounded-lg col-span-3'>
-                    <div className='p-10 relative overflow-hidden ' style={{
+                    <div className='p-10 relative overflow-hidden' style={{
                         borderTopLeftRadius: 8,
                         borderTopRightRadius: 8,
                     }}>
