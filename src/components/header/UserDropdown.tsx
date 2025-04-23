@@ -24,8 +24,8 @@ export default function UserDropdown() {
       >
         <span className="mr-2 overflow-hidden rounded-full h-11 w-11">
           <Image
-            width={44}
-            height={44}
+            width={40}
+            height={40}
             src="/images/user/owner.jpg"
             alt="User"
           />

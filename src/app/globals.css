@@ -564,3 +564,11 @@
 textarea:focus {
   outline: none !important;
 }
+
+.sidenav-menu svg{
+  fill: #2c2c2c;
+}
+
+.sidenav-menu:hover svg {
+  fill: var(--rose-600);
+}
