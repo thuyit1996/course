@@ -8,10 +8,10 @@ import { DropdownItem } from "../ui/dropdown/DropdownItem";
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
 
-function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-  e.stopPropagation();
-  setIsOpen((prev) => !prev);
-}
+  function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.stopPropagation();
+    setIsOpen((prev) => !prev);
+  }
 
   function closeDropdown() {
     setIsOpen(false);
@@ -20,9 +20,9 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     <div className="relative">
       <button
         onClick={toggleDropdown} className="dropdown-toggle"
-        className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle"
+        className="flex items-center text-gray-700 dropdown-toggle"
       >
-        <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
+        <span className="mr-2 overflow-hidden rounded-full h-11 w-11">
           <Image
             width={44}
             height={44}
@@ -30,13 +30,15 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
             alt="User"
           />
         </span>
+        <div className="flex flex-col mr-4 text-left">
+          <span className="block mr-1 font-bold text-sm text-[#2c2c2c]">Xuan Tung</span>
+          <span className="block mr-1 font-medium text-sm text-[#757575]">Grade 12</span>
 
-        <span className="block mr-1 font-medium text-theme-sm">Musharof</span>
+        </div>
 
         <svg
-          className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+            }`}
           width="18"
           height="20"
           viewBox="0 0 18 20"
