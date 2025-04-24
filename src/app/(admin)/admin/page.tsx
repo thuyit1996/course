@@ -2,6 +2,10 @@
 import Header from '@/components/admin-header';
 import MobileMenu from '@/components/mobile-menu';
 import Sidebar from '@/components/sidebar';
+import Teachers from '@/components/teachers';
+import Button from '@/components/ui/button/Button';
+import PlusIcon from '@/public/images/icons/plus.svg';
+
 // src/pages/Dashboard.tsx
 import React, { useState } from 'react';
 
@@ -26,40 +30,18 @@ const Dashboard: React.FC = () => {
             <Sidebar />
             <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
             <Header onMenuClick={() => setIsMenuOpen(true)} />
-            <main className="md:ml-64 p-6 mt-4">
-                <h2 className="text-2xl font-semibold mb-4">Grade 12 - Attendance</h2>
-                <div className="bg-white shadow rounded-lg overflow-hidden">
-                    <table className="w-full text-left text-sm border-collapse">
-                        <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
-                            <tr>
-                                <th className="px-6 py-3">#</th>
-                                <th className="px-6 py-3">Name</th>
-                                <th className="px-6 py-3">Gender</th>
-                                <th className="px-6 py-3">Score</th>
-                                <th className="px-6 py-3 text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {students.map((student) => (
-                                <tr key={student.id} className="border-b">
-                                    <td className="px-6 py-4">{student.id}</td>
-                                    <td className="px-6 py-4">{student.name}</td>
-                                    <td className="px-6 py-4">{student.gender}</td>
-                                    <td className="px-6 py-4">{student.score}</td>
-                                    <td className="px-6 py-4 text-right">
-                                        <button
-                                            className={`px-3 py-1 text-sm rounded ${student.status === 'Present'
-                                                ? 'bg-green-100 text-green-700'
-                                                : 'bg-red-100 text-red-600'
-                                                }`}
-                                        >
-                                            {student.status}
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+            <main className="md:ml-[288px]">
+                <div className='shadow rounded-3xl bg-white  h-[calc(100vh-2rem)]'>
+                    <div className='flex justify-between px-6 py-4'>
+                        <div className='flex items-center'>
+                            <span className='text-semibold text-lg'>Teacher list</span>
+                            <div className='border rounded-2xl ml-3 border-gray-200 text-[#2c2c2c] text-sm text-center px-2 py-1 text-medium'>100 teachers</div>
+                        </div>
+                        <Button variant='primary' startIcon={<PlusIcon className="fill-rose-600" />}>Add teacher</Button>
+                    </div>
+                    <div className=''>
+                        <Teachers />
+                    </div>
                 </div>
             </main>
         </>

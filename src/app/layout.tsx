@@ -6,6 +6,8 @@ import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { SidebarProvider } from "@/context/SidebarContext";
+import QueryProvider from "@/providers/QueryProvider";
+import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,10 +23,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} dark:bg-gray-900`}>
-        {/* <ThemeProvider> */}
-          {/* {children} */}
-          <SidebarProvider>{children}</SidebarProvider>
-        {/* </ThemeProvider> */}
+        <QueryProvider>
+          {children}
+        </QueryProvider>
+        <NextTopLoader
+          color="#605bff"
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #2299DD,0 0 5px #2299DD"
+          template='<div class="bar" role="bar"><div class="peg"></div></div> 
+  <div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
+          zIndex={1600}
+          showAtBottom={false}
+        />
       </body>
     </html>
   );
