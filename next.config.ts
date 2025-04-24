@@ -1,6 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*',
+      },
+      {
+        protocol: 'http',
+        hostname: '*',
+      },
+    ],
+  },
+  experimental: {
+    reactCompiler: true,
+  },
   /* config options here */
   webpack(config) {
     config.module.rules.push({
