@@ -1,16 +1,15 @@
-import { getWritingTest } from "@/api/writing-test/fetches"
+import { getWritingTest, submitWritingTest } from "@/api/writing-test/fetches"
 import CountdownTimer from "@/components/count-down"
 import Writing from "@/components/writing";
 
 const WritingTestPage = async () => {
     const resp = await getWritingTest();
+    // const a = await submitWritingTest('test');
+    // const w = fetch('fasefa', {method: 'POST', body : 'test'})
+    // console.log(a);
     return (
         <div className="mt-[104px] 4xl:px-[175px] 2xl:px-[150px] lg:px-[100px] md:px-6 gap-6 px-4 grid grid-cols-12">
 
-            <div className="max-h-[444px] lg:p-10 p-5 rounded-lg shadow text-center bg-white col-span-3 sticky top-[104px]">
-                <div className="text-base font-semibold text-indigo-600 lg:mb-10 mb-8">TIMER</div>
-                <CountdownTimer />
-            </div>
             <Writing exam={resp.responseData} />
             <div className='rounded-lg col-span-0'>
                 <div className='4xl:p-10 p-3 md:p4 2xl:p-6 relative overflow-hidden' style={{

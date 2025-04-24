@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const CountdownTimer = () => {
-  const duration = 0.4 * 60; // 20 minutes
+  const duration = 0.1 * 60; // 20 minutes
   const radius = 90;
   const strokeWidth = 20;
   const circumference = 2 * Math.PI * radius;
@@ -71,16 +71,37 @@ const CountdownTimer = () => {
           />
         </svg>
         <div className="absolute  text-[40px] leading-[32px] font-medium text-gray-700">
-        {timeLeft === 0 ? 'Finish' : formatTime(timeLeft)}
+          {timeLeft === 0 ? 'Finish' : formatTime(timeLeft)}
         </div>
       </div>
-      <button
-        onClick={startCountdown}
-        disabled={isRunning}
-        className="mt-10 px-4 py-2.5 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
-      >
-        Start
-      </button>
+      {
+        isRunning ?
+          <div>
+            <button
+              className="mt-10 mr-4 px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
+            >Cancel</button>
+            <button
+              className="mt-10 px-4 py-2.5 border border-indigo-100 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
+            >
+              Submit</button>
+          </div>
+          : timeLeft === 0 ? <div>
+            <button
+              className="mt-10 mr-4 px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
+            >Rewrite</button>
+            <button
+              className="mt-10 px-4 py-2.5 border border-indigo-100 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
+            >
+              New</button>
+          </div> : <button
+            onClick={startCountdown}
+            disabled={isRunning}
+            className="mt-10 px-4 py-2.5 border border-indigo bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
+          >
+            Start
+          </button>
+      }
+
     </div>
   );
 };

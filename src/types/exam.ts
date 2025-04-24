@@ -20,4 +20,13 @@ interface Example {
     cards: Card[];
 }
 
-export type { Example }
+
+interface  WritingFeedback  {
+    Overall_Band_Score: number;
+    Task_Achievement: number;
+    Coherence: number;
+    Lexical_Resource: number;
+    Grammar: number;
+    Feedback: string;
+  };
+export type { Example, WritingFeedback }
