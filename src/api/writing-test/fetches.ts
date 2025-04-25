@@ -3,7 +3,7 @@ import { END_POINTS } from "../endpoint";
 import { API } from "../fetch"
 import { Example, WritingFeedback } from "@/types/exam";
 
-const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3NDU1MDQyMTMsImV4cCI6MTc0NjEwOTAxM30.WakG3bLsKXnFhbABE6HirqkWDUOm02PKHl32d08x3tcDe1j1j-ieqz-ztQvM3xiyRsBDgJg78lfF-630XPZs3g'
+const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3NDU1NDUwNjIsImV4cCI6MTc0NjE0OTg2Mn0.MGgNR0faVocYz_rvB2FNRhFyd8Pz791im6u0T9GEVtHGx0XifTSMGs4xw9GIwLciheSmodhAHeTIdhHfurhQ2Q'
 export const getWritingTest = (id = '680939fa6ca0ae13fc78f963'): Promise<ResponseData<Example>> => {
     const api = new API();
     return api.addPathName(`${END_POINTS.GET_WRITING_TEST}/${id}`).addToken(token).get().then(res => res.json());

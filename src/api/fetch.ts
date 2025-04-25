@@ -58,6 +58,7 @@ export class API {
 
     private async fetchRequest<T>(options: FetchOptions<T>): Promise<Response> {
         const { body, ...restOptions } = options;
+        console.log(this.buildURL(), this.token);
         return fetch(this.buildURL(), {
             credentials: 'same-origin',
             headers: {

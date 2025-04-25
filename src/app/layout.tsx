@@ -1,13 +1,15 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/autoplay";
-import { ThemeProvider } from "@/context/ThemeContext";
-import { SidebarProvider } from "@/context/SidebarContext";
+// import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css/pagination";
+// import "swiper/css/autoplay";
+// import { ThemeProvider } from "@/context/ThemeContext";
+// import { SidebarProvider } from "@/context/SidebarContext";
 import QueryProvider from "@/providers/QueryProvider";
 import NextTopLoader from 'nextjs-toploader';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -39,6 +41,7 @@ export default function RootLayout({
           zIndex={1600}
           showAtBottom={false}
         />
+        <ToastContainer position="top-center" />
       </body>
     </html>
   );
