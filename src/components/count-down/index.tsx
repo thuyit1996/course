@@ -1,14 +1,17 @@
 'use client';
 import React, { useState, useEffect, useRef, forwardRef, Ref, useImperativeHandle } from 'react';
 import { InvokeTimmer } from '../writing';
+import { WritingFeedback } from '@/types/exam';
 interface CountdownTimerProps {
   submitExample: () => void;
   onCancel: () => void;
   onUpdateStatus: (isStart: boolean) => void;
   onStop: () => void;
+  response?: WritingFeedback;
+  onRetake?: () => void;
 }
 const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
-  ({ submitExample, onCancel, onUpdateStatus, onStop }, ref: Ref<InvokeTimmer>) => {
+  ({ submitExample, onCancel, onUpdateStatus, onStop, response, onRetake }, ref: Ref<InvokeTimmer>) => {
     const duration = 0.1 * 60; // 20 minutes
     const radius = 90;
     const strokeWidth = 20;
@@ -92,6 +95,10 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
       onCancel();
     };
 
+    const onRetakeHandle = () => {
+      resetCountdown();
+      onRetake?.();
+    }
 
     return (
       <div className="flex flex-col justify-center items-center">
@@ -130,8 +137,18 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
           </div>
         </div>
         {
-          isRunning ?
+          response ?
             <div>
+              <button
+                className="mt-10 mr-4 px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
+                onClick={onRetakeHandle}
+              >Retake</button>
+              <button
+                className="mt-10 px-4 py-2.5 border border-indigo-100 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
+              >
+                New Question</button>
+            </div>
+            : isRunning ? <div>
               <button
                 className="mt-10 mr-4 px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
                 onClick={resetCountdown}
@@ -141,15 +158,6 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
                 onClick={onSubmitExam}
               >
                 Submit</button>
-            </div>
-            : timeLeft === 0 ? <div>
-              <button
-                className="mt-10 mr-4 px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
-              >Rewrite</button>
-              <button
-                className="mt-10 px-4 py-2.5 border border-indigo-100 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
-              >
-                New</button>
             </div> : <button
               onClick={startCountdown}
               disabled={isRunning}

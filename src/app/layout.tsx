@@ -10,6 +10,7 @@ import QueryProvider from "@/providers/QueryProvider";
 import NextTopLoader from 'nextjs-toploader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AosProvider from "@/providers/AOSProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -25,9 +26,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} dark:bg-gray-900`}>
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+        <AosProvider>
+          <QueryProvider>
+            {children}
+          </QueryProvider>
+        </AosProvider>
         <NextTopLoader
           color="#605bff"
           height={3}
