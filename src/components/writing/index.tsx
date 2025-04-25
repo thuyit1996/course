@@ -29,12 +29,13 @@ const Writing = ({ exam }: { exam: Example }) => {
                 openModalWaiting();
                 startTransition(async () => {
                     const resp = await submitWritingTestAction(content);
-                    if (resp) {
-
+                    if (resp.responseData) {
+                        console.log(resp.responseData);
                     }
                 })
             }
         } catch (error) {
+            closeModalWaiting();
             console.log(error);
             toast.error(`Something went wrong`);
         }
