@@ -12,9 +12,9 @@ interface CountdownTimerProps {
 }
 const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
   ({ submitExample, onCancel, onUpdateStatus, onStop, response, onRetake }, ref: Ref<InvokeTimmer>) => {
-    const duration = 0.1 * 60; // 20 minutes
+    const duration = 20 * 60; // 20 minutes
     const radius = 90;
-    const strokeWidth = 20;
+    const strokeWidth = 15;
     const circumference = 2 * Math.PI * radius;
     const [isPaused, setIsPaused] = useState(false);
     const [timeLeft, setTimeLeft] = useState(duration);
@@ -148,7 +148,7 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
               >
                 New Question</button>
             </div>
-            : isRunning ? <div>
+            : (isRunning || timeLeft === 0) ? <div>
               <button
                 className="mt-10 mr-4 px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
                 onClick={resetCountdown}

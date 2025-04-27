@@ -29,4 +29,14 @@ interface  WritingFeedback  {
     Grammar: number;
     Feedback: string;
   };
-export type { Example, WritingFeedback }
+
+interface WritingTestList {
+    topicName: string;
+    total: number;
+    exams: {
+        id: string,
+        name: string,
+        cards: string[]
+    }[]
+}
+export type { Example, WritingFeedback, WritingTestList }

@@ -138,7 +138,7 @@ const Writing = ({ exam }: { exam: Example }) => {
                 title="Scoring in progress..."
                 content="The AI is evaluating your writing.<br/> Please wait a moment while we process your results."
             />
-            {response ? <div className='rounded-lg col-span-3 sticky top-[104px]' data-aos="fade-left">
+            {response ? <div className='rounded-lg col-span-3 sticky max-h-[444px] top-[104px]' data-aos="fade-left">
                 <div className='4xl:p-10 p-3 md:p4 2xl:p-6 relative overflow-hidden' style={{
                     borderTopLeftRadius: 8,
                     borderTopRightRadius: 8,
