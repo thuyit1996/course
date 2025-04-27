@@ -7,12 +7,12 @@ import { useModal } from "@/hooks/useModal";
 import ConfirmModal from "../ui/confirm-modal";
 import parser, { DOMNode, domToReact, Element } from 'html-react-parser';
 import { toast } from 'react-toastify';
-import { submitWritingTest } from "@/api/writing-test/fetches";
+import { saveWritingTest, submitWritingTest } from "@/api/writing-test/fetches";
 
 export interface InvokeTimmer {
     invokeCountDown: () => void;
 }
-const Writing = ({ exam }: { exam: Example }) => {
+const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
     const [content, setContent] = useState('');
     const { isOpen, closeModal, openModal } = useModal();
     const { isOpen: isOpenWaiting, closeModal: closeModalWaiting, openModal: openModalWaiting } = useModal();
@@ -35,7 +35,16 @@ const Writing = ({ exam }: { exam: Example }) => {
                     if (resp.responseData) {
                         closeModalWaiting();
                         setResponse(resp.responseData);
+                        await saveWritingTest({
+                            examId,
+                            "listAnswers": [
+                                content
+                            ],
+                            "score": resp.responseData.Overall_Band_Score,
+                            "remarks": resp.responseData.Feedback
+                        });
                     }
+
                 })
             }
         } catch (error) {

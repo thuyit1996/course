@@ -28,3 +28,16 @@ export const getWritingTestList = async (topicId: string) : Promise<ResponseData
     const api = new API();
     return api.addPathName(`${END_POINTS.GET_ALL_WRITING_TEST}/${topicId}`).addToken(token).get().then(res => res.json());
 }
+
+export const saveWritingTest = (body: {
+    examId: string,
+    listAnswers: string[],
+    score: number,
+    remarks: string
+}) => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.SAVE_WRITING_TEST}`).addToken(token).post({
+        ...body,
+        userId: '67c9c116b4060540c59d2d00',
+    }).then(res => res.json());
+}
