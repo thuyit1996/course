@@ -3,6 +3,8 @@ export const END_POINTS = {
     SUBMIT_WRITING_TEST: '/exam/score',
     GET_ALL_TOPIC: '/topic/list',
     GET_ALL_WRITING_TEST: '/exam/list',
-    SAVE_WRITING_TEST: '/history'
+    SAVE_WRITING_TEST: '/history',
+    // INFO: auth
+    LOGIN: '/public/login'
 
 }
