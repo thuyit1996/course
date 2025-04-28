@@ -9,6 +9,7 @@ export const config = {
         '/writing-test',
         '/quiz-test',
         '/admin/teachers',
-        '/admin'
+        '/admin',
+        '/'
     ],
 };

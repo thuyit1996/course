@@ -36,7 +36,10 @@ interface WritingTestList {
     exams: {
         id: string,
         name: string,
-        cards: string[]
+        cards: string[],
+        remarks: string,
+        score: number,
+        total: number
     }[]
 }
 export type { Example, WritingFeedback, WritingTestList }

@@ -612,3 +612,17 @@ textarea:focus {
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
 }
+
+.dot-animation {
+  animation: jump 1s infinite;
+  display: inline-block;
+}
+
+@keyframes jump {
+  0%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+}

@@ -4,10 +4,12 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
+import { useSession } from "next-auth/react";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const session = useSession();
+  console.log(session);
   function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
     setIsOpen((prev) => !prev);
@@ -31,8 +33,8 @@ export default function UserDropdown() {
           />
         </span>
         <div className="flex flex-col mr-4 text-left">
-          <span className="block mr-1 font-bold text-sm text-[#2c2c2c]">Xuan Tung</span>
-          <span className="block mr-1 font-medium text-sm text-[#757575]">Grade 12</span>
+          <span className="block mr-1 font-bold text-sm text-[#2c2c2c]">{session?.data?.user.displayName ?? ''}</span>
+          <span className="block mr-1 font-medium text-sm text-[#757575]">{''}</span>
 
         </div>
 
@@ -62,10 +64,10 @@ export default function UserDropdown() {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            Musharof Chowdhury
+            {session?.data?.user.displayName ?? ''}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-            randomuser@pimjo.com
+            {session?.data?.user.email ?? ''}
           </span>
         </div>
 
@@ -95,7 +97,7 @@ export default function UserDropdown() {
               Edit profile
             </DropdownItem>
           </li>
-          <li>
+          {/* <li>
             <DropdownItem
               onItemClick={closeDropdown}
               tag="a"
@@ -144,10 +146,10 @@ export default function UserDropdown() {
               </svg>
               Support
             </DropdownItem>
-          </li>
+          </li> */}
         </ul>
         <Link
-          href="/signin"
+          href="/logout"
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
         >
           <svg

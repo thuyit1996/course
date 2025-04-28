@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -30,14 +29,9 @@ export const authOptions = {
                 if (!response.responseData) {
                     return null;
                 }
-                const cookieStore = await cookies();
-                cookieStore.set({
-                    name: Cookiekeys.accessToken,
-                    value: response.responseData.token,
-                    httpOnly: true
-                });
                 return {
                     ...response.responseData.englishUser,
+                    userId: response.responseData.englishUser.userId,
                     id: response.responseData.englishUser.userId,
                     accessToken: response.responseData.token,
                 };
@@ -66,10 +60,11 @@ export const authOptions = {
         async session({ session, token }) {
             session.user.firstName = token.firstName;
             session.user.lastName = token.lastName;
-            token.displayName = token.displayName;
+            session.user.displayName = token.displayName;
             session.user.phone = token.phone;
             session.user.accessToken = token.accessToken;
             session.user.roles = token.roles;
+            session.user.userId = token.userId;
             return session;
         },
     },

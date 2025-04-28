@@ -4,9 +4,12 @@ import Light from '@/public/images/icons/light.svg';
 import Button from '@/components/ui/button/Button';
 import { getAllTopic, getWritingTestList } from '@/api/writing-test/fetches';
 import Link from 'next/link';
+
 const WritingTestPage = async () => {
     const topicResp = await getAllTopic();
+    console.log(topicResp);
     const writingTestResp = topicResp?.responseData?.[0] ? await getWritingTestList(topicResp?.responseData?.[0].id) : null
+    console.log(writingTestResp);
     return (
         <div className="mt-[104px] 4xl:px-[175px] 2xl:px-[150px] lg:px-[100px] md:px-6 gap-6 px-4">
             <div className="flex items-center w-full">
@@ -20,14 +23,18 @@ const WritingTestPage = async () => {
                             <Pen className="mr-2" />
                             <span className='uppercase textlg 4xl:text-[24px] leading-[100%] text-indigo-25 line-clamp-1'>{item.name}</span>
                         </p>
-                        <div className='mt-4 mx-auto bg-[#1f235b] rounded-[100px] text-base text-indigo-25 py-4.5 text-center px-[44px] xl:px-[52px]'>
-                            SCORE: 4.5
-
+                        <p className='mt-2 text-indigo-25 text-sm text-center line-clamp-1'>ID: {item.id}</p>
+                        {/* <div className='mt-4 mx-auto bg-[#1f235b] rounded-[100px] text-base text-indigo-25 py-4.5 text-center px-[44px] xl:px-[52px]'>
+                            <span>
+                            </span>
+                            </div> */}
+                        <div className={`block mt-4 w-[200px] mx-auto bg-[#1f235b] rounded-[100px] text-base text-indigo-25 py-4.5 text-center ${!item.score ? 'text-indigo-600 text-semibold' : ''}`}>
+                            {item.score ? `SCORE: ${item.score}` : 'YOUR SCORE'}
                         </div>
                         <div className='mt-10 text-indigo-25 text-base'>
                             <div className='flex  items-center'>
                                 <Setting className="mr-3" />
-                                <span>200 questions</span>
+                                <span>{item.total > 1 ? `${item.total}: questions` : `${item.total} question`}</span>
                             </div>
                             <div className='flex  items-center mt-4'>
                                 <Light className="mr-3" />
@@ -35,14 +42,23 @@ const WritingTestPage = async () => {
                             </div>
                         </div>
                         <div className='mt-10 flex justify-center items-center'>
-                            <Link href={'/writing-test/review'}>
-                                <Button variant='outline' className='mr-2.5'>Review</Button>
-                            </Link>
-                            <Link href={`/writing-test/start/${item.id}`} className='w-1/2'>
-                                <Button variant='secondary' className=''>
-                                    Retake
-                                </Button>
-                            </Link>
+                            {item.score ? <>
+                                <Link href={'/writing-test/review'} className='w-1/2 mr-2.5'>
+                                    <Button variant='outline' className='w-full'>Review</Button>
+                                </Link>
+                                <Link href={`/writing-test/start/${item.id}`} className='w-1/2'>
+                                    <Button variant='secondary' className='w-full'>
+                                        Retake
+                                    </Button>
+                                </Link>
+                            </>
+                                :
+                                <Link href={`/writing-test/start/${item.id}`} className='w-full'>
+                                    <Button variant='secondary' className='w-full'>
+                                        Start Now
+                                    </Button>
+                                </Link>
+                            }
                         </div>
                     </div>
                 })}

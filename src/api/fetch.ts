@@ -1,3 +1,7 @@
+import { authOptions } from "@/libs/auth";
+import { getServerSession } from "next-auth";
+import { getSession } from "next-auth/react";
+
 enum ApiMethod {
     GET = 'GET',
     POST = 'POST',
@@ -59,12 +63,19 @@ export class API {
     private async fetchRequest<T>(options: FetchOptions<T>): Promise<Response> {
         const { body, ...restOptions } = options;
         console.log(this.buildURL(), this.token);
+        const session = await (typeof window !== 'undefined'
+            ? getSession()
+            : getServerSession(authOptions));
+        const token = session?.user.accessToken;
+        const authorizationHeader: HeadersInit = token
+            ? { Authorization: `Bearer ${token}` }
+            : {};
         return fetch(this.buildURL(), {
             credentials: 'same-origin',
             headers: {
                 Accept: 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                ...(this.token && { authorization: `Bearer ${this.token}` }),
+                ...authorizationHeader,
                 ...restOptions.headers,
             },
             cache: 'no-store',
