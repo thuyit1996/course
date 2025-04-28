@@ -2,7 +2,6 @@ import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { signIn } from '@/api/auth/fetches';
-import { Cookiekeys } from './constant';
 
 export const authOptions = {
     session: {

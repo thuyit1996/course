@@ -12,7 +12,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AosProvider from "@/providers/AOSProvider";
 import { NextAuthProvider } from "@/providers/NextAuthProvider";
-
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],

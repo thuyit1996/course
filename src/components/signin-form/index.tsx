@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import Input from "../form/input/InputField"
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { CalenderIcon, EyeCloseIcon, EyeIcon, TimeIcon } from "../../icons";
+import { EyeCloseIcon, EyeIcon } from "../../icons";
 import { toast } from "react-toastify";
 
 const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {

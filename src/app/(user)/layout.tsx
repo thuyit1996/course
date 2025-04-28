@@ -1,6 +1,5 @@
 import React from 'react';
 
-import CountdownTimer from '@/components/count-down';
 import UserHeader from '@/components/user-header';
 
 const UserLayout = ({ children }: { children: React.ReactNode }) => {

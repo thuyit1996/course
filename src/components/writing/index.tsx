@@ -1,11 +1,11 @@
 'use client';
 
 import { Example, WritingFeedback } from "@/types/exam";
-import React, { useRef, useState, useTransition } from "react";
+import React, { useRef, useState } from "react";
 import CountdownTimer from "../count-down";
 import { useModal } from "@/hooks/useModal";
 import ConfirmModal from "../ui/confirm-modal";
-import parser, { DOMNode, domToReact, Element } from 'html-react-parser';
+import parser from 'html-react-parser';
 import { toast } from 'react-toastify';
 import { saveWritingTest, submitWritingTest } from "@/api/writing-test/fetches";
 import { useSession } from "next-auth/react";
@@ -20,39 +20,35 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
     const countDownRef = useRef<InvokeTimmer>(null);
     const [isStart, setIsStart] = useState(false);
     const [response, setResponse] = useState<WritingFeedback | null>(null)
-    const [isPending, startTransition] = useTransition();
     const session = useSession();
     const countWords = content?.trim?.() === ''
         ? 0
         : content?.trim?.().split(/\s+/)?.length;
-    const onSubmitExam = () => {
+    const onSubmitExam = async () => {
         try {
             if (!content) {
                 countDownRef.current?.invokeCountDown();
                 toast.error(`You haven't entered any content. Please add content before submitting.`);
             } else {
                 openModalWaiting();
-                startTransition(async () => {
-                    const resp = await submitWritingTest(content);
-                    if (resp.responseData) {
-                        closeModalWaiting();
-                        setResponse(resp.responseData);
-                        await saveWritingTest({
-                            examId,
-                            "listAnswers": [
-                                content
-                            ],
-                            "score": resp.responseData.Overall_Band_Score,
-                            "remarks": resp.responseData.Feedback,
-                            userId: session.data?.user.userId ?? ''
-                        });
-                    } else {
-                        closeModalWaiting();
-                        toast.error(`Something went wrong`);
-                        countDownRef.current?.invokeCountDown();
-                    }
-
-                })
+                const resp = await submitWritingTest(content);
+                if (resp.responseData) {
+                    closeModalWaiting();
+                    setResponse(resp.responseData);
+                    await saveWritingTest({
+                        examId,
+                        "listAnswers": [
+                            content
+                        ],
+                        "score": resp.responseData.Overall_Band_Score,
+                        "remarks": resp.responseData.Feedback,
+                        userId: session.data?.user.userId ?? ''
+                    });
+                } else {
+                    closeModalWaiting();
+                    toast.error(`Something went wrong`);
+                    countDownRef.current?.invokeCountDown();
+                }
             }
         } catch (error) {
             closeModalWaiting();

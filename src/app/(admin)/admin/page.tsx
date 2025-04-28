@@ -5,22 +5,7 @@ import Sidebar from '@/components/sidebar';
 import Teachers from '@/components/teachers';
 import Button from '@/components/ui/button/Button';
 import PlusIcon from '@/public/images/icons/plus.svg';
-
-// src/pages/Dashboard.tsx
 import React, { useState } from 'react';
-
-interface Student {
-    id: number;
-    name: string;
-    gender: string;
-    score: number;
-    status: 'Present' | 'Absent';
-}
-
-const students: Student[] = [
-    { id: 1, name: 'Nguyen Van A', gender: 'Male', score: 7.5, status: 'Present' },
-    { id: 2, name: 'Tran Thi B', gender: 'Female', score: 8.0, status: 'Absent' },
-];
 
 const Dashboard: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);

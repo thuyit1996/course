@@ -7,18 +7,17 @@ import { getServerSession } from "next-auth";
 // }
 const SignInPage = async ({
   searchParams,
-}: {
-  searchParams: { callbackUrl?: string };
-}) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+}: any) => {
   const session = await getServerSession();
   if (session) {
     redirect('/');
   }
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white p-4">
+    <div className="flex items-center justify-center bg-white p-4">
 
       {/* Main container */}
-      <div className="flex flex-col md:flex-row w-full max-w-[1440px] overflow-hidden">
+      <div className="flex flex-col md:flex-row w-full  max-w-[1440px] overflow-hidden">
 
         {/* Left image */}
         <div className="md:w-1/2 p-4 md:p-6 flex justify-center w-full relative" data-aos="zoom-in">
@@ -47,7 +46,7 @@ const SignInPage = async ({
 
           {/* Footer */}
           <div className="text-center mt-4 text-base" data-aos="fade">
-            <span className="text-[#757575]">Don't have an account?</span>
+            <span className="text-[#757575]">{`Don't have an account?`}</span>
             <a href="#" className="text-rose-600 font-medium hover:underline ml-2"> Sign Up</a>
           </div>
 
