@@ -7,25 +7,21 @@ import { getServerSession } from "next-auth";
 // }
 const SignInPage = async ({
   searchParams,
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-}: any) => {
+}: { searchParams: {callbackUrl: string}}) => {
   const session = await getServerSession();
   if (session) {
     redirect('/');
   }
   return (
-    <div className="flex items-center justify-center bg-white p-4">
-
-      {/* Main container */}
-      <div className="flex flex-col md:flex-row w-full  max-w-[1440px] overflow-hidden">
-
+    <div >
+      <div className="flex flex-col items-center justify-center md:flex-row w-full mx-auto h-[100vh] max-w-[1440px] overflow-hidden">
         {/* Left image */}
         <div className="md:w-1/2 p-4 md:p-6 flex justify-center w-full relative" data-aos="zoom-in">
           <img src="/images/auth/Image.png" />
         </div>
 
         {/* Right form */}
-        <div className="md:w-1/2 w-full p-8 flex flex-col md:mt-[130px]" data-aos="fade-left">
+        <div className="md:w-1/2 w-full p-8 flex flex-col md:mt-[80px]" ata-aos="fade-left">
 
           {/* Logo */}
           <div className="mb-6 md:mr-[120px] xl:mr-[134px] text-center md:text-left" data-aos="fade-down">
@@ -42,7 +38,7 @@ const SignInPage = async ({
           </div>
 
           {/* Form */}
-          <SignInForm callbackUrl={searchParams.callbackUrl ?? ''} />
+          <SignInForm callbackUrl={searchParams?.callbackUrl ?? ''} />
 
           {/* Footer */}
           <div className="text-center mt-4 text-base" data-aos="fade">

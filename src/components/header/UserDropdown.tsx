@@ -9,7 +9,6 @@ import { useSession } from "next-auth/react";
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const session = useSession();
-  console.log(session);
   function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
     setIsOpen((prev) => !prev);

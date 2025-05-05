@@ -8,9 +8,10 @@ export const getWritingTest = (id: string): Promise<ResponseData<Example>> => {
     return api.addPathName(`${END_POINTS.GET_WRITING_TEST}/${id}`).get().then(res => res.json());
 }
 
-export const submitWritingTest = (content: string): Promise<ResponseData<WritingFeedback>> => {
+export const submitWritingTest = (examId: string, content: string): Promise<ResponseData<WritingFeedback>> => {
     const api = new API();
     return api.addPathName(`${END_POINTS.SUBMIT_WRITING_TEST}`).post({
+        examId,
         essay: content
     }).then(res => res.json());
 }
@@ -38,3 +39,21 @@ export const saveWritingTest = (body: {
     }).then(res => res.json());
 }
 
+
+export const getAllAdminTopic = async (): Promise<{ topics: { id: string, name: string }[]}> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.GET_ALL_ADMIN_TOPIC}`).get().then(res => res.json());
+}
+
+export const createQuestion = async (body: Record<string, any>): Promise<ResponseData<boolean>> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.CREATE_QUESTION}`).post(body).then(res => res.json());
+}
+
+export const getHistoryDetail = async (examId: string, userId: string): Promise<ResponseData<{
+   examResults: WritingFeedback[]
+  }>> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.GET_HISTORY}?resultId=${examId}&userId=${userId}`).get().then(res => res.json());
+}
+// export const 

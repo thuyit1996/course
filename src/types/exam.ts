@@ -22,12 +22,13 @@ interface Example {
 
 
 interface  WritingFeedback  {
-    Overall_Band_Score: number;
-    Task_Achievement: number;
-    Coherence: number;
-    Lexical_Resource: number;
-    Grammar: number;
-    Feedback: string;
+    resultId: string;
+    score: number;
+    taskAchievement: number;
+    coherence: number;
+    lexicalResource: number;
+    grammar: number;
+    remarks: string;
   };
 
 interface WritingTestList {

@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -14,7 +17,6 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    reactCompiler: true,
   },
   /* config options here */
   webpack(config) {

@@ -7,9 +7,7 @@ import Link from 'next/link';
 
 const WritingTestPage = async () => {
     const topicResp = await getAllTopic();
-    console.log(topicResp);
     const writingTestResp = topicResp?.responseData?.[0] ? await getWritingTestList(topicResp?.responseData?.[0].id) : null
-    console.log(writingTestResp);
     return (
         <div className="mt-[104px] 4xl:px-[175px] 2xl:px-[150px] lg:px-[100px] md:px-6 gap-6 px-4">
             <div className="flex items-center w-full">

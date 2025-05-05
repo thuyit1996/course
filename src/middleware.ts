@@ -10,6 +10,7 @@ export const config = {
         '/quiz-test',
         '/admin/teachers',
         '/admin',
+        '/admin/questions',
         '/'
     ],
 };

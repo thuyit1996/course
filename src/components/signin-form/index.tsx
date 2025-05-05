@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import Input from "../form/input/InputField"
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { EyeCloseIcon, EyeIcon } from "../../icons";
 import { toast } from "react-toastify";
 
@@ -33,12 +33,22 @@ const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {
                     identifier: email,
                     password: password,
                 });
-                if (!resp?.error) {
-                    router.push(callbackUrl);
+                if (resp?.ok) {
+                    const session = await getSession();
+                    console.log(session, callbackUrl);
+                    if(callbackUrl) {
+                        router.push(callbackUrl);
+                    }else {
+                        if(session?.user.roles?.includes("ROLE_ADMIN")) {
+                            router.push('/admin/questions');
+                        }else {
+                            router.push('/writing-test')
+                        }
+                    }
                     router.refresh();
-                } else {
+                  } else {
                     toast.error(`Invalid login credentials.`);
-                }
+                  }
             })
         } catch (error) {
             console.log(error);

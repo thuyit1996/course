@@ -1,9 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 'use client';
 import React, { useState, useEffect, useRef, forwardRef, Ref, useImperativeHandle } from 'react';
 import { InvokeTimmer } from '../writing';
 import { WritingFeedback } from '@/types/exam';
+import Link from 'next/link';
 interface CountdownTimerProps {
   submitExample: () => void;
   onCancel: () => void;
@@ -12,6 +11,7 @@ interface CountdownTimerProps {
   response?: WritingFeedback;
   onRetake?: () => void;
 }
+
 const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
   ({ submitExample, onCancel, onUpdateStatus, onStop, response, onRetake }, ref: Ref<InvokeTimmer>) => {
     const duration = 20 * 60; // 20 minutes
@@ -22,8 +22,9 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
     const [timeLeft, setTimeLeft] = useState(duration);
     const [isRunning, setIsRunning] = useState(false);
     const [isResetting, setIsResetting] = useState(false);
+    const [isFinishTest, setIsFinishTest] = useState(false);
 
-    const intervalRef = useRef(null);
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const formatTime = (seconds: number) => {
       const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
@@ -38,7 +39,7 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
       intervalRef.current = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime <= 1) {
-            clearInterval(intervalRef.current);
+            clearInterval(intervalRef.current as unknown as number);
             intervalRef.current = null;
             setIsRunning(false);
             onStop();
@@ -51,7 +52,7 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
     };
 
     useEffect(() => {
-      return () => clearInterval(intervalRef.current);
+      return () => clearInterval(intervalRef.current as unknown as number);
     }, []);
 
     const offset = circumference - (timeLeft / duration) * circumference;
@@ -65,7 +66,8 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
     }
 
     useImperativeHandle(ref, () => ({
-      invokeCountDown: () => resumeCountdown()
+      invokeCountDown: () => resumeCountdown(),
+      forceFinish: () => forceFinish()
     }));
 
     const resumeCountdown = () => {
@@ -75,7 +77,7 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
       intervalRef.current = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime <= 1) {
-            clearInterval(intervalRef.current);
+            clearInterval(intervalRef.current as unknown as number);
             intervalRef.current = null;
             setIsRunning(false);
             onStop();
@@ -87,7 +89,7 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
     };
 
     const resetCountdown = () => {
-      clearInterval(intervalRef.current);
+      clearInterval(intervalRef.current as unknown as number );
       intervalRef.current = null;
       setIsRunning(false);
       setIsPaused(false);
@@ -101,6 +103,16 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
       resetCountdown();
       onRetake?.();
     }
+
+    const forceFinish = () => {
+      clearInterval(intervalRef.current!);
+      intervalRef.current = null;
+      setTimeLeft(0);
+      setIsRunning(false);
+      setIsPaused(false);
+      onStop();
+      setIsFinishTest(true);
+    };
 
     return (
       <div className="flex flex-col justify-center items-center">
@@ -134,21 +146,24 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
             />
           </svg>
           <div className="absolute  text-[40px] leading-[32px] font-medium text-gray-700">
-            {/* {timeLeft === 0 ? 'Finish' : formatTime(timeLeft)} */}
-            {formatTime(timeLeft)}
+            {(timeLeft === 0 || isFinishTest) ? 'Finish' : formatTime(timeLeft)}
+            {/* {formatTime(timeLeft)} */}
           </div>
         </div>
         {
-          response ?
-            <div>
+          isFinishTest ?
+            <div className='flex flex-col'>
               <button
-                className="mt-10 mr-4 px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
-                onClick={onRetakeHandle}
-              >Retake</button>
-              <button
-                className="mt-10 px-4 py-2.5 border border-indigo-100 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
+                className="mt-10 mr-4 w-full px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
+                onClick={() => window.location.reload()}
+              >Try the Test Again</button>
+              <Link href={'/writing-test'}>
+<button
+                className="mt-4 px-4 py-2.5 w-full border border-indigo-100 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
               >
-                New Question</button>
+                Choose Another Test</button>
+              </Link>
+              
             </div>
             : (isRunning || timeLeft === 0) ? <div>
               <button

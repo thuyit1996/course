@@ -1,17 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { Example, WritingFeedback } from "@/types/exam";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import CountdownTimer from "../count-down";
 import { useModal } from "@/hooks/useModal";
 import ConfirmModal from "../ui/confirm-modal";
 import parser from 'html-react-parser';
 import { toast } from 'react-toastify';
-import { saveWritingTest, submitWritingTest } from "@/api/writing-test/fetches";
+import { getHistoryDetail, submitWritingTest } from "@/api/writing-test/fetches";
 import { useSession } from "next-auth/react";
+import { useEventSourceWithAutoReconnect } from "@/hooks/useEventSource";
 
 export interface InvokeTimmer {
     invokeCountDown: () => void;
+    forceFinish: () => void;
 }
 const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
     const [content, setContent] = useState('');
@@ -24,6 +27,35 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
     const countWords = content?.trim?.() === ''
         ? 0
         : content?.trim?.().split(/\s+/)?.length;
+
+    const url = session ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/stream/scoreResult/${session.data?.user.userId}` : undefined;
+
+    const { data, error } = useEventSourceWithAutoReconnect(url);
+    console.log(data, error);
+    useEffect(() => {
+        if ((error as any)?.error) {
+            toast.error((error as any)?.error ?? '');
+            countDownRef.current?.forceFinish();
+        }
+    }, [error]);
+    useEffect(() => {
+        if(data?.examId === examId && data?.userId) {
+            getHistoryData(data.examId, data.userId);
+            countDownRef.current?.forceFinish();
+            closeModalWaiting();
+        }
+    }, [data]);
+    const getHistoryData = async(examId: string, userId: string) => {
+        try {
+            const resp = await getHistoryDetail(examId, userId);
+            console.log(resp);
+            if(resp.responseData) {
+                setResponse(resp.responseData?.examResults?.[0])
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const onSubmitExam = async () => {
         try {
             if (!content) {
@@ -31,19 +63,9 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                 toast.error(`You haven't entered any content. Please add content before submitting.`);
             } else {
                 openModalWaiting();
-                const resp = await submitWritingTest(content);
+                const resp = await submitWritingTest(examId, content);
                 if (resp.responseData) {
-                    closeModalWaiting();
-                    setResponse(resp.responseData);
-                    await saveWritingTest({
-                        examId,
-                        "listAnswers": [
-                            content
-                        ],
-                        "score": resp.responseData.Overall_Band_Score,
-                        "remarks": resp.responseData.Feedback,
-                        userId: session.data?.user.userId ?? ''
-                    });
+                    // closeModalWaiting();
                 } else {
                     closeModalWaiting();
                     toast.error(`Something went wrong`);
@@ -57,8 +79,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
             toast.error(`Something went wrong`);
         }
     }
-    console.log(content.replace(/\n/g, "<br />"));
-    const feedback = response ? parser(response?.Feedback, {
+    const feedback = response ? parser(response?.remarks, {
         replace(domNode) {
             if (domNode.type === 'text') {
                 const text = domNode.data as string;
@@ -78,10 +99,11 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
 
         },
     }) : '';
+    console.log(response);
     return (
         <>
             <div className="flex">
-                <div className="max-h-[444px] lg:p-10 p-5 rounded-lg shadow text-center bg-white col-span-2 sticky top-[104px] w-[295px] mr-6" data-aos="fade-right">
+                <div className="max-h-[500px] lg:p-10 p-5 rounded-lg shadow text-center bg-white col-span-2 sticky top-[104px] w-[295px] mr-6" data-aos="fade-right">
                     <div className="text-base font-semibold text-indigo-600 lg:mb-10 mb-8">TIMER</div>
                     <CountdownTimer
                         submitExample={openModal}
@@ -97,7 +119,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                     />
                 </div>
                 <div className="gap-6 grid grid-cols-12 w-full">
-                    {response ? <div className={'col-span-9'}>
+                    {response ? <div className={'col-span-8'}>
                         <div className="bg-white p-10 rounded-lg shadow">
                             <div className='flex justify-between mb-4'>
                                 <span className='text-base font-semibold text-indigo-600 mb-4'>ANSWER</span>
@@ -139,7 +161,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                             </div> : null
                         }
                     </>}
-                    {response ? <div className='rounded-lg col-span-3 sticky max-h-[444px] top-[104px]' data-aos="fade-left">
+                    {response ? <div className='rounded-lg col-span-4 sticky max-h-[444px] top-[104px]' data-aos="fade-left">
                         <div className='4xl:p-10 p-3 md:p4 2xl:p-6 relative overflow-hidden' style={{
                             borderTopLeftRadius: 8,
                             borderTopRightRadius: 8,
@@ -160,7 +182,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                             </svg>
                             <div className='relative z-20 flex items-center justify-between'>
                                 <p className="text-base lg:text-lg 4xl:text-[24px] leading-[100%] tracking-[2px] text-white font-bold">OVERALL <br />BAND SCORE</p>
-                                <p className="text-lg lg:text-4xl 4xl:text-6xl text-white font-bold">{response.Overall_Band_Score}</p>
+                                <p className="text-lg lg:text-4xl 4xl:text-6xl text-white font-bold">{response.score}</p>
                             </div>
                         </div>
                         <ul className='uppercase border-indigo-100 rounded-lg shadow' style={{
@@ -170,25 +192,25 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                             <li className='border-b border-indigo-100 bg-indigo-50'>
                                 <div className='4xl:px-10 4xl:py-7.5 xl:px-6 xl:py-4 px-4 py-3 flex justify-between items-center'>
                                     <span className='text-sm 4xl:text-base text-indigo-600 font-semibold'>Task Achievement</span>
-                                    <span className='text-xl 4xl:text-[36px] text-[#1F235B] leading-[44px]'>{response.Task_Achievement}</span>
+                                    <span className='text-xl 4xl:text-[36px] text-[#1F235B] leading-[44px]'>{response.taskAchievement}</span>
                                 </div>
                             </li>
                             <li className='border-b border-indigo-100 bg-indigo-50'>
                                 <div className='4xl:px-10 4xl:py-7.5 xl:px-6 xl:py-4 px-4 py-3 flex justify-between items-center'>
                                     <span className='text-sm 4xl:text-base text-indigo-600 font-semibold'>Coherence</span>
-                                    <span className='text-xl 4xl:text-[36px] text-[#1F235B] leading-[44px]'>{response.Coherence}</span>
+                                    <span className='text-xl 4xl:text-[36px] text-[#1F235B] leading-[44px]'>{response.coherence}</span>
                                 </div>
                             </li>
                             <li className='border-b border-indigo-100 bg-indigo-50'>
                                 <div className='4xl:px-10 4xl:py-7.5 xl:px-6 xl:py-4 px-4 py-3 flex justify-between items-center'>
                                     <span className='text-sm 4xl:text-base text-indigo-600 font-semibold'>Lexical resource</span>
-                                    <span className='text-xl 4xl:text-[36px] text-[#1F235B] leading-[44px]'>{response.Lexical_Resource}</span>
+                                    <span className='text-xl 4xl:text-[36px] text-[#1F235B] leading-[44px]'>{response.lexicalResource}</span>
                                 </div>
                             </li>
                             <li className='bg-indigo-50'>
                                 <div className='4xl:px-10 4xl:py-7.5 xl:px-6 xl:py-4 px-4 py-3 flex justify-between items-center'>
                                     <span className='text-sm 4xl:text-base text-indigo-600 font-semibold'>Grammatical</span>
-                                    <span className='text-xl 4xl:text-[36px] text-[#1F235B] leading-[44px]'>{response.Grammar}</span>
+                                    <span className='text-xl 4xl:text-[36px] text-[#1F235B] leading-[44px]'>{response.grammar}</span>
                                 </div>
                             </li>
                         </ul>
