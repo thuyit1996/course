@@ -103,4 +103,31 @@ export class API {
     async patch<T>(body?: T): Promise<Response> {
         return this.fetchRequest({ method: ApiMethod.PATCH, body });
     }
+
+    private async uploadFile<T>(options: FetchOptions<T>): Promise<Response> {
+        const { body, ...restOptions } = options;
+        console.log(this.buildURL(), this.token);
+        const session = await (typeof window !== 'undefined'
+            ? getSession()
+            : getServerSession(authOptions));
+        const token = session?.user.accessToken;
+        const authorizationHeader: HeadersInit = token
+            ? { Authorization: `Bearer ${token}` }
+            : {};
+        return fetch(this.buildURL(), {
+            credentials: 'same-origin',
+            headers: {
+                // 'Content-Type': 'multipart/form-data',
+                ...authorizationHeader,
+                ...restOptions.headers,
+            },
+            cache: 'no-store',
+            body: body as BodyInit,
+            ...restOptions,
+        });
+    }
+
+    async postFile<T>(body?: T): Promise<Response> {
+        return this.uploadFile({ method: ApiMethod.POST, body });
+    }
 }

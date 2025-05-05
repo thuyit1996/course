@@ -29,6 +29,7 @@ interface  WritingFeedback  {
     lexicalResource: number;
     grammar: number;
     remarks: string;
+    listAnswer: string[]
   };
 
 interface WritingTestList {

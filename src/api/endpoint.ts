@@ -8,5 +8,7 @@ export const END_POINTS = {
     LOGIN: '/public/login',
     GET_ALL_ADMIN_TOPIC: '/admin/topics',
     CREATE_QUESTION: '/card',
-    GET_HISTORY: '/history/detail'
+    GET_HISTORY: '/history/detail',
+    CHECK_TOKEN: '/public/token',
+    UPLOAD_FILE: '/upload'
 }

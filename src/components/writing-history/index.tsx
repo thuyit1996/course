@@ -1,86 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { Example, WritingFeedback } from "@/types/exam";
 import React, { useEffect, useId, useRef, useState } from "react";
 import CountdownTimer from "../count-down";
-import { useModal } from "@/hooks/useModal";
-import ConfirmModal from "../ui/confirm-modal";
 import parser from 'html-react-parser';
-import { toast } from 'react-toastify';
-import { getHistoryDetail, submitWritingTest } from "@/api/writing-test/fetches";
-import { useSession } from "next-auth/react";
-import { useEventSourceWithAutoReconnect } from "@/hooks/useEventSource";
 
 export interface InvokeTimmer {
     invokeCountDown: () => void;
     forceFinish: () => void;
 }
-const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
-    const [content, setContent] = useState('');
-    const { isOpen, closeModal, openModal } = useModal();
-    const { isOpen: isOpenWaiting, closeModal: closeModalWaiting, openModal: openModalWaiting } = useModal();
+const Writing = ({ exam, history, examId }: { exam: Example, history: { examResults: WritingFeedback[]; }, examId: string }) => {
     const countDownRef = useRef<InvokeTimmer>(null);
-    const [isStart, setIsStart] = useState(false);
-    const [response, setResponse] = useState<WritingFeedback | null>(null)
-    const session = useSession();
-    const countWords = content?.trim?.() === ''
-        ? 0
-        : content?.trim?.().split(/\s+/)?.length;
 
-    const url = session ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/stream/scoreResult/${session.data?.user.userId}` : undefined;
-
-    const { data, error } = useEventSourceWithAutoReconnect(url);
-    console.log(data, error);
     useEffect(() => {
-        if ((error as any)?.error) {
-            toast.error((error as any)?.error ?? '');
-            // countDownRef.current?.forceFinish();
-            closeModalWaiting();
-            countDownRef.current?.invokeCountDown();
-        }
-    }, [error]);
-    useEffect(() => {
-        if(data?.examId === examId && data?.userId) {
-            getHistoryData(data.examId, data.userId);
-            countDownRef.current?.forceFinish();
-            closeModalWaiting();
-        }
-    }, [data]);
-    const getHistoryData = async(examId: string, userId: string) => {
-        try {
-            const resp = await getHistoryDetail(examId, userId);
-            console.log(resp);
-            if(resp.responseData) {
-                setResponse(resp.responseData?.examResults?.[0])
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    const onSubmitExam = async () => {
-        try {
-            if (!content) {
-                countDownRef.current?.invokeCountDown();
-                toast.error(`You haven't entered any content. Please add content before submitting.`);
-            } else {
-                openModalWaiting();
-                const resp = await submitWritingTest(examId, content);
-                if (resp.responseData) {
-                    // closeModalWaiting();
-                } else {
-                    closeModalWaiting();
-                    toast.error(`Something went wrong`);
-                    countDownRef.current?.invokeCountDown();
-                }
-            }
-        } catch (error) {
-            closeModalWaiting();
-            countDownRef.current?.invokeCountDown();
-            console.log(error);
-            toast.error(`Something went wrong`);
-        }
-    }
+        countDownRef.current?.forceFinish();
+    }, []);
+    const response = history?.examResults?.[0];
     const feedback = response ? parser(response?.remarks, {
         replace(domNode) {
             if (domNode.type === 'text') {
@@ -102,22 +37,24 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
         },
     }) : '';
     console.log(response);
+    const content = response?.listAnswer?.[0];
+    const countWords = content?.trim?.() === ''
+        ? 0
+        : content?.trim?.().split(/\s+/)?.length;
     return (
         <>
             <div className="flex">
                 <div className="max-h-[500px] lg:p-10 p-5 rounded-lg shadow text-center bg-white col-span-2 sticky top-[104px] w-[295px] mr-6" data-aos="fade-right">
                     <div className="text-base font-semibold text-indigo-600 lg:mb-10 mb-8">TIMER</div>
                     <CountdownTimer
-                        submitExample={openModal}
-                        onCancel={() => {
-                            setContent('');
-                            setIsStart(false)
-                        }}
-                        onUpdateStatus={setIsStart}
+                        submitExample={console.log}
+                        onCancel={console.log}
+                        onUpdateStatus={console.log}
                         ref={countDownRef}
-                        onStop={() => setIsStart(false)}
+                        onStop={console.log}
                         response={response as WritingFeedback}
-                        onRetake={() => setResponse(null)}
+                        isReview={true}
+                        examId={examId}
                     />
                 </div>
                 <div className="gap-6 grid grid-cols-12 w-full">
@@ -156,14 +93,13 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                                         className="w-full h-[320px]  bg-gray-50 rounded-lg border-0 overflow-auto focus:outline-none text-sm lg:text-base 4xl:text-lg text-[#262626] placeholder-gray-400 resize-none disabled:opacity-50"
                                         placeholder={exam?.cards?.[0]?.question?.hint}
                                         value={content}
-                                        disabled={!isStart || !!response}
-                                        onChange={(event) => setContent(event.target.value)}
+                                        disabled
                                     />
                                 </div>
                             </div> : null
                         }
                     </>}
-                    {response ? <div className='rounded-lg col-span-4 sticky max-h-[444px] top-[104px]' data-aos="fade-left">
+                    <div className='rounded-lg col-span-4 sticky max-h-[444px] top-[104px]' data-aos="fade-left">
                         <div className='4xl:p-10 p-3 md:p4 2xl:p-6 relative overflow-hidden' style={{
                             borderTopLeftRadius: 8,
                             borderTopRightRadius: 8,
@@ -179,7 +115,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                             >
                                 <path
                                     d="M454,100 C370,180 100,120 0,160 L0,150 L454,150 Z"
-                                    fill="rgba(255, 255, 255, 0.03)" // nhẹ nhàng thôi để không đè gradient
+                                    fill="rgba(255, 255, 255, 0.03)"
                                 />
                             </svg>
                             <div className='relative z-20 flex items-center justify-between'>
@@ -216,22 +152,9 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                                 </div>
                             </li>
                         </ul>
-                    </div> : null
-                    }
+                    </div>
                 </div>
             </div>
-            <ConfirmModal isOpen={isOpen} closeModal={() => {
-                closeModal();
-                countDownRef.current?.invokeCountDown();
-            }} buttonLabel={['Cancel', 'Submit Now']} handleSave={() => {
-                closeModal();
-                onSubmitExam();
-            }} title="Have you finished your writing?" content="Once you submit, you won’t be able to edit your response.<br /> Are you sure you want to submit?" />
-            {/* Modal waiting  */}
-            <ConfirmModal isOpen={isOpenWaiting} closeModal={closeModalWaiting} isShowFooter={false}
-                title="Scoring in progress..."
-                content="The AI is evaluating your writing.<br/> Please wait a moment while we process your results."
-            />
         </>
     )
 }

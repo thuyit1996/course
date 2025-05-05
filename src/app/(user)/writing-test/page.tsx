@@ -41,7 +41,7 @@ const WritingTestPage = async () => {
                         </div>
                         <div className='mt-10 flex justify-center items-center'>
                             {item.score ? <>
-                                <Link href={'/writing-test/review'} className='w-1/2 mr-2.5'>
+                                <Link href={`/writing-test/review/${item.id}`} className='w-1/2 mr-2.5'>
                                     <Button variant='outline' className='w-full'>Review</Button>
                                 </Link>
                                 <Link href={`/writing-test/start/${item.id}`} className='w-1/2'>

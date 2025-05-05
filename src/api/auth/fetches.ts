@@ -13,3 +13,9 @@ export const signIn = async (payload: {
         .then((res) => res.json());
 };
 
+export const validateToken = async (): Promise<ResponseData<boolean>> => {
+    const AuthApiInstance = new API();
+    return AuthApiInstance.addPathName(END_POINTS.CHECK_TOKEN)
+        .post()
+        .then((res) => res.json());
+}

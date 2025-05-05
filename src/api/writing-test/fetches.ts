@@ -56,4 +56,7 @@ export const getHistoryDetail = async (examId: string, userId: string): Promise<
     const api = new API();
     return api.addPathName(`${END_POINTS.GET_HISTORY}?resultId=${examId}&userId=${userId}`).get().then(res => res.json());
 }
-// export const 
+export const uploadFile = async (formData: FormData): Promise<ResponseData<string>> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.UPLOAD_FILE}`).postFile(formData).then(res => res.json());
+}

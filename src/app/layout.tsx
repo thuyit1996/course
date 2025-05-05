@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AosProvider from "@/providers/AOSProvider";
 import { NextAuthProvider } from "@/providers/NextAuthProvider";
+import TokenGuard from "@/components/token-guard";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -29,7 +30,9 @@ export default function RootLayout({
         <AosProvider>
           <NextAuthProvider>
             <QueryProvider>
-              {children}
+              <TokenGuard>
+                {children}
+              </TokenGuard>
             </QueryProvider>
           </NextAuthProvider>
         </AosProvider>

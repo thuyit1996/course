@@ -51,7 +51,7 @@ const Sidebar: React.FC = () => {
             </nav>
             <div className="px-4 fixed bottom-8 w-[274px]">
                 <div className="mt-4 flex items-center p-4 border border-gray-100 rounded-3xl">
-                    <UserDropdown />
+                    <UserDropdown isAdminSite={true}/>
                 </div>
 
             </div>

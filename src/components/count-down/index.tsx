@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, forwardRef, Ref, useImperativeHandl
 import { InvokeTimmer } from '../writing';
 import { WritingFeedback } from '@/types/exam';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 interface CountdownTimerProps {
   submitExample: () => void;
   onCancel: () => void;
@@ -10,10 +11,12 @@ interface CountdownTimerProps {
   onStop: () => void;
   response?: WritingFeedback;
   onRetake?: () => void;
+  isReview?: boolean;
+  examId?: string
 }
 
 const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
-  ({ submitExample, onCancel, onUpdateStatus, onStop, response, onRetake }, ref: Ref<InvokeTimmer>) => {
+  ({ submitExample, onCancel, onUpdateStatus, onStop, response, onRetake, isReview = false, examId }, ref: Ref<InvokeTimmer>) => {
     const duration = 20 * 60; // 20 minutes
     const radius = 90;
     const strokeWidth = 15;
@@ -23,6 +26,7 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
     const [isRunning, setIsRunning] = useState(false);
     const [isResetting, setIsResetting] = useState(false);
     const [isFinishTest, setIsFinishTest] = useState(false);
+    const router = useRouter();
 
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -151,11 +155,17 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
           </div>
         </div>
         {
-          isFinishTest ?
+          (isFinishTest || isReview) ?
             <div className='flex flex-col'>
               <button
                 className="mt-10 mr-4 w-full px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
-                onClick={() => window.location.reload()}
+                onClick={() => {
+                  if(isReview) {
+                    router.push(`/writing-test/start/${examId}`)
+                  }else {
+                    window.location.reload()
+                  }
+                }}
               >Try the Test Again</button>
               <Link href={'/writing-test'}>
 <button
