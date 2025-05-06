@@ -22,6 +22,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
     const { isOpen: isOpenWaiting, closeModal: closeModalWaiting, openModal: openModalWaiting } = useModal();
     const countDownRef = useRef<InvokeTimmer>(null);
     const [isStart, setIsStart] = useState(false);
+    const [isFinish, setIsFinish] = useState(false);
     const [response, setResponse] = useState<WritingFeedback | null>(null)
     const session = useSession();
     const countWords = content?.trim?.() === ''
@@ -34,10 +35,12 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
     console.log(data, error);
     useEffect(() => {
         if ((error as any)?.error) {
-            toast.error((error as any)?.error ?? '');
-            // countDownRef.current?.forceFinish();
             closeModalWaiting();
-            countDownRef.current?.invokeCountDown();
+            toast.error((error as any)?.error ?? '');
+            countDownRef.current?.forceFinish();
+            if((error as any).userId && (error as any).examId) {
+                getHistoryData((error as any).examId , (error as any).userId);
+            }
         }
     }, [error]);
     useEffect(() => {
@@ -118,6 +121,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                         onStop={() => setIsStart(false)}
                         response={response as WritingFeedback}
                         onRetake={() => setResponse(null)}
+                        alertFinish={() => setIsFinish(true)}
                     />
                 </div>
                 <div className="gap-6 grid grid-cols-12 w-full">
@@ -140,7 +144,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                             exam?.cards?.[0] ? <div className={'col-span-12'} data-aos="fade-left">
                                 <div className=" bg-white p-10 rounded-lg shadow" >
                                     <div className="text-base font-semibold text-indigo-600 mb-4">QUESTION</div>
-                                    <div className={`${!isStart ? 'blur-sm brightness-125 contrast-110 rounded-md' : ''}`}>
+                                    <div className={`${(!isStart && !isFinish) ? 'blur-sm brightness-125 contrast-110 rounded-md' : ''}`}>
                                         <p className="text-sm lg:text-base 4xl:text-lg mb-4 font-medium text-[#262626]">
                                             {exam?.cards?.[0]?.question?.text}
                                         </p>

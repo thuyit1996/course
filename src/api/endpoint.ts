@@ -13,4 +13,5 @@ export const END_POINTS = {
     UPLOAD_FILE: '/upload',
     GET_ALL_CLASS: '/admin/classroom/list',
     GET_QUESTIONS: '/admin/cards',
+    CREATE_EXAM: '/exam',
 }

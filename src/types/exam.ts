@@ -41,7 +41,15 @@ interface WritingTestList {
         cards: string[],
         remarks: string,
         score: number,
-        total: number
+        total: number,
+        code: string,
     }[]
 }
-export type { Example, WritingFeedback, WritingTestList }
+type QuestionList = {
+    cards: {
+        id: string,
+        question: { sound: string, text: string, image: string },
+        checked: boolean
+    }[]
+}
+export type { Example, WritingFeedback, WritingTestList , QuestionList }

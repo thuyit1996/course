@@ -9,11 +9,13 @@ import Topic from '@/public/images/icons/topic.svg';
 import Question from '@/public/images/icons/question.svg';
 import UserDropdown from '../header/UserDropdown';
 import Link from 'next/link';
+import { useGetAllClass } from '@/api/admin/query';
 const Sidebar: React.FC = () => {
+    const { data } = useGetAllClass();
     return (
         <aside className="hidden md:flex flex-col w-[276px] shadow rounded-3xl bg-white py-4 h-[calc(100vh-2rem)] fixed inset-4 z-30">
             <div className='pb-4 border-b border-gray-100  px-4.5'>
-                <img src="/images/logo/logo-main.svg" />
+                <img src="/images/logo/logo-main.svg" className='h-10' />
             </div>
             <nav className="flex-1 px-4.5 py-4  sidenav-menu">
                 <div>
@@ -40,10 +42,10 @@ const Sidebar: React.FC = () => {
                 <div className='mt-4'>
                     <p className="font-semibold text-sm text-[#757575] px-4">Class</p>
                     <div className={`max-h-[350px] overflow-y-auto`}>
-                        {['Grade 11', 'Grade 10', 'Grade 9'].map((grade, index) => (
-                            <a href="#" key={index} className="font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600">
+                        {data?.responseData?.classroom?.map((grade, index) => (
+                            <a href="#" key={grade.id} className="font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600">
                                 <Grade className="mr-2" />
-                                <span>Grade {index + 1}</span></a>
+                                <span>{grade.name}</span></a>
                         ))}
 
                     </div>

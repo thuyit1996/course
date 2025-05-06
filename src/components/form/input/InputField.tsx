@@ -69,6 +69,7 @@ const Input: FC<InputProps> = ({
         disabled={disabled}
         className={inputClasses}
         value={value}
+        onClick={console.log}
       />
 
       {/* Optional Hint Text */}

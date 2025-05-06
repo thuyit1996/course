@@ -13,11 +13,12 @@ interface CountdownTimerProps {
   onRetake?: () => void;
   isReview?: boolean;
   examId?: string
+  alertFinish?: () => void;
 }
 
 const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
-  ({ submitExample, onCancel, onUpdateStatus, onStop, response, onRetake, isReview = false, examId }, ref: Ref<InvokeTimmer>) => {
-    const duration = 20 * 60; // 20 minutes
+  ({ submitExample, onCancel, onUpdateStatus, onStop, response, onRetake, isReview = false, examId, alertFinish }, ref: Ref<InvokeTimmer>) => {
+    const duration = 0.1 * 60; // 20 minutes
     const radius = 90;
     const strokeWidth = 15;
     const circumference = 2 * Math.PI * radius;
@@ -117,6 +118,18 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
       onStop();
       setIsFinishTest(true);
     };
+
+    useEffect(() => {
+      if(timeLeft === 0) {
+        alertFinish?.();
+      }
+    }, [timeLeft])
+
+    useEffect(() => {
+      if(isFinishTest) {
+        alertFinish?.();
+      }
+    }, [isFinishTest])
 
     return (
       <div className="flex flex-col justify-center items-center">
