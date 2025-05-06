@@ -10,5 +10,7 @@ export const END_POINTS = {
     CREATE_QUESTION: '/card',
     GET_HISTORY: '/history/detail',
     CHECK_TOKEN: '/public/token',
-    UPLOAD_FILE: '/upload'
+    UPLOAD_FILE: '/upload',
+    GET_ALL_CLASS: '/admin/classroom/list',
+    GET_QUESTIONS: '/admin/cards',
 }

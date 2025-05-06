@@ -178,7 +178,7 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
             : (isRunning || timeLeft === 0) ? <div>
               <button
                 className="mt-10 mr-4 px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
-                onClick={resetCountdown}
+                onClick={() => router.push('/writing-test')}
               >Cancel</button>
               <button
                 className="mt-10 px-4 py-2.5 border border-indigo-100 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"

@@ -626,3 +626,19 @@ textarea:focus {
     transform: translateY(-5px);
   }
 }
+
+.dropdown-container {
+  border:1px solid var(--gray-300) !important;
+  border-radius: 8px !important;
+  height: 44px !important;
+}
+
+.dropdown-container .dropdown-heading {
+  margin-top:2px!important;
+
+}
+
+.dropdown-container .dropdown-heading span {
+  font-size: 14px!important;
+  color: var(--gray-400);
+}

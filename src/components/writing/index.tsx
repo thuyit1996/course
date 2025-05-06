@@ -41,17 +41,17 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
         }
     }, [error]);
     useEffect(() => {
-        if(data?.examId === examId && data?.userId) {
+        if (data?.examId === examId && data?.userId) {
             getHistoryData(data.examId, data.userId);
             countDownRef.current?.forceFinish();
             closeModalWaiting();
         }
     }, [data]);
-    const getHistoryData = async(examId: string, userId: string) => {
+    const getHistoryData = async (examId: string, userId: string) => {
         try {
             const resp = await getHistoryDetail(examId, userId);
             console.log(resp);
-            if(resp.responseData) {
+            if (resp.responseData) {
                 setResponse(resp.responseData?.examResults?.[0])
             }
         } catch (error) {
@@ -101,7 +101,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
 
         },
     }) : '';
-    console.log(response);
+    console.log(isStart);
     return (
         <>
             <div className="flex">
@@ -138,13 +138,15 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                     </div> : <>
                         {
                             exam?.cards?.[0] ? <div className={'col-span-12'} data-aos="fade-left">
-                                < div className=" bg-white p-10 rounded-lg shadow" >
+                                <div className=" bg-white p-10 rounded-lg shadow" >
                                     <div className="text-base font-semibold text-indigo-600 mb-4">QUESTION</div>
-                                    <p className="text-sm lg:text-base 4xl:text-lg mb-4 font-medium text-[#262626]">
-                                        {exam?.cards?.[0]?.question?.text}
-                                    </p>
-                                    <div className="px-10 flex justify-center">
-                                        <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
+                                    <div className={`${!isStart ? 'blur-sm brightness-125 contrast-110 rounded-md' : ''}`}>
+                                        <p className="text-sm lg:text-base 4xl:text-lg mb-4 font-medium text-[#262626]">
+                                            {exam?.cards?.[0]?.question?.text}
+                                        </p>
+                                        <div className="px-10 flex justify-center">
+                                            <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
+                                        </div>
                                     </div>
                                 </div >
                                 <div className="bg-white p-6 rounded-lg shadow mt-4">
