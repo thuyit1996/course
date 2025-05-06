@@ -14,4 +14,5 @@ export const END_POINTS = {
     GET_ALL_CLASS: '/admin/classroom/list',
     GET_QUESTIONS: '/admin/cards',
     CREATE_EXAM: '/exam',
+    GET_USER_IN_CLASS: '/admin/users?orderBy=userId&orderDirection=asc&pageIndex=0&pageSize=100'
 }

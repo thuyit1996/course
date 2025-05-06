@@ -581,7 +581,7 @@ textarea:focus {
   fill: #2c2c2c;
 }
 
-.sidenav-menu:hover svg {
+.sidenav-menu a:hover svg {
   fill: var(--rose-600);
 }
 

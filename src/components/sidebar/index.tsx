@@ -43,9 +43,9 @@ const Sidebar: React.FC = () => {
                     <p className="font-semibold text-sm text-[#757575] px-4">Class</p>
                     <div className={`max-h-[350px] overflow-y-auto`}>
                         {data?.responseData?.classroom?.map((grade, index) => (
-                            <a href="#" key={grade.id} className="font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600">
+                            <Link href={`/admin/grade/${grade.id}`} key={grade.id} className="font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600">
                                 <Grade className="mr-2" />
-                                <span>{grade.name}</span></a>
+                                <span>{grade.name}</span></Link>
                         ))}
 
                     </div>

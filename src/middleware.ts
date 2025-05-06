@@ -11,6 +11,8 @@ export const config = {
         '/admin/teachers',
         '/admin',
         '/admin/questions',
+        '/admin/exams',
+        '/admin/grade',
         '/'
     ],
 };

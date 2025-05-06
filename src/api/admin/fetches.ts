@@ -1,7 +1,7 @@
 import { ResponseData } from "@/types/api";
 import { END_POINTS } from "../endpoint";
 import { API } from "../fetch";
-import { Class } from "@/types/admin";
+import { Class, User } from "@/types/admin";
 import { QuestionList } from "@/types/exam";
 
 export const getAllClass = (): Promise<ResponseData<Class>> => {
@@ -23,3 +23,8 @@ export const createExam = (body: {
     const api = new API();
     return api.addPathName(`${END_POINTS.CREATE_EXAM}`).post(body).then(res => res.json());
 }
+
+export const getUserInClass = (classId: string): Promise<{total: number, users: User[]}> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.GET_USER_IN_CLASS}&classroomId=${classId}`).get().then(res => res.json());
+} 
