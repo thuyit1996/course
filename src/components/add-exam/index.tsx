@@ -16,8 +16,8 @@ import { QuestionList } from "@/types/exam";
 import { toast } from "react-toastify";
 
 const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => void }) => {
-    const [selected, setSelected] = useState([]);
     const [isOpenDropdown, setIsOpen] = useState(false);
+    const [isOpenTopic, setIsOpenTopic] = useState(false);
     const [topic, setTopic] = useState('');
     const { data: classResp } = useGetAllClass();
     const { data: topicResp } = useGetAllAdminTopic();
@@ -27,13 +27,15 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
     const [displayQuestionText, setDisplayQuestionText] = useState('');
     const [name, setName] = useState('');
     const [classroomId, setClassroomId] = useState('');
-    const getQuestionByTopic = async (topicId: string) => {
-        setTopic(topicId);
-        const resp = await getQuestionByTopicId(topicId);
-        if (resp?.cards) {
-            setTempQuestions(resp.cards);
+  
+    const [topics, setTopics] = useState<{ id: string, name: string }[]>([]);
+    const [isSelectAllTopics, setIsSelectAllTopics] = useState(false);
+    const [displayTopics, setDisplayTopics] = useState('');
+    useEffect(() => {
+        if (topicResp?.topics) {
+            setTopics(topicResp.topics)
         }
-    }
+    }, [topicResp])
     function closeDropdown() {
         setIsOpen(false);
     }
@@ -95,14 +97,14 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
         try {
             const body = {
                 name,
-                "topicId": topic,
+                "topicIds":  topics?.filter((item: any) => item.checked === true)?.map(item => item.id),
                 "classroomId": classroomId,
                 "cardIds": tempQuestions?.filter((item: any) => item.checked)?.map((item: any) => item.id)
             }
             const resp = await createExam(body);
-            if(resp?.responseData){
+            if (resp?.responseData) {
                 toast.success("Create exam successfully!");
-            }else {
+            } else {
                 toast.error("Something went wrong")
             }
             closeModal();
@@ -110,6 +112,62 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
             toast.error("Something went wrong")
         }
     }
+
+    const onChangeSelectAllTopics = (value: boolean) => {
+        setIsSelectAllTopics(value);
+        if (value) {
+            const newTopics = topics.map((item: any) => {
+                return {
+                    ...item,
+                    checked: true
+                }
+            })
+            setTopics(newTopics);
+        } else {
+            const newTopics = topics.map((item: any) => {
+                return {
+                    ...item,
+                    checked: false
+                }
+            })
+            setTopics(newTopics);
+        }
+    }
+
+    const selectTopic = (status: boolean, id: string) => {
+        const newTopics = topics.map((item: any) => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    checked: status
+                }
+            } else {
+                return {
+                    ...item
+                }
+            }
+        })
+        setTopics(newTopics);
+    }
+    const onApplyTopic = () => {
+        setIsOpenTopic(false);
+        const countActive = topics?.filter((item: any) => item.checked === true);
+        if (countActive?.length) {
+            setDisplayTopics(`${countActive.length} ${countActive.length > 1 ? 'topics' : 'topic'}` as string);
+            console.log(countActive.map(item => item.id));
+            getQuestionByTopics(countActive.map(item => item.id))
+        } else {
+            setDisplayTopics('');
+        }
+    }
+
+    const getQuestionByTopics = async (topicIds: string[]) => {
+        const resp = await getQuestionByTopicId(topicIds);
+        if (resp?.cards) {
+            setTempQuestions(resp.cards);
+        }
+    }
+    const activeTopics = topics?.filter((item: any) => item.checked === true);
     return (
         <CustomModal
             isOpen={isOpen}
@@ -117,6 +175,7 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
             title='Create exam'
             buttonLabel={['Cancel', 'Create']}
             handleSave={onCreateExam}
+            showLeftButton={false}
         >
             <div className="flex flex-col overflow-y-auto custom-scrollbar max-h-[450px]">
                 <div className="mt-6">
@@ -144,7 +203,7 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
                         <label className="mb-2 block text-base text-[#2c2c2c]">
                             Topic List
                         </label>
-                        <Select
+                        {/* <Select
                             options={topicResp?.topics?.map(item => ({
                                 label: item.name,
                                 value: item.id
@@ -152,7 +211,45 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
                             onChange={getQuestionByTopic}
                             placeholder="Choose topic"
                             className="bg-gray-50 text-base"
-                        />
+                        /> */}
+                        <div className={`border border-gray-300 cursor-pointer flex items-center px-4 text-base rounded-lg h-11 leading-11 text-sm text-gray-500 shadow-theme-xs w-full relative`} onClick={() => {
+                            if (isOpenTopic) {
+                                setIsOpenTopic(false);
+                            } else {
+                                setIsOpenTopic(true);
+                            }
+                        }}>{displayTopics || 'Select topics'}
+                            <ArrowSelect className="absolute right-3 top-4" />
+                        </div>
+                        <Dropdown
+                            isOpen={isOpenTopic}
+                            onClose={() => setIsOpenTopic(false)}
+                            className={`absolute right-7.5 z-999  mt-[4px] flex w-[536px] flex-col rounded-lg bg-white p-4 shadow-[0px_4px_8px_0px_#00000014]`}
+                        >
+                            <span className="text-[#757575] text-xs">Topic count: {topics?.length ?? 0}</span>
+                            <div className="mt-4 min-h-[332px] max-h-[332px] mb-5 overflow-y-auto">
+                                {topics?.length ?
+                                    <div className="flex items-center gap-3 mt-2">
+                                        <Checkbox checked={isSelectAllTopics} onChange={(value) => {
+                                            onChangeSelectAllTopics(value);
+                                        }} className="w-5 h-5   text-sm text-[#2c2c2c]" label={`All (${topics?.length} topics)`} />
+                                    </div> : null
+                                }
+                                {topics?.map((item, index: number) => {
+                                    return (
+                                        <div className="flex items-center gap-3 mt-4" key={index}>
+                                            <Checkbox checked={(item as any).checked} onChange={(status) => selectTopic(status, item.id)} className="w-5 h-5  text-sm text-[#2c2c2c]" label={item.name} />
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                            <div className="flex w-full">
+                                <Button variant='outline' className='w-1/2 mr-2.5' onClick={() => onChangeSelectAllTopics(false)}>Reset</Button>
+                                <Button variant='primary' className='w-1/2' onClick={() => onApplyTopic()}>
+                                    Apply
+                                </Button>
+                            </div>
+                        </Dropdown>
                     </div>
                 </div>
                 <div className="mt-6">
@@ -160,7 +257,7 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
                         <label className="mb-2 block t  ext-base text-[#2c2c2c]">
                             Question List
                         </label>
-                        <div className={`border border-gray-300 cursor-pointer flex items-center px-4 text-base rounded-lg h-11 leading-11 text-sm text-gray-500 shadow-theme-xs w-full relative ${!topic ? 'pointer-events-none bg-gray-100' : ''}`} onClick={() => {
+                        <div className={`border border-gray-300 cursor-pointer flex items-center px-4 text-base rounded-lg h-11 leading-11 text-sm text-gray-500 shadow-theme-xs w-full relative ${!activeTopics?.length ? 'pointer-events-none bg-gray-100' : ''}`} onClick={() => {
                             if (isOpenDropdown) {
                                 closeDropdown();
                             } else {
@@ -175,7 +272,7 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
                             className={`absolute right-7.5 z-999  mt-[4px] flex w-[536px] flex-col rounded-lg bg-white p-4 shadow-[0px_4px_8px_0px_#00000014]`}
                         >
                             <span className="text-[#757575] text-xs">Question count: {questions?.length ?? 0}</span>
-                            <div className="mt-4 min-h-[332px] max-h-[332px] overflow-y-auto">
+                            <div className="mt-4 min-h-[332px] max-h-[332px] mb-5 overflow-y-auto">
                                 {questions?.length ?
                                     <div className="flex items-center gap-3 mt-2">
                                         <Checkbox checked={isSelectAll} onChange={(value) => {
@@ -185,7 +282,7 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
                                 }
                                 {tempQuestions?.map((item: any, index: number) => {
                                     return (
-                                        <div className="flex items-center gap-3 mt-2" key={index}>
+                                        <div className="flex items-center gap-3 mt-4" key={index}>
                                             <Checkbox checked={item.checked} onChange={(status) => selectQuestion(status, item.id)} className="w-5 h-5  text-sm text-[#2c2c2c]" label={item.question?.text} />
                                         </div>
                                     )

@@ -15,8 +15,9 @@ interface ConfirmModalProps {
   addQuestion?: () => void;
   showAddQuestion?: boolean;
   goBack?: () => void;
+  showLeftButton?: boolean
 }
-const CustomModal = ({ isOpen, closeModal, handleSave, isShowFooter = true, buttonLabel, showButton, title, children, addQuestion, showAddQuestion, goBack }: ConfirmModalProps) => {
+const CustomModal = ({ isOpen, closeModal, handleSave, isShowFooter = true, buttonLabel, showButton, title, children, addQuestion, showAddQuestion, goBack, showLeftButton = true }: ConfirmModalProps) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -30,14 +31,14 @@ const CustomModal = ({ isOpen, closeModal, handleSave, isShowFooter = true, butt
       {children}
       {
         isShowFooter ? <div className="mt-6 flex items-center">
-          {
+          {showLeftButton ? <>{
             showAddQuestion ?
               <Button variant='outline' className="w-[300px]" startIcon={<PlusIcon className="fill-[#2c2c2c]" />} onClick={addQuestion}>Add Child Question</Button>
               : <Button size="md" className={`${showButton?.[0] && 'hidden'} w-[300px]`} variant="outline" onClick={goBack}>
                 <BackIcon className="mr-1" />
                 Back Question Type
               </Button>
-          }
+          }</> : null}
           <div className={`flex items-center justify-end w-full gap-3`}>
             <Button size="md" className={`${showButton?.[0] && 'hidden'}`} variant="outline" onClick={closeModal}>
               {buttonLabel?.[0] ?? 'Cancel'}

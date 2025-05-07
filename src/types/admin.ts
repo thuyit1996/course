@@ -24,4 +24,25 @@ type User = {
     address: string;
     phone: string;
 }
-export type { Schedule, Classroom, Class, User }
+
+interface Creator {
+    userId: string;
+    displayName: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    address: string;
+    phone: string;
+  }
+  
+  interface Exam {
+    id: string;
+    name: string;
+    code: string;
+    creator: Creator;
+    cardIds: string[];
+    createdDate: number;
+    lastModifiedDate: number;
+  }
+
+export type { Schedule, Classroom, Class, User, Exam }

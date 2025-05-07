@@ -38,7 +38,7 @@ const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {
                     if (session?.user.roles?.includes("ROLE_ADMIN")) {
                         router.push('/admin/questions');
                     } else {
-                        router.push('/writing-test')
+                        router.push('/')
                     }
                     router.refresh();
                 } else {
