@@ -1,16 +1,18 @@
-'use client';
-import Header from "@/components/admin-header"
-import MobileMenu from "@/components/mobile-menu";
-import Sidebar from "@/components/sidebar"
-import React, { useState } from "react"
+import React from "react"
+import AdminContainer from "../containers/AdminContainer";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/libs/auth";
+import { redirect } from "next/navigation";
 
-const AdminLayout = ({ children }: { children: React.ReactNode }) => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    return <div className="bg-[#fffaf5] md:p-4">
-             <Sidebar />
-            <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-            <Header onMenuClick={() => setIsMenuOpen(true)} />
-                {children}
-    </div>
+const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
+    const session = await getServerSession(authOptions);
+    if(session && !session.user?.roles?.includes("ROLE_ADMIN")) {
+        return redirect('/');
+    }
+    return (
+        <AdminContainer>
+            {children}
+        </AdminContainer>
+    )
 }
 export default AdminLayout

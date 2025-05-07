@@ -35,20 +35,15 @@ const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {
                 });
                 if (resp?.ok) {
                     const session = await getSession();
-                    console.log(session, callbackUrl);
-                    if(callbackUrl) {
-                        router.push(callbackUrl);
-                    }else {
-                        if(session?.user.roles?.includes("ROLE_ADMIN")) {
-                            router.push('/admin/questions');
-                        }else {
-                            router.push('/writing-test')
-                        }
+                    if (session?.user.roles?.includes("ROLE_ADMIN")) {
+                        router.push('/admin/questions');
+                    } else {
+                        router.push('/writing-test')
                     }
                     router.refresh();
-                  } else {
+                } else {
                     toast.error(`Invalid login credentials.`);
-                  }
+                }
             })
         } catch (error) {
             console.log(error);

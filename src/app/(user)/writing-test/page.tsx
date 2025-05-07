@@ -14,8 +14,8 @@ const WritingTestPage = async () => {
                 <h3 className="text-lg text-[#2c2c2c] mr-3 font-semibold">All Writing Test</h3>
                 <div className='border rounded-2xl  border-gray-200 text-[#2c2c2c] text-sm text-center px-2 py-1 text-medium'>{writingTestResp?.responseData?.exams?.length || 0} tests</div>
             </div>
-            {JSON.stringify(writingTestResp)}
-            {writingTestResp?.responseData?.exams?.length ? <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5 gap-4">
+            
+            {writingTestResp?.responseData?.exams?.length ? <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5 gap-4 mb-10">
                 {writingTestResp?.responseData?.exams.map((item) => {
                     return <div className="rounded-2xl p-6 relative bg-indigo-800 bg-[url('/images/grid-image/test.png')] bg-cover bg-center" key={item.id} data-aos="fade-up">
                         <p className="flex items-center justify-center">

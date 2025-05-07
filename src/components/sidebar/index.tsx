@@ -21,7 +21,7 @@ const Sidebar: React.FC = () => {
             <div className='pb-4 border-b border-gray-100  px-4.5'>
                 <img src="/images/logo/logo-main.svg" className='h-10' />
             </div>
-            <nav className="flex-1 px-4.5 py-4  sidenav-menu max-h-[420px] overflow-y-auto">
+            <nav className="flex-1 px-4.5 py-4  sidenav-menu max-h-[70vh] overflow-y-auto">
                 <div>
                     <p className="font-semibold text-sm text-[#757575] px-4">Account</p>
                     <Link href="/admin/teachers" className="font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600">

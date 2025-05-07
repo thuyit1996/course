@@ -1,6 +1,7 @@
 import { authOptions } from "@/libs/auth";
 import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 enum ApiMethod {
     GET = 'GET',
@@ -81,7 +82,21 @@ export class API {
             cache: 'no-store',
             body: body ? JSON.stringify(body) : null,
             ...restOptions,
-        });
+        }).then(res => {
+            console.log("status", res.status);
+            if (res.status === 401) {
+                if (typeof window !== 'undefined') void signOut({ callbackUrl: '/sign-in' });
+                else redirect('/logout');
+                return {
+                    ...res,
+                    json: () =>
+                        new Promise((resolve) => {
+                            resolve(null);
+                        }),
+                };
+            }
+            return res;
+        })
     }
 
     async get(): Promise<Response> {
