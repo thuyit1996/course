@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 const AddQuestion = dynamic(() => import('@/components/add-question'), { ssr: false });
 const QuestionPage: React.FC = () => {
     const { isOpen, openModal, closeModal } = useModal();
-
+    const chooseQuestion = useModal();
     return (
         <>
 
@@ -25,9 +25,13 @@ const QuestionPage: React.FC = () => {
                     </div>
                 </div>
                 {
+                    chooseQuestion.isOpen && 
+                    <ChooseQuestion
+                }
+                {/* {
                     isOpen &&
                     <AddQuestion isOpen={isOpen} openModal={openModal} closeModal={closeModal} />
-                }
+                } */}
             </main>
         </>
     );
