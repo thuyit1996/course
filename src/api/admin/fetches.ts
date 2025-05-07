@@ -28,4 +28,10 @@ export const getUserInClass = (classId: string): Promise<{total: number, users: 
     console.log(classId);
     const api = new API();
     return api.addPathName(`${END_POINTS.GET_USER_IN_CLASS}&classroomIds=${classId}`).get().then(res => res.json());
-} 
+}
+
+// export const getUserInClass = (classId: string): Promise<{total: number, users: User[]}> => {
+//     console.log(classId);
+//     const api = new API();
+//     return api.addPathName(`${END_POINTS.GET_USER_IN_CLASS}&classroomIds=${classId}`).get().then(res => res.json());
+// } 

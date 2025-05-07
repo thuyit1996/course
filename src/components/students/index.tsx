@@ -15,7 +15,9 @@ import Image from "next/image";
 import { User } from "@/types/admin";
 import { useParams, useSearchParams } from "next/navigation";
 import Checkbox from "../form/input/Checkbox";
-
+import EditIcon from '@/public/images/icons/edit.svg'
+import TrashIcon from '@/public/images/icons/Trash.svg'
+import LockIcon from '@/public/images/icons/lock.svg'
 interface Order {
   id: number;
   user: {
@@ -142,7 +144,7 @@ export default function Students({ users, total }: { users: User[], total: numbe
                       isHeader
                       className="px-5 py-3 flex text-[#757575] text-xs font-semibold text-start"
                     >
-                      <Checkbox onChange={console.log} checked={true} className="mr-2"/>
+                      <Checkbox onChange={console.log} checked={true} className="mr-2" />
                       <span>Name</span>
                     </TableCell>
                     <TableCell
@@ -191,16 +193,18 @@ export default function Students({ users, total }: { users: User[], total: numbe
                       isHeader
                       className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
                     >
-                      <></>
+                      <>Action</>
                     </TableCell>
                   </TableRow>
                 </TableHeader>
 
                 {/* Table Body */}
                 <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                  {users.map((user) => (
-                    <TableRow key={user.userId}>
-                      {/* <TableCell className="px-5 py-4 sm:px-6 text-start">
+
+                  {users?.length ? <>
+                    {users.map((user) => (
+                      <TableRow key={user.userId}>
+                        {/* <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
                         <Image
@@ -220,16 +224,16 @@ export default function Students({ users, total }: { users: User[], total: numbe
                       </div>
                     </div>
                   </TableCell> */}
-                      <TableCell className="px-4 py-3 text-gray-500 flex text-start text-theme-sm dark:text-gray-400">
-                        <Checkbox onChange={console.log} checked={true} className="mr-2"/>
-                        <span>{user.displayName}</span>
-                      </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                        <></>
-                      </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                        <></>
-                        {/* <div className="flex -space-x-2">
+                        <TableCell className="px-4 py-3 text-gray-500 flex text-start text-theme-sm dark:text-gray-400">
+                          <Checkbox onChange={console.log} checked={true} className="mr-2" />
+                          <span>{user.displayName}</span>
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                          <></>
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                          <></>
+                          {/* <div className="flex -space-x-2">
                       {order.team.images.map((teamImage, index) => (
                         <div
                           key={index}
@@ -245,11 +249,11 @@ export default function Students({ users, total }: { users: User[], total: numbe
                         </div>
                       ))}
                     </div> */}
-                      </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                        <>
-                        </>
-                        {/* <Badge
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                          <>
+                          </>
+                          {/* <Badge
                       size="sm"
                       color={
                         order.status === "Active"
@@ -261,24 +265,48 @@ export default function Students({ users, total }: { users: User[], total: numbe
                     >
                       {order.status}
                     </Badge> */}
-                      </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                        {user.phone}
-                      </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                        {user.email}
-                      </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                        {user.address}
-                      </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                        <></>
-                      </TableCell>
-                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                        <></>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                          {user.phone}
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                          {user.email}
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                          {user.address}
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                          <></>
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                          <div className="flex gap-4">
+                            <EditIcon className="cursor-pointer" />
+                            <LockIcon className="cursor-pointer" />
+                            <TrashIcon className="cursor-pointer" />
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </> : <TableRow>
+                    <TableCell  className="text-center py-10 text-gray-500" colSpan={9}>
+                      <div className="flex flex-col items-center justify-center space-y-2">
+                        <svg
+                          className="w-10 h-10 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9.75 9.75h.008v.008H9.75V9.75zM14.25 9.75h.008v.008H14.25V9.75zM21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"
+                          />
+                        </svg>
+                        <p className="text-[#757575] italic text-lg">No data available to display</p>
+                      </div>
+                    </TableCell>
+                  </TableRow>}
                 </TableBody>
               </Table>
             </div>

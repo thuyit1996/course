@@ -33,13 +33,13 @@ const Sidebar: React.FC = () => {
                 </div>
                 <div className='mt-4'>
                     <p className="font-semibold text-sm text-[#757575] px-4">Exam</p>
-                    <Link href="/admin/exams" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/exams' ? 'text-rose-600 bg-rose-100' : '' }`}>
+                    <Link href="/admin/exams" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/exams' ? 'text-rose-600 bg-rose-100 active' : '' }`}>
                         <Exam className="mr-2" />
                         <span>Exams</span></Link>
                     <Link href="/admin/topics" className="font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600">
                         <Topic className="mr-2" />
                         <span>Topics</span></Link>
-                    <Link href="/admin/questions" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/questions' ? 'text-rose-600 bg-rose-100' : '' }`}>
+                    <Link href="/admin/questions" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/questions' ? 'text-rose-600 bg-rose-100 active' : '' }`}>
                         <Question className="mr-2" />
                         <span>Questions</span></Link>
                 </div>
@@ -47,7 +47,7 @@ const Sidebar: React.FC = () => {
                     <p className="font-semibold text-sm text-[#757575] px-4">Class</p>
                     <div>
                         {data?.responseData?.classroom?.map((grade, index) => (
-                            <Link href={`/admin/grade/${grade.id}?grade=${grade.name}`} key={grade.id} className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${params?.id === grade.id ? 'text-rose-600 bg-rose-100' : ''}`}>
+                            <Link href={`/admin/grade/${grade.id}?grade=${grade.name}`} key={grade.id} className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${params?.id === grade.id ? 'text-rose-600 bg-rose-100 active' : ''}`}>
                                 <Grade className="mr-2" />
                                 <span>{grade.name}</span></Link>
                         ))}

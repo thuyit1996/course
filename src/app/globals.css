@@ -585,6 +585,10 @@ textarea:focus {
   fill: var(--rose-600);
 }
 
+.sidenav-menu a.active svg{
+  fill: var(--rose-600);
+}
+
 .header-icon.active {
   background-color: var(--indigo-100);
   color: var(--indigo-600);
@@ -641,4 +645,14 @@ textarea:focus {
 .dropdown-container .dropdown-heading span {
   font-size: 14px!important;
   color: var(--gray-400);
+}
+
+.scroll-hidden {
+  overflow: auto;
+  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Opera */
 }

@@ -17,23 +17,12 @@ import { v4 } from 'uuid'
 import { useGetAllAdminTopic } from '@/api/writing-test/query';
 import { createQuestion, uploadFile } from '@/api/writing-test/fetches';
 import { toast } from 'react-toastify';
-const QuestionType = [
-    {
-        value: 'text',
-        label: 'Text response'
-    },
-    {
-        value: 'multiple',
-        label: 'Multiple choice'
-    },
-];
 
-const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, closeModal: () => void, openModal: () => void }) => {
+const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: questionTypeProp }: { isOpen: boolean, closeModal: () => void, openModal: () => void, goBack?: () => void, questionType: 0 | 1 }) => {
     const [isQuestionGroup, setIsQuestionGroup] = useState(false);
     const { data: topics } = useGetAllAdminTopic();
     const [imageSrc, setImageSrc] = useState('');
     const [audioSrc, setAudioSrc] = useState('');
-    const [questionType, setQuestionType] = useState('text');
     const [questionMultipleList, setQuestionMultipleList] = useState<{ option: { content: '', isCorrect: boolean, }[], question: string, id: string }[]>([{
         id: v4(), option: [
             { content: '', isCorrect: false, },
@@ -64,7 +53,7 @@ const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, close
             const formData = new FormData();
             formData.append('file', file);
             const resp = await uploadFile(formData);
-            if(resp.responseData) {
+            if (resp.responseData) {
                 setQuestion(prev => ({
                     ...prev,
                     image: resp.responseData
@@ -80,7 +69,7 @@ const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, close
             const formData = new FormData();
             formData.append('file', file);
             const resp = await uploadFile(formData);
-            if(resp.responseData) {
+            if (resp.responseData) {
                 setQuestion(prev => ({
                     ...prev,
                     sound: resp.responseData
@@ -98,23 +87,19 @@ const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, close
     };
 
     const addQuestion = () => {
-        if (questionType === 'multiple') {
-            setQuestionMultipleList(prev => [...prev, {
-                id: v4(),
-                question: '',
-                option: [
-                    { content: '', isCorrect: false, },
-                    { content: '', isCorrect: false, },
-                    { content: '', isCorrect: false, },
-                    { content: '', isCorrect: false, },
-                ]
-            }])
-        }
+        setQuestionMultipleList(prev => [...prev, {
+            id: v4(),
+            question: '',
+            option: [
+                { content: '', isCorrect: false, },
+                { content: '', isCorrect: false, },
+                { content: '', isCorrect: false, },
+                { content: '', isCorrect: false, },
+            ]
+        }])
     }
     const deleteQuestion = (id: string) => {
-        if (questionType === 'multiple') {
-            setQuestionMultipleList(questionMultipleList.filter(item => item.id !== id))
-        }
+        setQuestionMultipleList(questionMultipleList.filter(item => item.id !== id))
     }
     const updateQuestionNotGroup = (index: number, value: boolean | string, type: string) => {
         if (type === 'status') {
@@ -221,18 +206,7 @@ const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, close
     console.log(questionMultipleList);
     const createQuestionHandle = async () => {
         let body: any;
-        if (!isQuestionGroup) {
-            body = {
-                "topicId": topicId,
-                "question": question,
-                "answer": {
-                    "choices": answerNotQuestionGroup,
-                },
-                "type": "0",
-                "isQuestionGroup": false
-            }
-        }
-        if (isQuestionGroup && questionType === 'text') {
+        if (questionTypeProp === 0) {
             body = {
                 "topicId": topicId,
                 "question": question,
@@ -241,21 +215,32 @@ const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, close
                 },
                 "type": "1"
             }
-        }
-        if (isQuestionGroup && questionType === 'multiple') {
-            body = {
-                "topicId": topicId,
-                "question": question,
-                "type": 0,
-                "isQuestionGroup": true,
-                childCards: questionMultipleList.map(item => ({
-                    question: {
-                        text: item.question
+        }else {
+            if (isQuestionGroup && questionTypeProp === 1) {
+                body = {
+                    "topicId": topicId,
+                    "question": question,
+                    "type": 0,
+                    "isQuestionGroup": true,
+                    childCards: questionMultipleList.map(item => ({
+                        question: {
+                            text: item.question
+                        },
+                        answer: {
+                            choices: item.option
+                        }
+                    }))
+                }
+            } else {
+                body = {
+                    "topicId": topicId,
+                    "question": question,
+                    "answer": {
+                        "choices": answerNotQuestionGroup,
                     },
-                    answer: {
-                        choices: item.option
-                    }
-                }))
+                    "type": "0",
+                    "isQuestionGroup": false
+                }
             }
         }
         try {
@@ -279,11 +264,12 @@ const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, close
             closeModal={closeModal}
             title='Create question'
             buttonLabel={['Cancel', 'Create']}
-            showAddQuestion={questionType === 'multiple'}
+            showAddQuestion={isQuestionGroup}
             addQuestion={addQuestion}
             handleSave={createQuestionHandle}
+            goBack={() => goBack?.()}
         >
-            <div className="flex flex-col overflow-y-auto custom-scrollbar max-h-[450px]">
+            <div className="flex flex-col overflow-y-auto custom-scrollbar max-h-[450px] scroll-hidden">
                 <div className="mt-6">
                     <div>
                         <label className="mb-2 block text-base text-[#2c2c2c]">
@@ -321,7 +307,7 @@ const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, close
                         />
                     </div>
                 </div>
-                <div className="mt-6">
+                <div className="mt-2">
                     <div className="flex">
                         {/* Image Upload */}
                         <div className="flex px-6 py-4 border-dotted border-gray-200 mr-2 border w-1/2">
@@ -372,44 +358,11 @@ const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, close
                         </div>
                     </div>
                 </div>
-                <div className="mt-2">
-                    <Switch
-                        label="Is question group?"
-                        defaultChecked={false}
-                        onChange={setIsQuestionGroup}
-                    />
-                </div>
-                {!isQuestionGroup ? <div className='mt-6'>
-                    <label className="block text-base text-[#2c2c2c]">
-                        Answer
-                    </label>
-                    <p className='text-sm text-[#757575] mt-[2px]'>Tick the correct answers. Each question may have up to two correct options.</p>
-                    {answerNotQuestionGroup.map((item, index) => {
-                        return (
-                            <div className="flex mt-2 w-full" key={index}>
-                                <Checkbox
-                                    className="w-5 h-5 mr-4"
-                                    onChange={value => {
-                                        updateQuestionNotGroup(index, value, 'status')
-                                    }}
-                                    checked={item.isCorrect}
-                                />
-                                <Input placeholder={`Enter answer ${index + 1}`} wrapperClass='w-full' value={item.content} onChange={(event) => updateQuestionNotGroup(index, event.target.value,
-                                    'content'
-                                )} />
-                            </div>
-
-                        )
-                    })}
-                </div> : <div className='mt-2'>
-                    <Select
-                        options={QuestionType}
-                        onChange={(value) => setQuestionType(value)}
-                        placeholder="Question type"
-                        defaultValue={questionType}
-                        className="bg-gray-50 text-base"
-                    />
-                    {questionType === 'text' ?
+                {questionTypeProp == 0 ?
+                    <>
+                        <label className="block text-base text-[#2c2c2c] mt-6">
+                            Answer
+                        </label>
                         <div className=''>
                             <TextArea
                                 rows={3}
@@ -418,8 +371,38 @@ const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, close
                                 value={textResponse}
                                 onChange={setTextResponse}
                             />
-                        </div> :
-                        <>
+                        </div>
+                    </> : <>
+                        <div className="mt-2">
+                            <Switch
+                                label="Is question group?"
+                                defaultChecked={false}
+                                onChange={setIsQuestionGroup}
+                            />
+                        </div>
+                        {!isQuestionGroup ? <div className='mt-6'>
+                            <label className="block text-base text-[#2c2c2c]">
+                                Answer
+                            </label>
+                            <p className='text-sm text-[#757575] mt-[2px]'>Tick the correct answers. Each question may have up to two correct options.</p>
+                            {answerNotQuestionGroup.map((item, index) => {
+                                return (
+                                    <div className="flex mt-2 w-full" key={index}>
+                                        <Checkbox
+                                            className="w-5 h-5 mr-4"
+                                            onChange={value => {
+                                                updateQuestionNotGroup(index, value, 'status')
+                                            }}
+                                            checked={item.isCorrect}
+                                        />
+                                        <Input placeholder={`Enter answer ${index + 1}`} wrapperClass='w-full' value={item.content} onChange={(event) => updateQuestionNotGroup(index, event.target.value,
+                                            'content'
+                                        )} />
+                                    </div>
+
+                                )
+                            })}
+                        </div> : <div className='mt-2'>
                             {questionMultipleList.map((item, index) => {
                                 return (
                                     <div className="mt-2 bg-gray-50 rounded-lg p-4" key={item.id}>
@@ -452,12 +435,9 @@ const AddQuestion = ({ isOpen, closeModal, openModal }: { isOpen: boolean, close
                                     </div>
                                 )
                             })}
-                        </>
-
-                    }
-
-                </div>}
-
+                        </div>}
+                    </>
+                }
             </div>
         </CustomModal>
     )
