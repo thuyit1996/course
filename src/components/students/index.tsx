@@ -1,4 +1,5 @@
-import React from "react";
+'use client';
+import React, { use } from "react";
 import {
   Table,
   TableBody,
@@ -7,9 +8,13 @@ import {
   TableRow,
 } from "../ui/table";
 
+import Button from '@/components/ui/button/Button';
+import PlusIcon from '@/public/images/icons/plus.svg';
 import Badge from "../ui/badge/Badge";
 import Image from "next/image";
 import { User } from "@/types/admin";
+import { useParams, useSearchParams } from "next/navigation";
+import Checkbox from "../form/input/Checkbox";
 
 interface Order {
   id: number;
@@ -112,77 +117,90 @@ const tableData: Order[] = [
   },
 ];
 
-export default function Students({users}: {users: User[]}) {
+export default function Students({ users, total }: { users: User[], total: number }) {
+  const params = useSearchParams();
+  console.log(params.get('grade'));
   return (
-    <div className="overflow-hidden border-t border-gray-100 bg-white ">
-      <div className="max-w-full overflow-x-auto">
-        <div className="min-w-[1102px]">
-          <Table>
-            {/* Table Header */}
-            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-              <TableRow>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 text-[#757575] text-xs font-semibold text-start"
-                >
-                  Name
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
-                >
-                   Attendance
-                </TableCell>
-                <TableCell
-                  isHeader
-                   className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
-                >
-                  Homework
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
-                >
-                  Gender
-                </TableCell>
-                <TableCell
-                  isHeader
-                 className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
-                >
-                  Phone
-                </TableCell>
-                <TableCell
-                  isHeader
-                 className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
-                >
-                  Email
-                </TableCell>
-                <TableCell
-                  isHeader
-                 className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
-                >
-                  Address
-                </TableCell>
-                <TableCell
-                  isHeader
-                 className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
-                >
-                  Date of birth
-                </TableCell>
-                <TableCell
-                  isHeader
-                 className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
-                >
-                  
-                </TableCell>
-              </TableRow>
-            </TableHeader>
+    <>
 
-            {/* Table Body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {tableData.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
+      <div className='flex justify-between px-6 py-4'>
+        <div className='flex items-center'>
+          <span className='text-semibold text-lg'>{params.get('grade')}</span>
+          <div className='border rounded-2xl ml-3 border-gray-200 text-[#2c2c2c] text-sm text-center px-2 py-1 text-medium'>{total} {total > 1 ? 'students' : 'student'}</div>
+        </div>
+        <Button variant='primary' startIcon={<PlusIcon className="fill-rose-600" />}>Add teacher</Button>
+      </div>
+      <div className=''>
+        <div className="overflow-hidden border-t border-gray-100 bg-white ">
+          <div className="max-w-full overflow-x-auto">
+            <div className="min-w-[1102px]">
+              <Table>
+                {/* Table Header */}
+                <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+                  <TableRow>
+                    <TableCell
+                      isHeader
+                      className="px-5 py-3 flex text-[#757575] text-xs font-semibold text-start"
+                    >
+                      <Checkbox onChange={console.log} checked={true} className="mr-2"/>
+                      <span>Name</span>
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
+                    >
+                      Attendance
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
+                    >
+                      Homework
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
+                    >
+                      Gender
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
+                    >
+                      Phone
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
+                    >
+                      Email
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
+                    >
+                      Address
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
+                    >
+                      Date of birth
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
+                    >
+                      <></>
+                    </TableCell>
+                  </TableRow>
+                </TableHeader>
+
+                {/* Table Body */}
+                <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                  {users.map((user) => (
+                    <TableRow key={user.userId}>
+                      {/* <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 overflow-hidden rounded-full">
                         <Image
@@ -201,12 +219,17 @@ export default function Students({users}: {users: User[]}) {
                         </span>
                       </div>
                     </div>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.projectName}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex -space-x-2">
+                  </TableCell> */}
+                      <TableCell className="px-4 py-3 text-gray-500 flex text-start text-theme-sm dark:text-gray-400">
+                        <Checkbox onChange={console.log} checked={true} className="mr-2"/>
+                        <span>{user.displayName}</span>
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <></>
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <></>
+                        {/* <div className="flex -space-x-2">
                       {order.team.images.map((teamImage, index) => (
                         <div
                           key={index}
@@ -221,10 +244,12 @@ export default function Students({users}: {users: User[]}) {
                           />
                         </div>
                       ))}
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
+                    </div> */}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <>
+                        </>
+                        {/* <Badge
                       size="sm"
                       color={
                         order.status === "Active"
@@ -235,17 +260,31 @@ export default function Students({users}: {users: User[]}) {
                       }
                     >
                       {order.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.budget}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                    </Badge> */}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {user.phone}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {user.email}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {user.address}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        <></>
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        <></>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

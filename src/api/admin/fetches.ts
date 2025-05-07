@@ -25,6 +25,7 @@ export const createExam = (body: {
 }
 
 export const getUserInClass = (classId: string): Promise<{total: number, users: User[]}> => {
+    console.log(classId);
     const api = new API();
-    return api.addPathName(`${END_POINTS.GET_USER_IN_CLASS}&classroomId=${classId}`).get().then(res => res.json());
+    return api.addPathName(`${END_POINTS.GET_USER_IN_CLASS}&classroomIds=${classId}`).get().then(res => res.json());
 } 

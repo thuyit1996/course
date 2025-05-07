@@ -13,12 +13,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import AosProvider from "@/providers/AOSProvider";
 import { NextAuthProvider } from "@/providers/NextAuthProvider";
 import TokenGuard from "@/components/token-guard";
+import { Metadata } from "next";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: 'swap'
 });
-
+export const metadata: Metadata = {
+  title: 'Ms.Lan English',
+  description: 'Ms.Lan English'
+}
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,9 +34,9 @@ export default function RootLayout({
         <AosProvider>
           <NextAuthProvider>
             <QueryProvider>
-              <TokenGuard>
+              {/* <TokenGuard> */}
                 {children}
-              </TokenGuard>
+              {/* </TokenGuard> */}
             </QueryProvider>
           </NextAuthProvider>
         </AosProvider>

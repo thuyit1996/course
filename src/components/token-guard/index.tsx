@@ -12,23 +12,23 @@ export default function TokenGuard({ children }: { children: React.ReactNode }) 
 
     useEffect(() => {
         const checkToken = async () => {
-            // if (status === 'loading') return;
-            // if(session){
-            //     try {
-            //         const resp = await validateToken();
-            //         if (!resp.responseData) {
-            //             await signOut({
-            //                 callbackUrl: '/sign-in'
-            //             });
-            //         } else {
-            //             console.log("ok")
-            //         }
-            //     } catch (error) {
-            //         await signOut({
-            //             callbackUrl: '/sign-in'
-            //         });
-            //     }
-            // }
+            if (status === 'loading') return;
+            if(session){
+                try {
+                    const resp = await validateToken();
+                    if (!resp.responseData) {
+                        await signOut({
+                            callbackUrl: '/sign-in'
+                        });
+                    } else {
+                        console.log("ok")
+                    }
+                } catch (error) {
+                    await signOut({
+                        callbackUrl: '/sign-in'
+                    });
+                }
+            }
         };
         checkToken();
     }, [session]);

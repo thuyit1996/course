@@ -18,7 +18,7 @@ interface CountdownTimerProps {
 
 const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
   ({ submitExample, onCancel, onUpdateStatus, onStop, response, onRetake, isReview = false, examId, alertFinish }, ref: Ref<InvokeTimmer>) => {
-    const duration = 0.1 * 60; // 20 minutes
+    const duration = 20 * 60; // 20 minutes
     const radius = 90;
     const strokeWidth = 15;
     const circumference = 2 * Math.PI * radius;
