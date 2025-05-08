@@ -9,6 +9,7 @@ import ChangeUserView from '@/public/images/icons/change-user-view.svg';
 import ChangeAvatar from '@/public/images/icons/change-avatar.svg';
 import ChangePassword from '@/public/images/icons/change-password.svg';
 import Logout from '@/public/images/icons/logout.svg';
+import { alert } from "@/libs/alert";
 
 export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +21,21 @@ export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean })
 
   function closeDropdown() {
     setIsOpen(false);
+  }
+  const showAlert = () => {
+    setTimeout(() => {
+      if (isAdminSite) {
+        alert.success(<div>
+          <p className='text-[#2c2c2c] text-base font-semibold mb-1'>{`You're now in User View.`}</p>
+          <Link className='text-[#079455] underline text-sm' href='/admin/questions'>Undo</Link>
+        </div>, "bottom-right")
+      } else {
+        alert.success(<div>
+          <p className='text-[#2c2c2c] text-base font-semibold mb-1'>{`You're now in Admin View.`}</p>
+          <Link className='text-[#079455] underline text-sm' href='/'>Undo</Link>
+        </div>, "bottom-right")
+      }
+    }, 2000)
   }
   return (
     <div className="relative">
@@ -69,9 +85,12 @@ export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean })
           <li>
             {session.data?.user?.roles?.includes("ROLE_ADMIN") ?
               <DropdownItem
-                onItemClick={closeDropdown}
+                onItemClick={() => {
+                  closeDropdown();
+                  showAlert();
+                }}
                 tag="a"
-                href={`${isAdminSite ? '/' : '/admin/exams'}`}
+                href={`${isAdminSite ? '/' : '/admin/questions'}`}
                 className="flex justify-between items-center gap-3 px-3 py-2 rounded-lg group text-sm hover:bg-gray-100 !text-[#2c2c2c]"
               >
                 {isAdminSite ? 'User View' : 'Admin View'}

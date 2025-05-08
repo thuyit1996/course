@@ -17,6 +17,9 @@ import { v4 } from 'uuid'
 import { useGetAllAdminTopic } from '@/api/writing-test/query';
 import { createQuestion, uploadFile } from '@/api/writing-test/fetches';
 import { toast } from 'react-toastify';
+import FileIcon from '@/public/images/icons/file.svg';
+import MP3Icon from '@/public/images/icons/mp3.svg';
+
 
 const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: questionTypeProp }: { isOpen: boolean, closeModal: () => void, openModal: () => void, goBack?: () => void, questionType: 0 | 1 }) => {
     const [isQuestionGroup, setIsQuestionGroup] = useState(false);
@@ -215,7 +218,7 @@ const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: ques
                 },
                 "type": "1"
             }
-        }else {
+        } else {
             if (isQuestionGroup && questionTypeProp === 1) {
                 body = {
                     "topicId": topicId,
@@ -310,18 +313,16 @@ const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: ques
                 <div className="mt-2">
                     <div className="flex">
                         {/* Image Upload */}
-                        <div className="flex px-6 py-4 border-dotted border-gray-200 mr-2 border w-1/2">
-                            {imageSrc && (
-                                <div className="w-[96px] h-[80px] mr-2 relative border rounded">
-                                    <img src={imageSrc} alt="preview" className="w-full h-full object-cover" />
-                                    <button
-                                        onClick={removeImage}
-                                        className="absolute top-[-10px] flex justify-center items-center border border-gray-200 right-[-10px] bg-white text-black rounded-full px-1 w-4.5 h-4.5"
-                                    >
-                                        <MiniDelete />
-                                    </button>
-                                </div>
-                            )}
+                        {imageSrc ? <div className="flex px-6 py-4 border-dotted border-gray-200 mr-2 border w-1/2">
+                            <div className="w-[96px] h-[80px] mr-2 relative border rounded">
+                                <img src={imageSrc} alt="preview" className="w-full h-full object-cover" />
+                                <button
+                                    onClick={removeImage}
+                                    className="absolute top-[-10px] flex justify-center items-center border border-gray-200 right-[-10px] bg-white text-black rounded-full px-1 w-4.5 h-4.5"
+                                >
+                                    <MiniDelete />
+                                </button>
+                            </div>
                             <label className="w-[96px] h-[80px] flex items-center justify-center border rounded cursor-pointer">
                                 <PlusFile />
                                 <input
@@ -331,21 +332,30 @@ const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: ques
                                     className="hidden"
                                 />
                             </label>
-                        </div>
+                        </div> : <div className="border-dotted border-gray-200 mr-2 border w-1/2">
+                            <label className="w-full h-full flex items-center justify-center cursor-pointer py-3 flex-col">
+                                <FileIcon />
+                                <p className='mt-2 text-indigo-600 text-xs font-semibold'>Click to upload image</p>
+                                <p className='mt-0.5 text-[#757575] text-xs'>JPG, JPEG less than 1MB</p>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="hidden"
+                                />
+                            </label>
+                        </div>}
 
-                        {/* Audio Upload */}
-                        <div className="flex px-6 py-4 border-dotted border-gray-200 border w-1/2">
-                            {audioSrc && (
-                                <div className="w-[96px] h-[80px] mr-2 relative border rounded flex items-center justify-center p-2">
-                                    <audio controls src={audioSrc} className="w-full" />
-                                    <button
-                                        onClick={removeAudio}
-                                        className="absolute top-[-10px] flex justify-center items-center border border-gray-200 right-[-10px] bg-white text-black rounded-full px-1 w-4.5 h-4.5"
-                                    >
-                                        <MiniDelete />
-                                    </button>
-                                </div>
-                            )}
+                        {audioSrc ? <div className="flex px-6 py-4 border-dotted border-gray-200 border w-1/2">
+                            <div className="w-[96px] h-[80px] mr-2 relative border rounded flex items-center justify-center p-2">
+                                <audio controls src={audioSrc} className="w-full" />
+                                <button
+                                    onClick={removeAudio}
+                                    className="absolute top-[-10px] flex justify-center items-center border border-gray-200 right-[-10px] bg-white text-black rounded-full px-1 w-4.5 h-4.5"
+                                >
+                                    <MiniDelete />
+                                </button>
+                            </div>
                             <label className="w-[96px] h-[80px] flex items-center justify-center border border-dotted rounded cursor-pointer">
                                 <PlusFile />
                                 <input
@@ -355,7 +365,43 @@ const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: ques
                                     className="hidden"
                                 />
                             </label>
-                        </div>
+                        </div> :  <div className="border-dotted border-gray-200 mr-2 border w-1/2"> <label className="w-full h-full flex items-center justify-center cursor-pointer py-3 flex-col">
+                            <MP3Icon />
+                            <p className='mt-2 text-indigo-600 text-xs font-semibold'>Click to upload sound</p>
+                            <p className='mt-0.5 text-[#757575] text-xs'>MP3 less than 4MB</p>
+                            <input
+                                type="file"
+                                accept="audio/*"
+                                onChange={handleAudioChange}
+                                className="hidden"
+                            />
+                        </label>
+                        </div>}
+                        {/* Audio Upload */}
+                        {/* <div className="border-dotted border-gray-200 border w-1/2">
+                            {audioSrc && (
+                                <div className="flex px-6 py-4  w-[96px] h-[80px] mr-2 relative border rounded items-center justify-center p-2">
+                                    <audio controls src={audioSrc} className="w-full" />
+                                    <button
+                                        onClick={removeAudio}
+                                        className="absolute top-[-10px] flex justify-center items-center border border-gray-200 right-[-10px] bg-white text-black rounded-full px-1 w-4.5 h-4.5"
+                                    >
+                                        <MiniDelete />
+                                    </button>
+                                </div>
+                            )}
+                            <label className="w-full h-full flex items-center justify-center cursor-pointer py-3 flex-col">
+                                <MP3Icon />
+                                <p className='mt-2 text-indigo-600 text-xs font-semibold'>Click to upload sound</p>
+                                <p className='mt-0.5 text-[#757575] text-xs'>MP3 less than 4MB</p>
+                                <input
+                                    type="file"
+                                    accept="audio/*"
+                                    onChange={handleAudioChange}
+                                    className="hidden"
+                                />
+                            </label>
+                        </div> */}
                     </div>
                 </div>
                 {questionTypeProp == 0 ?

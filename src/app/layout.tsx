@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
 import "./globals.css";
 // import "swiper/css";
 // import "swiper/css/navigation";
@@ -6,19 +6,62 @@ import "./globals.css";
 // import "swiper/css/autoplay";
 // import { ThemeProvider } from "@/context/ThemeContext";
 // import { SidebarProvider } from "@/context/SidebarContext";
+import localFont from 'next/font/local';
 import QueryProvider from "@/providers/QueryProvider";
 import NextTopLoader from 'nextjs-toploader';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AosProvider from "@/providers/AOSProvider";
 import { NextAuthProvider } from "@/providers/NextAuthProvider";
-import TokenGuard from "@/components/token-guard";
 import { Metadata } from "next";
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: 'swap'
+import { AlertProvider } from "@/components/Alert";
+// const inter = Inter({
+//   variable: "--font-inter",
+//   subsets: ["latin"],
+//   display: 'swap'
+// });
+
+const inter = localFont({
+  src: [
+    {
+      path: '../fonts/inter/Inter-Regular.otf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/inter/Inter-Medium.otf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/inter/Inter-SemiBold.otf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/inter/Inter-Bold.otf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  fallback: [
+    '-apple-system',
+    'BlinkMacSystemFont',
+    'Twemoji Country Flags',
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    'sans-serif',
+  ],
+  variable: '--font-inter',
+  display: 'swap',
 });
+
 export const metadata: Metadata = {
   title: 'Ms.Lan English',
   description: 'Ms.Lan English'
@@ -32,13 +75,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} dark:bg-gray-900`}>
         <AosProvider>
-          <NextAuthProvider>
-            <QueryProvider>
-              {/* <TokenGuard> */}
+          <AlertProvider>
+            <NextAuthProvider>
+              <QueryProvider>
                 {children}
-              {/* </TokenGuard> */}
-            </QueryProvider>
-          </NextAuthProvider>
+              </QueryProvider>
+            </NextAuthProvider>
+          </AlertProvider>
         </AosProvider>
         <NextTopLoader
           color="#605bff"

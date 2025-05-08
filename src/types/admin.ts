@@ -43,6 +43,7 @@ interface Creator {
     cardIds: string[];
     createdDate: number;
     lastModifiedDate: number;
+    classroomName: string;
   }
 
 export type { Schedule, Classroom, Class, User, Exam }

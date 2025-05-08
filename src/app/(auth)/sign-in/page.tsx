@@ -14,7 +14,7 @@ const SignInPage = async ({
   }
   return (
     <div >
-      <div className="flex flex-col items-center justify-center md:flex-row w-full mx-auto h-[100vh] max-w-[1440px] overflow-hidden">
+      <div className="flex flex-col items-center justify-center md:flex-row w-full mx-auto h-[100vh] max-w-[1440px] pt-[280px] overflow-y-auto md:pt-0 md:overflow-hidden">
         {/* Left image */}
         <div className="md:w-1/2 p-4 md:p-6 flex justify-center w-full relative" data-aos="zoom-in">
           <img src="/images/auth/Image.png" />

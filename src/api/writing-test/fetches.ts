@@ -21,9 +21,9 @@ export const getAllTopic = async (): Promise<ResponseData<{ id: string, name: st
     return api.addPathName(`${END_POINTS.GET_ALL_TOPIC}`).get().then(res => res.json());
 }
 
-export const getWritingTestList = async (topicId: string): Promise<ResponseData<WritingTestList>> => {
+export const getWritingTestList = async (): Promise<ResponseData<WritingTestList>> => {
     const api = new API();
-    return api.addPathName(`${END_POINTS.GET_ALL_WRITING_TEST}/${topicId}`).get().then(res => res.json());
+    return api.addPathName(`${END_POINTS.GET_ALL_WRITING_TEST}`).get().then(res => res.json());
 }
 
 export const saveWritingTest = (body: {
