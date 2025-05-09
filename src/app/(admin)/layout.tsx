@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Suspense } from "react"
 import AdminContainer from "../containers/AdminContainer";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/libs/auth";
@@ -11,7 +11,9 @@ const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
     }
     return (
         <AdminContainer>
-            {children}
+            <Suspense>
+                {children}
+            </Suspense>
         </AdminContainer>
     )
 }

@@ -1,40 +1,34 @@
 import {
-    DelimitedNumericArrayParam,
     NumberParam,
     StringParam,
-    createEnumParam,
     decodeQueryParams,
 } from 'serialize-query-params';
-import { getExams } from "@/api/admin/fetches";
-import Exams from "@/components/exams";
+import { getTopics } from "@/api/admin/fetches";
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { QueryKeys } from '@/api/queryKeys';
-export const examPramConfig = {
+import Topics from '@/components/topics';
+export const topicsPramConfig = {
     pageSize: NumberParam,
     pageIndex: NumberParam,
     orderDirection: StringParam,
-    orderBy: StringParam
 }
-const ExamPage = async ({ searchParams }: { searchParams: Record<string, string> }) => {
-    const queryParams = decodeQueryParams(examPramConfig, {
+const TopicsPage = async ({ searchParams }: { searchParams: Record<string, string> }) => {
+    const queryParams = decodeQueryParams(topicsPramConfig, {
         pageSize: '10',
         pageIndex: '0',
-        orderBy: 'createdDate',
         orderDirection: 'desc',
         ...searchParams,
     })
-    console.log("serever", queryParams);
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
-        queryKey: [QueryKeys.getExams, queryParams],
-        queryFn: () => getExams(queryParams as any),
+        queryKey: [QueryKeys.getTopics, queryParams],
+        queryFn: () => getTopics(queryParams as any),
     });
-    // const resp = await getExams();
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
-            <Exams />
+            <Topics />
         </HydrationBoundary>
     );
 };
 
-export default ExamPage;
+export default TopicsPage;

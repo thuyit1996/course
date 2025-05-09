@@ -35,12 +35,12 @@ export class API {
         return process.env.NEXT_PUBLIC_API_ENDPOINT;
     }
 
-    addQueryParam(params: { key: string; value: number | string }[]): API {
-        params.forEach((param) => {
-            this.queryParameters[param.key] = param.value;
-        });
-        return this;
-    }
+    // addQueryParam(params: { key: string; value: number | string }[]): API {
+    //     params.forEach((param) => {
+    //         this.queryParameters[param.key] = param.value;
+    //     });
+    //     return this;
+    // }
 
     private buildURL(): string {
         let url = `${this.getEndpoint()}${this.path}`;
@@ -60,6 +60,13 @@ export class API {
         this.token = token;
         return this;
     };
+
+    addQueryParams(params?: any): API {
+        if (params) {
+            this.queryParameters = params;
+        }
+        return this;
+    }
 
     private async fetchRequest<T>(options: FetchOptions<T>): Promise<Response> {
         const { body, ...restOptions } = options;

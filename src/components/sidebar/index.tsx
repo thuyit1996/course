@@ -24,22 +24,22 @@ const Sidebar: React.FC = () => {
             <nav className="flex-1 px-4.5 py-4  sidenav-menu max-h-[70vh] overflow-y-auto">
                 <div>
                     <p className="font-semibold text-sm text-[#757575] px-4">Account</p>
-                    <Link href="/admin/teachers" className="font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600">
+                    <Link href="/admin/teachers" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/teachers' ? 'text-rose-600 bg-rose-100 active' : ''}`}>
                         <Teacher className="mr-2" />
                         <span>Teacher</span></Link>
-                    <a href="#" className="font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600">
+                    <Link href="/admin/staffs" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/staffs' ? 'text-rose-600 bg-rose-100 active' : ''}`}>
                         <Staff className="mr-2" />
-                        <span>Staff</span></a>
+                        <span>Staff</span></Link>
                 </div>
                 <div className='mt-4'>
                     <p className="font-semibold text-sm text-[#757575] px-4">Exam</p>
-                    <Link href="/admin/exams" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/exams' ? 'text-rose-600 bg-rose-100 active' : '' }`}>
+                    <Link href="/admin/exams" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/exams' ? 'text-rose-600 bg-rose-100 active' : ''}`}>
                         <Exam className="mr-2" />
                         <span>Exams</span></Link>
-                    <Link href="/admin/topics" className="font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600">
+                    <Link href="/admin/topics" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/topics' ? 'text-rose-600 bg-rose-100 active' : ''}`}>
                         <Topic className="mr-2" />
                         <span>Topics</span></Link>
-                    <Link href="/admin/questions" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/questions' ? 'text-rose-600 bg-rose-100 active' : '' }`}>
+                    <Link href="/admin/questions" className={`font-medium text-sm flex flex-row items-center mt-1 px-4 py-3 hover:bg-rose-100 ease-in-out transition duration-300 rounded-lg hover:text-rose-600 ${pathname === '/admin/questions' ? 'text-rose-600 bg-rose-100 active' : ''}`}>
                         <Question className="mr-2" />
                         <span>Questions</span></Link>
                 </div>
@@ -57,7 +57,7 @@ const Sidebar: React.FC = () => {
             </nav>
             <div className="px-4 fixed bottom-8 w-[274px]">
                 <div className="mt-4 flex items-center p-4 border border-gray-100 rounded-3xl">
-                    <UserDropdown isAdminSite={true}/>
+                    <UserDropdown isAdminSite={true} />
                 </div>
 
             </div>

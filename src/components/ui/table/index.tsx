@@ -60,7 +60,7 @@ const TableCell: React.FC<TableCellProps> = ({
   colSpan = 1,
 }) => {
   const CellTag = isHeader ? "th" : "td";
-  return <CellTag className={` ${className}`} colSpan={colSpan}>{children}</CellTag>;
+  return <CellTag className={` ${className} ${isHeader ? 'sticky top-0 z-99999 bg-gray-50' : ''}`} colSpan={colSpan}>{children}</CellTag>;
 };
 
 export { Table, TableHeader, TableBody, TableRow, TableCell };

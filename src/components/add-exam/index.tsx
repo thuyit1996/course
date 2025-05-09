@@ -14,11 +14,13 @@ import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
 import { QuestionList } from "@/types/exam";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => void }) => {
     const [isOpenDropdown, setIsOpen] = useState(false);
     const [isOpenTopic, setIsOpenTopic] = useState(false);
     const [topic, setTopic] = useState('');
+    const router = useRouter();
     const { data: classResp } = useGetAllClass();
     const { data: topicResp } = useGetAllAdminTopic();
     const [questions, setQuestions] = useState<any>([]);
@@ -104,6 +106,7 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
             const resp = await createExam(body);
             if (resp?.responseData) {
                 toast.success("Create exam successfully!");
+                router.push('/admin/exams');
             } else {
                 toast.error("Something went wrong")
             }

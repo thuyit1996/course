@@ -21,7 +21,7 @@ import FileIcon from '@/public/images/icons/file.svg';
 import MP3Icon from '@/public/images/icons/mp3.svg';
 
 
-const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: questionTypeProp }: { isOpen: boolean, closeModal: () => void, openModal: () => void, goBack?: () => void, questionType: 0 | 1 }) => {
+const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: questionTypeProp }: { isOpen: boolean, closeModal: (isSuccess?: boolean) => void, openModal: () => void, goBack?: () => void, questionType: 0 | 1 }) => {
     const [isQuestionGroup, setIsQuestionGroup] = useState(false);
     const { data: topics } = useGetAllAdminTopic();
     const [imageSrc, setImageSrc] = useState('');
@@ -249,7 +249,7 @@ const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: ques
         try {
             const resp = await createQuestion(body);
             if (resp.responseData) {
-                closeModal()
+                closeModal(true);
                 toast.success('Create question successfully')
             } else {
                 closeModal();

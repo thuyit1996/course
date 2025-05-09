@@ -19,11 +19,11 @@ const ChooseQuestionType = ({ isOpen, closeModal, chooseType }: {
                 <span className="text-base text-[#2c2c2c]">Do you want to create a Multiple Choice question or a Fill Blank question? Choose the format that best fits your goal.</span>
                 <div className="mt-6 grid grid-cols-2 gap-6">
                     <div className="bg-indigo-50 py-15 flex cursor-pointer justify-center items-center text-indigo-600 text-lg rounded-lg text-semibold" onClick={() => chooseType(0)}>
-                        <FillblankIcon className="mr-2" />
+                        <FillblankIcon className="mr-2 w-8 h-8" />
                         Fill Blank
                     </div>
                     <div className="bg-rose-100 py-15 flex cursor-pointer justify-center items-center text-rose-600 text-lg rounded-lg text-semibold" onClick={() => chooseType(1)}>
-                        <MultichoiceIcon className="mr-2" />
+                        <MultichoiceIcon className="mr-2 w-8 h-8" />
                         Multiple Choice
                     </div>
 

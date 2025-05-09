@@ -21,30 +21,30 @@ export const authOptions = {
                 if (!credentials?.identifier || !credentials.password) {
                     return null;
                 }
-                // const response = await signIn({
-                //     email: String(credentials.identifier),
-                //     password: String(credentials.password),
-                // });
-                // if (!response.responseData) {
-                //     return null;
-                // }
-                const response = {
-  "responseData": {
-    "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3NDY2OTM5NTEsImV4cCI6MTc0NzI5ODc1MX0.WuK1zoatwt8TtmkkIU92cA5KkwNquXCz_nIE59NnZSMzn30ycmJ6j42pzqysQ_Dgj061ozkJdwaT7VN10YDzbg",
-    "englishUser": {
-      "userId": "67c27b22b4060540c59d2cf5",
-      "roles": [
-        "ROLE_ADMIN"
-      ],
-      "firstName": "John",
-      "lastName": "Doe",
-      "displayName": "John Doe",
-      "email": "admin@gmail.com",
-      "phone": "123-456-7890",
-      "address": "123 Main St."
-    }
-  }
-}
+                const response = await signIn({
+                    email: String(credentials.identifier),
+                    password: String(credentials.password),
+                });
+                if (!response.responseData) {
+                    return null;
+                }
+//                 const response = {
+//   "responseData": {
+//     "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3NDY2OTM5NTEsImV4cCI6MTc0NzI5ODc1MX0.WuK1zoatwt8TtmkkIU92cA5KkwNquXCz_nIE59NnZSMzn30ycmJ6j42pzqysQ_Dgj061ozkJdwaT7VN10YDzbg",
+//     "englishUser": {
+//       "userId": "67c27b22b4060540c59d2cf5",
+//       "roles": [
+//         "ROLE_ADMIN"
+//       ],
+//       "firstName": "John",
+//       "lastName": "Doe",
+//       "displayName": "John Doe",
+//       "email": "admin@gmail.com",
+//       "phone": "123-456-7890",
+//       "address": "123 Main St."
+//     }
+//   }
+// }
                 return {
                     ...response.responseData.englishUser,
                     userId: response.responseData.englishUser.userId,

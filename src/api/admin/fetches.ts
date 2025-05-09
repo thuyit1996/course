@@ -1,7 +1,7 @@
 import { ResponseData } from "@/types/api";
 import { END_POINTS } from "../endpoint";
 import { API } from "../fetch";
-import { Class, Exam, User } from "@/types/admin";
+import { Class, Exam, QuestionItem, Topic, User } from "@/types/admin";
 import { QuestionList } from "@/types/exam";
 
 export const getAllClass = (): Promise<ResponseData<Class>> => {
@@ -24,13 +24,34 @@ export const createExam = (body: {
     return api.addPathName(`${END_POINTS.CREATE_EXAM}`).post(body).then(res => res.json());
 }
 
-export const getUserInClass = (classId: string): Promise<{total: number, users: User[]}> => {
-    console.log(classId);
+export const getUserInClass = (params: Record<string, string>): Promise<{ total: number, users: User[] }> => {
     const api = new API();
-    return api.addPathName(`${END_POINTS.GET_USER_IN_CLASS}&classroomIds=${classId}`).get().then(res => res.json());
+    return api.addPathName(`${END_POINTS.GET_USER_IN_CLASS}`).addQueryParams(params).get().then(res => res.json());
 }
 
-export const getExams = (): Promise<{total: number, exams: Exam[]}> => {
+export const getExams = (params: Record<string, string>): Promise<{ total: number, exams: Exam[] }> => {
     const api = new API();
-    return api.addPathName(`${END_POINTS.GET_EXAMS}`).get().then(res => res.json());
+    return api.addPathName(`${END_POINTS.GET_EXAMS}`).addQueryParams(params).get().then(res => res.json());
+}
+
+
+export const getTopics = (params: Record<string, string>): Promise<{ total: number, topics: Topic[] }> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.GET_TOPICS}`).addQueryParams(params).get().then(res => res.json());
+}
+
+export const getQuestions = (params: Record<string, string>): Promise<{ total: number, cards: QuestionItem[] }> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.GET_QUESTIONS}`).addQueryParams(params).get().then(res => res.json());
+}
+
+export const getTeachers = (params: Record<string, string>): Promise<{ total: number, users: User[] }> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.GET_TEACHERS}`).addQueryParams(params).get().then(res => res.json());
+}
+
+
+export const getStaff = (params: Record<string, string>): Promise<{ total: number, users: User[] }> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.GET_STAFF}`).addQueryParams(params).get().then(res => res.json());
 } 

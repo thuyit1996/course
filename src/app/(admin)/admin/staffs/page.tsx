@@ -5,37 +5,36 @@ import {
     createEnumParam,
     decodeQueryParams,
 } from 'serialize-query-params';
-import { getTeachers } from "@/api/admin/fetches";
+import { getStaff } from "@/api/admin/fetches";
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { QueryKeys } from '@/api/queryKeys';
-import Teachers from '@/components/teachers';
-export const teacherPramConfig = {
+import Staffs from '@/components/staffs';
+export const staffPramConfig = {
     pageSize: NumberParam,
     pageIndex: NumberParam,
     orderDirection: StringParam,
     orderBy: StringParam,
     roles: StringParam
 }
-const TeachersPage = async ({ searchParams }: { searchParams: Record<string, string> }) => {
-    const queryParams = decodeQueryParams(teacherPramConfig, {
+const StaffsPage = async ({ searchParams }: { searchParams: Record<string, string> }) => {
+    const queryParams = decodeQueryParams(staffPramConfig, {
         pageSize: '10',
         pageIndex: '0',
         orderBy: 'userId',
         orderDirection: 'desc',
-        roles: 'ROLE_TEACHER',
+        roles: 'ROLE_STAFF',
         ...searchParams,
     })
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
-        queryKey: [QueryKeys.getTeachers, queryParams],
-        queryFn: () => getTeachers(queryParams as any),
+        queryKey: [QueryKeys.getStaffs, queryParams],
+        queryFn: () => getStaff(queryParams as any),
     });
-    // const resp = await getExams();
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
-            <Teachers />
+            <Staffs />
         </HydrationBoundary>
     );
 };
 
-export default TeachersPage;
+export default StaffsPage;
