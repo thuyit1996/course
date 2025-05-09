@@ -7,11 +7,8 @@ import { getTopics } from "@/api/admin/fetches";
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { QueryKeys } from '@/api/queryKeys';
 import Topics from '@/components/topics';
-export const topicsPramConfig = {
-    pageSize: NumberParam,
-    pageIndex: NumberParam,
-    orderDirection: StringParam,
-}
+import { topicsPramConfig } from '@/libs/params';
+
 const TopicsPage = async ({ searchParams }: { searchParams: Record<string, string> }) => {
     const queryParams = decodeQueryParams(topicsPramConfig, {
         pageSize: '10',

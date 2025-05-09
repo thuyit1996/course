@@ -10,9 +10,11 @@ import LockIcon from '@/public/images/icons/lock.svg'
 import Pagination from '../pagination';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { decodeQueryParams } from 'serialize-query-params';
-import { createQueryString, parseSearchParams } from '@/libs/params';
+import { createQueryString, parseSearchParams, teacherPramConfig } from '@/libs/params';
 import { useGetTeachers } from '@/api/admin/query';
-import { teacherPramConfig } from '@/app/(admin)/admin/teachers/page';
+import MaleIcon from '@/public/images/icons/GenderMale.svg';
+import FemaleIcon from '@/public/images/icons/GenderFemale.svg';
+import LGBTIcon from '@/public/images/icons/GenderIntersex.svg';
 
 const Teachers = () => {
   const router = useRouter();
@@ -112,18 +114,29 @@ const Teachers = () => {
                             <span>{user.displayName}</span>
                           </TableCell>
                           <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                            <span>1</span>
+                            <span>{(user as any)?.classroom?.name}</span>
                           </TableCell>
                           <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                            <>{1}</>
+                            {(user as any)?.gender === 'MALE' ? <div className='gap-1 bg-success-50 border border-[#ABEFC6] text-[#079455] text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
+                              <MaleIcon className="w-3 h-3" />
+                              Male
+                            </div> : <>
+                              {(user as any)?.gender === 'FEMALE' ? <div className='gap-1 bg-error-50 text-error-600 border border-error-200 text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
+                                <FemaleIcon className="w-3 h-3" />
+                                Female
+                              </div> : <div className='gap-1 bg-[#E9D7FE] text-[#6941C6] border border-[#E9D7FE] text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
+                                <LGBTIcon className="w-3 h-3" />
+                                LGBT
+                              </div>}
+                            </>}
                           </TableCell>
                           <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                             <span>{user.email}</span>
                           </TableCell>
-                           <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                          <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                             <span>{user.address}</span>
                           </TableCell>
-                            <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                          <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                             <span>{user.phone}</span>
                           </TableCell>
                           <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">

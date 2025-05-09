@@ -14,8 +14,7 @@ import moment from 'moment';
 import Pagination from '../pagination';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { decodeQueryParams } from 'serialize-query-params';
-import { examPramConfig } from '@/app/(admin)/admin/exams/page';
-import { createQueryString, parseSearchParams } from '@/libs/params';
+import { createQueryString, examPramConfig, parseSearchParams } from '@/libs/params';
 import { useGetExams } from '@/api/admin/query';
 const AddExam = dynamic(() => import('@/components/add-exam'), { ssr: false })
 

@@ -9,11 +9,8 @@ import { getExams, getQuestions } from "@/api/admin/fetches";
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { QueryKeys } from '@/api/queryKeys';
 import Questions from '@/components/questions';
-export const questionPramConfig = {
-    pageSize: NumberParam,
-    pageIndex: NumberParam,
-    orderDirection: StringParam,
-}
+import { questionPramConfig } from '@/libs/params';
+
 const QuestionPage = async ({ searchParams }: { searchParams: Record<string, string> }) => {
     const queryParams = decodeQueryParams(questionPramConfig, {
         pageSize: '10',

@@ -84,9 +84,9 @@ const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {
                         )}
                     </button>
                 </div>
-                <div className="text-right mt-2.5">
+                {/* <div className="text-right mt-2.5">
                     <a href="#" className="text-sm font-medium text-indigo-600 hover:underline">Forgot Password?</a>
-                </div>
+                </div> */}
             </div>
 
             {/* <button

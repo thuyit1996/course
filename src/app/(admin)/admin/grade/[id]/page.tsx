@@ -1,16 +1,11 @@
 import { getUserInClass } from '@/api/admin/fetches';
 import { QueryKeys } from '@/api/queryKeys';
 import Students from '@/components/students';
+import { studentPramConfig } from '@/libs/params';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { omit } from 'lodash';
 import { decodeQueryParams, NumberParam, StringParam } from 'serialize-query-params';
-export const studentPramConfig = {
-    pageSize: NumberParam,
-    pageIndex: NumberParam,
-    orderDirection: StringParam,
-    orderBy: StringParam,
-    classroomIds: StringParam
-}
+
 const GradePage = async ({ params, searchParams }: { params: { id: string }, searchParams: Record<string, string> }) => {
     const queryParams = decodeQueryParams(studentPramConfig, {
         pageSize: '10',

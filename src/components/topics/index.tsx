@@ -10,9 +10,8 @@ import moment from 'moment';
 import Pagination from '../pagination';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { decodeQueryParams } from 'serialize-query-params';
-import { createQueryString, parseSearchParams } from '@/libs/params';
+import { createQueryString, parseSearchParams, topicsPramConfig } from '@/libs/params';
 import { useGetTopics } from '@/api/admin/query';
-import { topicsPramConfig } from '@/app/(admin)/admin/topics/page';
 
 const Topics = () => {
     const router = useRouter();

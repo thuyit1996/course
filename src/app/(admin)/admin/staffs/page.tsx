@@ -9,13 +9,8 @@ import { getStaff } from "@/api/admin/fetches";
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { QueryKeys } from '@/api/queryKeys';
 import Staffs from '@/components/staffs';
-export const staffPramConfig = {
-    pageSize: NumberParam,
-    pageIndex: NumberParam,
-    orderDirection: StringParam,
-    orderBy: StringParam,
-    roles: StringParam
-}
+import { staffPramConfig } from '@/libs/params';
+
 const StaffsPage = async ({ searchParams }: { searchParams: Record<string, string> }) => {
     const queryParams = decodeQueryParams(staffPramConfig, {
         pageSize: '10',

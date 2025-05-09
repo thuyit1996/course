@@ -9,12 +9,8 @@ import { getExams } from "@/api/admin/fetches";
 import Exams from "@/components/exams";
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { QueryKeys } from '@/api/queryKeys';
-export const examPramConfig = {
-    pageSize: NumberParam,
-    pageIndex: NumberParam,
-    orderDirection: StringParam,
-    orderBy: StringParam
-}
+import { examPramConfig } from '@/libs/params';
+
 const ExamPage = async ({ searchParams }: { searchParams: Record<string, string> }) => {
     const queryParams = decodeQueryParams(examPramConfig, {
         pageSize: '10',

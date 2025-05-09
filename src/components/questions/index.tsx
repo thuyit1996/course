@@ -10,8 +10,7 @@ import Checkbox from '../form/input/Checkbox';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from '../ui/table';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { decodeQueryParams } from 'serialize-query-params';
-import { questionPramConfig } from '@/app/(admin)/admin/questions/page';
-import { createQueryString, parseSearchParams } from '@/libs/params';
+import { createQueryString, parseSearchParams, questionPramConfig } from '@/libs/params';
 import { useGetQuestions } from '@/api/admin/query';
 import EditIcon from '@/public/images/icons/edit.svg'
 import TrashIcon from '@/public/images/icons/Trash.svg'
@@ -19,7 +18,6 @@ import LockIcon from '@/public/images/icons/lock.svg'
 import FillblankIcon from '@/public/images/icons/fillblank.svg';
 import MultichoiceIcon from '@/public/images/icons/multichoice.svg';
 import Pagination from '../pagination';
-import { examPramConfig } from '@/app/(admin)/admin/exams/page';
 
 const AddQuestion = dynamic(() => import('@/components/add-question'), { ssr: false });
 const ChooseQuestionType = dynamic(() => import('@/components/add-question/ChooseQuestionType'), { ssr: false });
@@ -185,7 +183,7 @@ const Questions: React.FC = () => {
                     </div>
                 </div>
                 <Pagination onChange={(pageIndex: number) => {
-                    router.push(`/admin/questions?${createQueryString(examPramConfig, { ...decodedParams, pageIndex })}`)
+                    router.push(`/admin/questions?${createQueryString(questionPramConfig, { ...decodedParams, pageIndex })}`)
                 }} total={data?.total ?? 0} initPageIndex={parseInt(searchParams.get('pageIndex') ?? '0')} />
                 {
                     chooseQuestion.isOpen &&

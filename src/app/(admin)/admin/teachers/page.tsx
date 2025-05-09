@@ -9,13 +9,8 @@ import { getTeachers } from "@/api/admin/fetches";
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { QueryKeys } from '@/api/queryKeys';
 import Teachers from '@/components/teachers';
-export const teacherPramConfig = {
-    pageSize: NumberParam,
-    pageIndex: NumberParam,
-    orderDirection: StringParam,
-    orderBy: StringParam,
-    roles: StringParam
-}
+import { teacherPramConfig } from '@/libs/params';
+
 const TeachersPage = async ({ searchParams }: { searchParams: Record<string, string> }) => {
     const queryParams = decodeQueryParams(teacherPramConfig, {
         pageSize: '10',

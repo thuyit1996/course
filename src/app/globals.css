@@ -656,3 +656,7 @@ textarea:focus {
 .scroll-hidden::-webkit-scrollbar {
   display: none;             /* Chrome, Safari, Opera */
 }
+
+table tbody td {
+  font-weight: 500 !important;
+}
