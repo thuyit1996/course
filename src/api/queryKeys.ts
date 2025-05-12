@@ -7,5 +7,5 @@ export const QueryKeys = {
     getQuestions: 'GET_QUESITONS',
     getTeachers: 'GET_TEACHERS',
     getStaffs: 'GET_STAFF',
-    getStudents: 'GET_STUDENT'
+    getStudents: 'GET_STUDENT',
 }

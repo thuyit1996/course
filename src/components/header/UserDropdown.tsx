@@ -10,10 +10,12 @@ import ChangeAvatar from '@/public/images/icons/change-avatar.svg';
 import ChangePassword from '@/public/images/icons/change-password.svg';
 import Logout from '@/public/images/icons/logout.svg';
 import { alert } from "@/libs/alert";
+import { ACCESS_ADMIN_SITE_ROLES, ROLES } from "@/libs/constant";
 
 export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const session = useSession();
+  const roles = session?.data?.user?.roles ?? [];
   function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
     setIsOpen((prev) => !prev);
@@ -22,6 +24,7 @@ export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean })
   function closeDropdown() {
     setIsOpen(false);
   }
+  const displayRole = roles?.includes(ROLES.ADMIN) ? 'Admin' : roles?.includes(ROLES.TEACHER) ? 'Teacher' : roles?.includes(ROLES.STAFF) ? 'Staff' : 'User'
   const showAlert = () => {
     setTimeout(() => {
       if (isAdminSite) {
@@ -53,7 +56,7 @@ export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean })
         </span>
         <div className="flex flex-col mr-4 text-left">
           <span className="block mr-1 font-bold text-sm text-[#2c2c2c]">{session?.data?.user.displayName ?? ''}</span>
-          <span className="block mr-1 font-medium text-sm text-[#757575]">{session?.data?.user?.roles?.includes("ROLE_ADMIN") ? 'Admin' : 'User'}</span>
+          <span className="block mr-1 font-medium text-sm text-[#757575]">{displayRole}</span>
 
         </div>
 
@@ -83,7 +86,7 @@ export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean })
       >
         <ul className="flex flex-col gap-1 pb-3 border-b border-gray-200 dark:border-gray-800">
           <li>
-            {session.data?.user?.roles?.includes("ROLE_ADMIN") ?
+            {ACCESS_ADMIN_SITE_ROLES.some(role => session.data?.user?.roles?.includes(role)) ?
               <DropdownItem
                 onItemClick={() => {
                   closeDropdown();

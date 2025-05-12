@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { getSession, signIn } from "next-auth/react";
 import { EyeCloseIcon, EyeIcon } from "../../icons";
 import { toast } from "react-toastify";
+import { ACCESS_ADMIN_SITE_ROLES } from "@/libs/constant";
 
 const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +36,7 @@ const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {
                 });
                 if (resp?.ok) {
                     const session = await getSession();
-                    if (session?.user.roles?.includes("ROLE_ADMIN")) {
+                    if (ACCESS_ADMIN_SITE_ROLES.some(role => session?.user?.roles?.includes(role))) {
                         router.push('/admin/questions');
                     } else {
                         router.push('/')

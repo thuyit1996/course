@@ -15,6 +15,8 @@ import { useGetTeachers } from '@/api/admin/query';
 import MaleIcon from '@/public/images/icons/GenderMale.svg';
 import FemaleIcon from '@/public/images/icons/GenderFemale.svg';
 import LGBTIcon from '@/public/images/icons/GenderIntersex.svg';
+import dynamic from 'next/dynamic';
+const AddUser = dynamic(() => import('@/components/add-user'), { ssr: false })
 
 const Teachers = () => {
   const router = useRouter();
@@ -31,6 +33,7 @@ const Teachers = () => {
     orderDirection: 'desc',
     roles: 'ROLE_TEACHER'
   } as any);
+  const { openModal, isOpen, closeModal } = useModal();
   return (
     <main className="md:ml-[288px]">
       <div className='shadow rounded-3xl bg-white  h-[calc(100vh-2rem)]'>
@@ -39,7 +42,7 @@ const Teachers = () => {
             <span className='text-semibold text-lg'>Teacher list</span>
             <div className='border rounded-2xl ml-3 border-gray-200 text-[#2c2c2c] text-sm text-center px-2 py-1 text-medium'>{data?.total} {data?.total as number > 1 ? 'teachers' : 'teacher'}</div>
           </div>
-          <Button variant='primary' onClick={console.log} startIcon={<PlusIcon className="fill-rose-600" />}>Create Teacher</Button>
+          <Button variant='primary' onClick={openModal} startIcon={<PlusIcon className="fill-rose-600" />}>Create Teacher</Button>
         </div>
         <div className=''>
           <div className="overflow-hidden border-t border-gray-100 bg-white ">
@@ -182,6 +185,7 @@ const Teachers = () => {
       <Pagination onChange={(pageIndex: number) => {
         router.push(`/admin/teachers?${createQueryString(teacherPramConfig, { ...decodedParams, pageIndex })}`)
       }} total={data?.total ?? 0} initPageIndex={parseInt(searchParams.get('pageIndex') ?? '0')} />
+      {isOpen && <AddUser isOpen={isOpen} closeModal={closeModal} role='TEACHER'/>}
     </main>
   )
 }

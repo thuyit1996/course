@@ -80,11 +80,15 @@ export const config = {
     matcher: [
         '/writing-test',
         '/quiz-test',
+        '/mini-test',
         '/admin/teachers',
         '/admin',
         '/admin/questions',
         '/admin/exams',
         '/admin/grade',
+        '/admin/topics',
+        '/admin/staffs',
+        '/admin/',
         '/'
     ],
 };

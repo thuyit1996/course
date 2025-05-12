@@ -11,7 +11,6 @@ export interface InvokeTimmer {
 }
 const Writing = ({ exam, history, examId }: { exam: Example, history: { examResults: WritingFeedback[]; }, examId: string }) => {
     const countDownRef = useRef<InvokeTimmer>(null);
-
     useEffect(() => {
         countDownRef.current?.forceFinish();
     }, []);
@@ -37,6 +36,7 @@ const Writing = ({ exam, history, examId }: { exam: Example, history: { examResu
         },
     }) : '';
     console.log(response);
+    console.log(exam);
     const content = response?.listAnswer?.[0];
     const countWords = content?.trim?.() === ''
         ? 0
@@ -59,6 +59,15 @@ const Writing = ({ exam, history, examId }: { exam: Example, history: { examResu
                 </div>
                 <div className="gap-6 grid grid-cols-12 w-full">
                     {response ? <div className={'col-span-8'}>
+                        <div className=" bg-white p-10 rounded-lg shadow mb-4" >
+                            <div className="text-base font-semibold text-indigo-600 mb-4">QUESTION</div>
+                            <p className="text-sm lg:text-base 4xl:text-lg mb-4 font-medium text-[#262626]">
+                                {exam?.cards?.[0]?.question?.text}
+                            </p>
+                            <div className="px-10 flex justify-center">
+                                <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
+                            </div>
+                        </div >
                         <div className="bg-white p-10 rounded-lg shadow">
                             <div className='flex justify-between mb-4'>
                                 <span className='text-base font-semibold text-indigo-600 mb-4'>ANSWER</span>
@@ -75,7 +84,7 @@ const Writing = ({ exam, history, examId }: { exam: Example, history: { examResu
                     </div> : <>
                         {
                             exam?.cards?.[0] ? <div className={'col-span-12'} data-aos="fade-left">
-                                < div className=" bg-white p-10 rounded-lg shadow" >
+                                <div className=" bg-white p-10 rounded-lg shadow" >
                                     <div className="text-base font-semibold text-indigo-600 mb-4">QUESTION</div>
                                     <p className="text-sm lg:text-base 4xl:text-lg mb-4 font-medium text-[#262626]">
                                         {exam?.cards?.[0]?.question?.text}

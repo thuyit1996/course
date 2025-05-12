@@ -32,14 +32,13 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
     const url = session ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/stream/scoreResult/${session.data?.user.userId}` : undefined;
 
     const { data, error } = useEventSourceWithAutoReconnect(url);
-    console.log(data, error);
     useEffect(() => {
         if ((error as any)?.error) {
             closeModalWaiting();
             toast.error((error as any)?.error ?? '');
             countDownRef.current?.forceFinish();
-            if((error as any).userId && (error as any).examId) {
-                getHistoryData((error as any).examId , (error as any).userId);
+            if ((error as any).userId && (error as any).examId) {
+                getHistoryData((error as any).examId, (error as any).userId);
             }
         }
     }, [error]);
@@ -126,6 +125,15 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                 </div>
                 <div className="gap-6 grid grid-cols-12 w-full">
                     {response ? <div className={'col-span-8'}>
+                        <div className=" bg-white p-10 rounded-lg shadow mb-4" >
+                            <div className="text-base font-semibold text-indigo-600 mb-4">QUESTION</div>
+                            <p className="text-sm lg:text-base 4xl:text-lg mb-4 font-medium text-[#262626]">
+                                {exam?.cards?.[0]?.question?.text}
+                            </p>
+                            <div className="px-10 flex justify-center">
+                                <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
+                            </div>
+                        </div >
                         <div className="bg-white p-10 rounded-lg shadow">
                             <div className='flex justify-between mb-4'>
                                 <span className='text-base font-semibold text-indigo-600 mb-4'>ANSWER</span>
