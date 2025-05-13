@@ -54,4 +54,15 @@ export const getTeachers = (params: Record<string, string>): Promise<{ total: nu
 export const getStaff = (params: Record<string, string>): Promise<{ total: number, users: User[] }> => {
     const api = new API();
     return api.addPathName(`${END_POINTS.GET_STAFF}`).addQueryParams(params).get().then(res => res.json());
+}
+
+export const createUser = (body: any) => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.REGISER_USER}`).post(body).then(res => res.json());
+}
+
+
+export const verifyUser = (params: any): Promise<ResponseData<boolean>> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.VERIFY_USER}`).addQueryParams(params).post().then(res => res.json());
 } 

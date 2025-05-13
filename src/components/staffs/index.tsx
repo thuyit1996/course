@@ -14,6 +14,9 @@ import { useGetStaff } from '@/api/admin/query';
 import MaleIcon from '@/public/images/icons/GenderMale.svg';
 import FemaleIcon from '@/public/images/icons/GenderFemale.svg';
 import LGBTIcon from '@/public/images/icons/GenderIntersex.svg';
+import { useModal } from '@/hooks/useModal';
+import dynamic from 'next/dynamic';
+const AddUser = dynamic(() => import('@/components/add-user'), { ssr: false })
 const Staffs = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -29,6 +32,7 @@ const Staffs = () => {
         orderDirection: 'desc',
         roles: 'ROLE_STAFF'
     } as any);
+    const { isOpen, closeModal, openModal } = useModal();
     return (
         <main className="md:ml-[288px]">
             <div className='shadow rounded-3xl bg-white  h-[calc(100vh-2rem)]'>
@@ -37,7 +41,7 @@ const Staffs = () => {
                         <span className='text-semibold text-lg'>Staff list</span>
                         <div className='border rounded-2xl ml-3 border-gray-200 text-[#2c2c2c] text-sm text-center px-2 py-1 text-medium'>{data?.total} {data?.total as number > 1 ? 'staffs' : 'staff'}</div>
                     </div>
-                    <Button variant='primary' onClick={console.log} startIcon={<PlusIcon className="fill-rose-600" />}>Create Staff</Button>
+                    <Button variant='primary' onClick={openModal} startIcon={<PlusIcon className="fill-rose-600" />}>Create Staff</Button>
                 </div>
                 <div className=''>
                     <div className="overflow-hidden border-t border-gray-100 bg-white ">
@@ -112,14 +116,14 @@ const Staffs = () => {
                                                         <span>{user.displayName}</span>
                                                     </TableCell>
                                                     <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                         <span>{(user as any)?.classroom?.name}</span>
+                                                        <span>{(user as any)?.classroom?.name}</span>
                                                     </TableCell>
                                                     <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                        {(user as any)?.gender === 'MALE' ? <div className='gap-1 bg-success-50 border border-[#ABEFC6] text-[#079455] text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
+                                                        {(user as any)?.gender === 'Male' ? <div className='gap-1 bg-success-50 border border-[#ABEFC6] text-[#079455] text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
                                                             <MaleIcon className="w-3 h-3" />
                                                             Male
                                                         </div> : <>
-                                                            {(user as any)?.gender === 'FEMALE' ? <div className='gap-1 bg-error-50 text-error-600 border border-error-200 text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
+                                                            {(user as any)?.gender === 'Female' ? <div className='gap-1 bg-error-50 text-error-600 border border-error-200 text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
                                                                 <FemaleIcon className="w-3 h-3" />
                                                                 Female
                                                             </div> : <div className='gap-1 bg-[#E9D7FE] text-[#6941C6] border border-[#E9D7FE] text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
@@ -180,6 +184,12 @@ const Staffs = () => {
             <Pagination onChange={(pageIndex: number) => {
                 router.push(`/admin/staffs?${createQueryString(staffPramConfig, { ...decodedParams, pageIndex })}`)
             }} total={data?.total ?? 0} initPageIndex={parseInt(searchParams.get('pageIndex') ?? '0')} />
+            {isOpen && <AddUser isOpen={isOpen} closeModal={(isSuccess) => {
+                closeModal();
+                if (isSuccess) {
+                    router.push(`/admin/staffs?${createQueryString(staffPramConfig, { ...decodedParams, pageIndex: 0 })}`)
+                }
+            }} role='STAFF' />}
         </main>
     )
 }

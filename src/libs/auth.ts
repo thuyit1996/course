@@ -2,6 +2,7 @@ import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { signIn } from '@/api/auth/fetches';
+import { redirect } from 'next/navigation';
 
 export const authOptions = {
     session: {
@@ -25,32 +26,29 @@ export const authOptions = {
                     email: String(credentials.identifier),
                     password: String(credentials.password),
                 });
-                if (!response.responseData) {
-                    return null;
+                // console.log(response);
+                // // if (!response.responseData) {
+                // // }
+                // if ((response as any)?.error?.messages?.includes("Please verify otp.")) {
+                //     console.log("here");
+                //    return {
+
+                //    }
+                // }
+                if (!response?.responseData) {
+                    if ((response as any)?.error?.messages?.includes("Please verify otp.")) {
+                        throw new Error((response as any)?.error?.messages?.[0]);
+                    }
                 }
-//                 const response = {
-//   "responseData": {
-//     "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3NDY2OTM5NTEsImV4cCI6MTc0NzI5ODc1MX0.WuK1zoatwt8TtmkkIU92cA5KkwNquXCz_nIE59NnZSMzn30ycmJ6j42pzqysQ_Dgj061ozkJdwaT7VN10YDzbg",
-//     "englishUser": {
-//       "userId": "67c27b22b4060540c59d2cf5",
-//       "roles": [
-//         "ROLE_ADMIN"
-//       ],
-//       "firstName": "John",
-//       "lastName": "Doe",
-//       "displayName": "John Doe",
-//       "email": "admin@gmail.com",
-//       "phone": "123-456-7890",
-//       "address": "123 Main St."
-//     }
-//   }
-// }
-                return {
-                    ...response.responseData.englishUser,
-                    userId: response.responseData.englishUser.userId,
-                    id: response.responseData.englishUser.userId,
-                    accessToken: response.responseData.token,
-                };
+                if (response?.responseData) {
+                    return {
+                        ...response.responseData.englishUser,
+                        userId: response.responseData.englishUser.userId,
+                        id: response.responseData.englishUser.userId,
+                        accessToken: response.responseData.token,
+                    };
+                }
+                return null;
             },
         }),
     ],

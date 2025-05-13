@@ -19,4 +19,6 @@ export const END_POINTS = {
     GET_TOPICS: '/admin/topics',
     GET_TEACHERS: '/admin/users',
     GET_STAFF: '/admin/users',
+    REGISER_USER: '/public/register/user',
+    VERIFY_USER: '/public/verify_otp',
 }

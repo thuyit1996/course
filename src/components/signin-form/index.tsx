@@ -7,6 +7,7 @@ import { getSession, signIn } from "next-auth/react";
 import { EyeCloseIcon, EyeIcon } from "../../icons";
 import { toast } from "react-toastify";
 import { ACCESS_ADMIN_SITE_ROLES } from "@/libs/constant";
+import { encryptAES } from "@/libs/helper";
 
 const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -34,6 +35,7 @@ const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {
                     identifier: email,
                     password: password,
                 });
+                console.log(resp, 3232);
                 if (resp?.ok) {
                     const session = await getSession();
                     if (ACCESS_ADMIN_SITE_ROLES.some(role => session?.user?.roles?.includes(role))) {
@@ -43,7 +45,11 @@ const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {
                     }
                     router.refresh();
                 } else {
-                    toast.error(`Invalid login credentials.`);
+                    if (resp?.error === 'Please verify otp.') {
+                        router.push(`/verification?email=${email}&password=${encryptAES(password)}`)
+                    } else {
+                        toast.error(`Invalid login credentials.`);
+                    }
                 }
             })
         } catch (error) {

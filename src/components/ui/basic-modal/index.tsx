@@ -1,6 +1,7 @@
 import { Modal } from "../modal"
 import Button from "../button/Button";
 import { ReactNode } from "react";
+import SpinnerIcon from '@/public/images/icons/spinner.svg';
 interface ConfirmModalProps {
     isShowFooter?: boolean;
     buttonLabel?: [string, string],
@@ -10,8 +11,9 @@ interface ConfirmModalProps {
     handleSave?: () => void;
     title: string,
     children: ReactNode,
+    isLoading?: boolean
 }
-const BasicModal = ({ isOpen, closeModal, handleSave, isShowFooter = true, buttonLabel, showButton, title, children, }: ConfirmModalProps) => {
+const BasicModal = ({ isOpen, closeModal, handleSave, isShowFooter = true, buttonLabel, showButton, title, children, isLoading = false }: ConfirmModalProps) => {
     return (
         <Modal
             isOpen={isOpen}
@@ -28,7 +30,7 @@ const BasicModal = ({ isOpen, closeModal, handleSave, isShowFooter = true, butto
                         <Button size="md" className={`${showButton?.[0] && 'hidden'}`} variant="outline" onClick={closeModal}>
                             {buttonLabel?.[0] ?? 'Cancel'}
                         </Button>
-                        <Button size="md" className={`${showButton?.[1] && 'hidden'}`} variant="secondary" onClick={handleSave}>
+                        <Button size="md" className={`${showButton?.[1] && 'hidden'}`} variant="secondary" onClick={handleSave} startIcon={isLoading ? <SpinnerIcon /> : <></>}>
                             {buttonLabel?.[1] ?? 'Save'}
                         </Button>
                     </div>

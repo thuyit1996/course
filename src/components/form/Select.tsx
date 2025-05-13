@@ -20,7 +20,8 @@ const Select: React.FC<SelectProps> = ({
   onChange,
   className = "",
   defaultValue = "",
-  toggle
+  toggle,
+  ...rest
 }) => {
   // Manage the selected value
   const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
@@ -37,10 +38,11 @@ const Select: React.FC<SelectProps> = ({
         selectedValue
           ? "text-gray-800 dark:text-white/90"
           : "text-gray-400 dark:text-gray-400"
-      } ${className}`}
+      } ${className}  text-error-800 `}
       value={selectedValue}
       onChange={handleChange}
       onClick={toggle}
+      {...rest}
     >
       {/* Placeholder option */}
       <option

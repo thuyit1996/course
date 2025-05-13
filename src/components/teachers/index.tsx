@@ -120,11 +120,11 @@ const Teachers = () => {
                             <span>{(user as any)?.classroom?.name}</span>
                           </TableCell>
                           <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                            {(user as any)?.gender === 'MALE' ? <div className='gap-1 bg-success-50 border border-[#ABEFC6] text-[#079455] text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
+                            {(user as any)?.gender === 'Male' ? <div className='gap-1 bg-success-50 border border-[#ABEFC6] text-[#079455] text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
                               <MaleIcon className="w-3 h-3" />
                               Male
                             </div> : <>
-                              {(user as any)?.gender === 'FEMALE' ? <div className='gap-1 bg-error-50 text-error-600 border border-error-200 text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
+                              {(user as any)?.gender === 'Female' ? <div className='gap-1 bg-error-50 text-error-600 border border-error-200 text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
                                 <FemaleIcon className="w-3 h-3" />
                                 Female
                               </div> : <div className='gap-1 bg-[#E9D7FE] text-[#6941C6] border border-[#E9D7FE] text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
@@ -185,7 +185,12 @@ const Teachers = () => {
       <Pagination onChange={(pageIndex: number) => {
         router.push(`/admin/teachers?${createQueryString(teacherPramConfig, { ...decodedParams, pageIndex })}`)
       }} total={data?.total ?? 0} initPageIndex={parseInt(searchParams.get('pageIndex') ?? '0')} />
-      {isOpen && <AddUser isOpen={isOpen} closeModal={closeModal} role='TEACHER'/>}
+      {isOpen && <AddUser isOpen={isOpen} closeModal={(isSuccess) => {
+        closeModal();
+        if (isSuccess) {
+          router.push(`/admin/teachers?${createQueryString(teacherPramConfig, { ...decodedParams, pageIndex: 0 })}`)
+        }
+      }} role='TEACHER' />}
     </main>
   )
 }
