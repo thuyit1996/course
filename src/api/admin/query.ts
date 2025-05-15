@@ -2,10 +2,10 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { QueryKeys } from "../queryKeys"
 import { getAllClass, getExams, getQuestions, getStaff, getTeachers, getTopics, getUserInClass } from "./fetches"
 
-export const useGetAllClass = () => {
+export const useGetAllClass = (params = {}) => {
     return useQuery({
-        queryKey: [QueryKeys.getAllClass],
-        queryFn: () => getAllClass(),
+        queryKey: [QueryKeys.getAllClass, params],
+        queryFn: () => getAllClass(params),
     })
 }
 

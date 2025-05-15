@@ -32,10 +32,10 @@ const SignInPage = async ({
             </p>
           </div>
           <SignInForm callbackUrl={searchParams?.callbackUrl ?? ''} />
-          <div className="text-center mt-4 text-base" data-aos="fade">
+          {/* <div className="text-center mt-4 text-base" data-aos="fade">
             <span className="text-[#757575]">{`Don't have an account?`}</span>
             <a href="#" className="text-rose-600 font-medium hover:underline ml-2"> Sign Up</a>
-          </div>
+          </div> */}
 
         </div>
 

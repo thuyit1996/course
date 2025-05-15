@@ -65,7 +65,11 @@ const Writing = ({ exam, history, examId }: { exam: Example, history: { examResu
                                 {exam?.cards?.[0]?.question?.text}
                             </p>
                             <div className="px-10 flex justify-center">
+                                {exam?.cards?.[0]?.question?.image ? 
+
                                 <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
+                                 : null
+                                }
                             </div>
                         </div >
                         <div className="bg-white p-10 rounded-lg shadow">
@@ -90,7 +94,10 @@ const Writing = ({ exam, history, examId }: { exam: Example, history: { examResu
                                         {exam?.cards?.[0]?.question?.text}
                                     </p>
                                     <div className="px-10 flex justify-center">
+                                        {exam?.cards?.[0]?.question?.image ? 
                                         <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
+                                         : null
+                                        }
                                     </div>
                                 </div >
                                 <div className="bg-white p-6 rounded-lg shadow mt-4">

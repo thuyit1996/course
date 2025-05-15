@@ -11,8 +11,19 @@ import UserDropdown from '../header/UserDropdown';
 import Link from 'next/link';
 import { useGetAllClass } from '@/api/admin/query';
 import { useParams, usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { ROLES } from '@/libs/constant';
 const Sidebar: React.FC = () => {
-    const { data } = useGetAllClass();
+    const session = useSession();
+    const { data } = useGetAllClass({
+        ...(session?.data?.user?.roles.includes(ROLES.TEACHER) && {
+            teacherId: session.data?.user.userId
+        }),
+        ...(session?.data?.user?.roles.includes(ROLES.STAFF) && {
+            staffId: session.data?.user.userId
+        }),
+    });
+    console.log(data, "data");
     const params = useParams();
     const pathname = usePathname();
     console.log(params);

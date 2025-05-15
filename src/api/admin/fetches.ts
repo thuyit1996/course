@@ -4,9 +4,9 @@ import { API } from "../fetch";
 import { Class, Exam, QuestionItem, Topic, User } from "@/types/admin";
 import { QuestionList } from "@/types/exam";
 
-export const getAllClass = (): Promise<ResponseData<Class>> => {
+export const getAllClass = (params = {}): Promise<ResponseData<Class>> => {
     const api = new API();
-    return api.addPathName(`${END_POINTS.GET_ALL_CLASS}`).get().then(res => res.json());
+    return api.addPathName(`${END_POINTS.GET_ALL_CLASS}`).addQueryParams(params).get().then(res => res.json());
 }
 
 export const getQuestionByTopicId = (topicIds: string[]): Promise<QuestionList> => {

@@ -5,16 +5,13 @@ import CalenderIcon from '@/public/images/icons/calender.svg';
 import DatePicker from 'react-date-picker';
 import { GENDERS, ROLES } from "@/libs/constant";
 import { useState, useTransition } from "react";
-import { EyeCloseIcon, EyeIcon } from "../../icons";
 import { z } from 'zod';
 import { useGetAllClass } from "@/api/admin/query";
-import { Form, type SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { createUser } from "@/api/admin/fetches";
 import { toast } from "react-toastify";
-import { alert } from "@/libs/alert";
+import 'react-date-picker/dist/DatePicker.css';
 import moment from "moment";
-import { useRouter } from "next/navigation";
+
 
 const AdminRoleSchema = z.object({
     firstName: z.string().trim().min(1, { message: 'This field is required' }),
@@ -69,8 +66,6 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
     const [dob, setDob] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [isPending, startTransition] = useTransition();
 
     const onCreateUser = async () => {
@@ -81,10 +76,7 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                     lastName,
                     gender,
                     password: 'Abcd1234@',
-                    ...(role === 'USER' && {
-                        classroomId,
-                        password
-                    }),
+                    classroomId,
                     email,
                     address,
                     phone,
@@ -108,6 +100,7 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
             console.error(error);
         }
     }
+
     return (
         <BasicModal
             isOpen={isOpen}
@@ -139,25 +132,23 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                             <Input placeholder={`Last name`} wrapperClass='w-full' value={lastName} onChange={(event) => setLastName(event.target.value)} />
                         </div>
                     </div>
-                    <div className={`w-full ${role === 'USER' ? 'grid' : ''} grid-cols-1 md:grid-cols-2 mt-6 gap-3 lg:gap-6`}>
-                        {role === 'USER' &&
-                            <div>
-                                <label className="mb-2 block text-base text-[#2c2c2c]">
-                                    Class
-                                </label>
-                                <Select
-                                    options={data?.responseData?.classroom?.map(item => ({
-                                        label: item.name,
-                                        value: item.id
-                                    })) ?? []}
-                                    placeholder="Choose class"
-                                    defaultValue={classroomId}
-                                    className="bg-gray-50 text-base"
-                                    onChange={(value) => setClassroomId(value)}
-                                />
-                                {/* <span className="text-rose-600 text-xs">This filed is required</span> */}
-                            </div>
-                        }
+                    <div className={`w-full grid grid-cols-1 md:grid-cols-2 mt-6 gap-3 lg:gap-6`}>
+                        <div>
+                            <label className="mb-2 block text-base text-[#2c2c2c]">
+                                Class
+                            </label>
+                            <Select
+                                options={data?.responseData?.classroom?.map(item => ({
+                                    label: item.name,
+                                    value: item.id
+                                })) ?? []}
+                                placeholder="Choose class"
+                                defaultValue={classroomId}
+                                className="bg-gray-50 text-base"
+                                onChange={(value) => setClassroomId(value)}
+                            />
+                            {/* <span className="text-rose-600 text-xs">This filed is required</span> */}
+                        </div>
                         <div>
                             <label className="mb-2 block text-base text-[#2c2c2c]">
                                 Gender
@@ -169,7 +160,6 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                                 className="bg-gray-50 text-base"
                                 onChange={(value) => setGender(value)}
                             />
-                            {/* <span className="text-rose-600 text-xs">This filed is required</span> */}
                         </div>
                     </div>
                     <div className="mt-6">
@@ -205,12 +195,14 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                                 Date of Birth
                             </label>
                             <div className="relative w-full flatpickr-wrapper">
-                                <Input type="date" value={dob} onChange={(event) => setDob(event.target.value)} />
+                                <div className="relative">
+                                    <DatePicker onChange={(value: any) => setDob(value)} value={dob} className="w-full" calendarIcon={<CalenderIcon />} format="dd/MM/yyyy" clearIcon={null} />
+                                </div>
                             </div>
                         </div>
 
                     </div>
-                    {role === 'USER' ?
+                    {/* {role === 'USER' ?
                         <>
                             <div className="mt-6">
                                 <div>
@@ -268,7 +260,7 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                                 </div>
                             </div>
                         </> : null
-                    }
+                    } */}
                 </div>
             </form>
         </BasicModal>

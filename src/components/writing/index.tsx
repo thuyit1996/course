@@ -131,7 +131,10 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                                 {exam?.cards?.[0]?.question?.text}
                             </p>
                             <div className="px-10 flex justify-center">
-                                <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
+                                {exam?.cards?.[0]?.question?.image ?
+                                    <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
+                                    : null
+                                }
                             </div>
                         </div >
                         <div className="bg-white p-10 rounded-lg shadow">
@@ -157,7 +160,10 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                                             {exam?.cards?.[0]?.question?.text}
                                         </p>
                                         <div className="px-10 flex justify-center">
+                                            {exam?.cards?.[0]?.question?.image ? 
                                             <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
+                                             : null
+                                            }
                                         </div>
                                     </div>
                                 </div >

@@ -16,8 +16,11 @@ import FemaleIcon from '@/public/images/icons/GenderFemale.svg';
 import LGBTIcon from '@/public/images/icons/GenderIntersex.svg';
 import { useModal } from '@/hooks/useModal';
 import dynamic from 'next/dynamic';
+import { useSession } from 'next-auth/react';
+import { ROLES } from '@/libs/constant';
 const AddUser = dynamic(() => import('@/components/add-user'), { ssr: false })
 const Staffs = () => {
+    const session = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
     const decodedParams = decodeQueryParams(
@@ -41,7 +44,10 @@ const Staffs = () => {
                         <span className='text-semibold text-lg'>Staff list</span>
                         <div className='border rounded-2xl ml-3 border-gray-200 text-[#2c2c2c] text-sm text-center px-2 py-1 text-medium'>{data?.total} {data?.total as number > 1 ? 'staffs' : 'staff'}</div>
                     </div>
-                    <Button variant='primary' onClick={openModal} startIcon={<PlusIcon className="fill-rose-600" />}>Create Staff</Button>
+
+                    {(session?.data?.user?.roles?.includes(ROLES.ADMIN) || session?.data?.user?.roles?.includes(ROLES.TEACHER)) && (
+                        <Button variant='primary' onClick={openModal} startIcon={<PlusIcon className="fill-rose-600" />}>Create Staff</Button>
+                    )}
                 </div>
                 <div className=''>
                     <div className="overflow-hidden border-t border-gray-100 bg-white ">
@@ -100,8 +106,11 @@ const Staffs = () => {
                                                 isHeader
                                                 className="px-5 py-3 text-[#757575] text-xs font-semibold  text-start"
                                             >
-                                                <>Action</>
+                                                {(session?.data?.user?.roles?.includes(ROLES.ADMIN) || session?.data?.user?.roles?.includes(ROLES.TEACHER)) && (
+                                                    <>Action</>
+                                                )}
                                             </TableCell>
+
                                         </TableRow>
                                     </TableHeader>
 
@@ -146,11 +155,13 @@ const Staffs = () => {
                                                         <>-</>
                                                     </TableCell>
                                                     <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                                        <div className="flex gap-4">
-                                                            <EditIcon className="cursor-pointer" />
-                                                            <LockIcon className="cursor-pointer" />
-                                                            <TrashIcon className="cursor-pointer" />
-                                                        </div>
+                                                        {(session?.data?.user?.roles?.includes(ROLES.ADMIN) || session?.data?.user?.roles?.includes(ROLES.TEACHER)) && (
+                                                            <div className="flex gap-4">
+                                                                <EditIcon className="cursor-pointer" />
+                                                                <LockIcon className="cursor-pointer" />
+                                                                <TrashIcon className="cursor-pointer" />
+                                                            </div>
+                                                        )}
                                                     </TableCell>
                                                 </TableRow>
                                             ))}
