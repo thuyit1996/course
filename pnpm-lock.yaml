@@ -89,6 +89,9 @@ importers:
       react-apexcharts:
         specifier: ^1.7.0
         version: 1.7.0(apexcharts@4.7.0)(react@18.3.1)
+      react-calendar:
+        specifier: ^5.1.0
+        version: 5.1.0(@types/react@18.3.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-date-picker:
         specifier: ^11.0.0
         version: 11.0.0(@types/react@18.3.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

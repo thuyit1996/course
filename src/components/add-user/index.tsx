@@ -9,7 +9,6 @@ import { z } from 'zod';
 import { useGetAllClass } from "@/api/admin/query";
 import { createUser } from "@/api/admin/fetches";
 import { toast } from "react-toastify";
-import 'react-date-picker/dist/DatePicker.css';
 import moment from "moment";
 
 
