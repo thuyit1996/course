@@ -1,29 +1,26 @@
-import TextArea from '@/components/form/input/TextArea';
-import Select from '@/components/form/Select';
-import Teachers from '@/components/teachers';
-import Button from '@/components/ui/button/Button';
-import CustomModal from '@/components/ui/custom-modal';
-import CloseIcon from '@/public/images/icons/close.svg';
-import { Modal } from '@/components/ui/modal';
-import { useModal } from '@/hooks/useModal';
-import PlusIcon from '@/public/images/icons/plus.svg';
-import PlusFile from '@/public/images/icons/plus-file.svg';
-import MiniDelete from '@/public/images/icons/mini-delete.svg';
-import { useState } from 'react';
-import Switch from '@/components/form/switch/Switch';
+import { createQuestion, uploadFile } from '@/api/exam/fetches';
+import { useGetAllAdminTopic } from '@/api/exam/query';
 import Checkbox from '@/components/form/input/Checkbox';
 import Input from '@/components/form/input/InputField';
-import { v4 } from 'uuid'
-import { useGetAllAdminTopic } from '@/api/writing-test/query';
-import { createQuestion, uploadFile } from '@/api/writing-test/fetches';
-import { toast } from 'react-toastify';
+import TextArea from '@/components/form/input/TextArea';
+import Select from '@/components/form/Select';
+import Switch from '@/components/form/switch/Switch';
+import CustomModal from '@/components/ui/custom-modal';
+import CloseIcon from '@/public/images/icons/close.svg';
 import FileIcon from '@/public/images/icons/file.svg';
+import MiniDelete from '@/public/images/icons/mini-delete.svg';
 import MP3Icon from '@/public/images/icons/mp3.svg';
-
+import PlusFile from '@/public/images/icons/plus-file.svg';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { v4 } from 'uuid';
+import TopicSelect from '../topic-select';
+import { Topic } from '@/types/admin';
 
 const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: questionTypeProp }: { isOpen: boolean, closeModal: (isSuccess?: boolean) => void, openModal: () => void, goBack?: () => void, questionType: 0 | 1 }) => {
     const [isQuestionGroup, setIsQuestionGroup] = useState(false);
-    const { data: topics } = useGetAllAdminTopic();
+    const { data: listTopic, isLoading, refetch } = useGetAllAdminTopic();
+    const [topics, setTopics] = useState<Topic[]>([]);
     const [imageSrc, setImageSrc] = useState('');
     const [audioSrc, setAudioSrc] = useState('');
     const [questionMultipleList, setQuestionMultipleList] = useState<{ option: { content: '', isCorrect: boolean, }[], question: string, id: string }[]>([{
@@ -48,6 +45,18 @@ const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: ques
         { content: '', isCorrect: false },
     ])
     const [textResponse, setTextResponse] = useState('');
+
+    useEffect(() => {
+        if (!isLoading) {
+            refetch();
+        }
+    }, [])
+
+    useEffect(() => {
+        if (listTopic?.topics) {
+            setTopics(listTopic.topics)
+        }
+    }, [listTopic])
 
     const handleImageChange = async (e: any) => {
         const file = e.target.files[0];
@@ -206,7 +215,6 @@ const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: ques
             setQuestionMultipleList(newData as typeof questionMultipleList);
         }
     }
-    console.log(questionMultipleList);
     const createQuestionHandle = async () => {
         let body: any;
         if (questionTypeProp === 0) {
@@ -255,7 +263,6 @@ const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: ques
                 closeModal();
                 toast.error('Something went wrong')
             }
-            console.log(resp);
         } catch (error) {
             console.log(error);
             toast.error('Something went wrong')
@@ -272,25 +279,20 @@ const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: ques
             handleSave={createQuestionHandle}
             goBack={() => goBack?.()}
         >
-            <div className="flex flex-col overflow-y-auto custom-scrollbar max-h-[450px] scroll-hidden">
+            <div className="flex flex-col overflow-y-auto custom-scrollbar max-h-[640px] scroll-hidden">
                 <div className="mt-6">
                     <div>
                         <label className="mb-2 block text-base text-[#2c2c2c]">
                             Topic
                         </label>
-                        <Select
-                            options={topics?.topics?.map(item => ({
-                                ...item,
-                                value: item.id,
-                                label: item.name
-                            })) ?? []}
+                        <TopicSelect
+                            options={topics ?? []}
                             onChange={setTopicId}
                             placeholder="Select topics or add your own"
-                            defaultValue=""
-                            className="bg-gray-50 text-base"
+                            name="select-topic"
+                            mode="single"
                         />
                     </div>
-
                 </div>
                 <div className="mt-6">
                     <div>
@@ -365,7 +367,7 @@ const AddQuestion = ({ isOpen, closeModal, openModal, goBack, questionType: ques
                                     className="hidden"
                                 />
                             </label>
-                        </div> :  <div className="border-dotted border-gray-200 mr-2 border w-1/2"> <label className="w-full h-full flex items-center justify-center cursor-pointer py-3 flex-col">
+                        </div> : <div className="border-dotted border-gray-200 mr-2 border w-1/2"> <label className="w-full h-full flex items-center justify-center cursor-pointer py-3 flex-col">
                             <MP3Icon />
                             <p className='mt-2 text-indigo-600 text-xs font-semibold'>Click to upload sound</p>
                             <p className='mt-0.5 text-[#757575] text-xs'>MP3 less than 4MB</p>

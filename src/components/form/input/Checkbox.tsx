@@ -7,6 +7,7 @@ interface CheckboxProps {
   id?: string; // Unique ID for the checkbox
   onChange: (checked: boolean) => void; // Change handler
   disabled?: boolean; // Disabled state
+  textClass?: string;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({
@@ -16,23 +17,24 @@ const Checkbox: React.FC<CheckboxProps> = ({
   onChange,
   className = "",
   disabled = false,
+  textClass = ''
 }) => {
   return (
     <label
       className={`flex items-center space-x-3 cursor-pointer ${
-        disabled ? "cursor-not-allowed opacity-60" : ""
+        disabled ? "cursor-not-allowed" : ""
       }`}
     >
       <input
         id={id}
         type="checkbox"
-        className={`w-4 h-4 ${className} checked:!bg-rose-600 dark:border-gray-700 border-gray-300 dark:focus:outline-none rounded text-brand-500 dark:focus:ring-0 focus:ring-0 dark:focus:ring-transparent focus:ring-transparent focus:outline-none dark:focus:bg-outline-none focus:ring-offset-0`}
+        className={`w-4 h-4 ${className} disabled:opacity-20 checked:!bg-rose-600 dark:border-gray-700 border-gray-300 dark:focus:outline-none rounded text-brand-500 dark:focus:ring-0 focus:ring-0 dark:focus:ring-transparent focus:ring-transparent focus:outline-none dark:focus:bg-outline-none focus:ring-offset-0`}
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
         disabled={disabled}
       />
       {label && (
-        <span className="font-medium text-gray-800 text-theme-sm dark:text-white text-sm text-[#2c2c2c]">
+        <span className={`${textClass} font-medium  text-theme-sm dark:text-white text-sm text-[#2c2c2c]`}>
           {label}
         </span>
       )}

@@ -1,15 +1,12 @@
 'use client';
 
-import { Example, WritingFeedback } from "@/types/exam";
-import React, { useEffect, useId, useRef, useState } from "react";
-import CountdownTimer from "../count-down";
+import { ExamType, InvokeTimmer, WritingFeedback } from "@/types/exam";
 import parser from 'html-react-parser';
+import React, { useEffect, useRef } from "react";
+import CountdownTimer from "../count-down";
+import ImageWithHide from "../fallback-image";
 
-export interface InvokeTimmer {
-    invokeCountDown: () => void;
-    forceFinish: () => void;
-}
-const Writing = ({ exam, history, examId }: { exam: Example, history: { examResults: WritingFeedback[]; }, examId: string }) => {
+const Writing = ({ exam, history, examId }: { exam: ExamType, history: { examResults: WritingFeedback[]; }, examId: string }) => {
     const countDownRef = useRef<InvokeTimmer>(null);
     useEffect(() => {
         countDownRef.current?.forceFinish();
@@ -55,8 +52,10 @@ const Writing = ({ exam, history, examId }: { exam: Example, history: { examResu
                         response={response as WritingFeedback}
                         isReview={true}
                         examId={examId}
+                        baseHref="/writing-test"
                     />
                 </div>
+{/* {JSON.stringify(exam?.cards?.[0]?.question)} */}
                 <div className="gap-6 grid grid-cols-12 w-full">
                     {response ? <div className={'col-span-8'}>
                         <div className=" bg-white p-10 rounded-lg shadow mb-4" >
@@ -65,11 +64,13 @@ const Writing = ({ exam, history, examId }: { exam: Example, history: { examResu
                                 {exam?.cards?.[0]?.question?.text}
                             </p>
                             <div className="px-10 flex justify-center">
-                                {exam?.cards?.[0]?.question?.image ? 
+                                {/* {exam?.cards?.[0]?.question?.image ? 
 
                                 <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
                                  : null
-                                }
+                                } */}
+
+                                <ImageWithHide src={exam?.cards?.[0]?.question?.image} alt="Graph" className="max-h-[756px] w-full h-full"/>
                             </div>
                         </div >
                         <div className="bg-white p-10 rounded-lg shadow">
@@ -94,10 +95,7 @@ const Writing = ({ exam, history, examId }: { exam: Example, history: { examResu
                                         {exam?.cards?.[0]?.question?.text}
                                     </p>
                                     <div className="px-10 flex justify-center">
-                                        {exam?.cards?.[0]?.question?.image ? 
-                                        <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
-                                         : null
-                                        }
+                                <ImageWithHide src={exam?.cards?.[0]?.question?.image} alt="Graph" className="w-full h-full max-h-[756px]"/>
                                     </div>
                                 </div >
                                 <div className="bg-white p-6 rounded-lg shadow mt-4">

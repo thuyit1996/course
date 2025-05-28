@@ -1,4 +1,6 @@
-interface Card {
+import { EnglishUser } from "./auth";
+
+export interface Card {
     version: string;
     createdDate: number;
     lastModifiedDate: number;
@@ -8,20 +10,41 @@ interface Card {
         image: string;
         hint: string;
         text: string;
+        sound: string;
     };
     topicId: string;
+    type: number
 }
 
 // Define the main structure
-interface Example {
+export interface ExamType {
     id: string;
     name: string;
     cardIds: string[];
     cards: Card[];
 }
 
+// Define the main structure
+export interface QuizExamType {
+    id: string;
+    name: string;
+    cardIds: string[];
+    cards: MiniTestCardItem[];
+}
 
-interface  WritingFeedback  {
+export interface QuizExamReviewType {
+    id: string;
+    userResponse: EnglishUser;
+    examResults: examResultType[]
+};
+
+export interface examResultType {
+    resultId: string,
+    score: number,
+    listAnswer: string[]
+};
+
+export interface WritingFeedback {
     resultId: string;
     score: number;
     taskAchievement: number;
@@ -30,9 +53,9 @@ interface  WritingFeedback  {
     grammar: number;
     remarks: string;
     listAnswer: string[]
-  };
+};
 
-interface WritingTestList {
+export interface ExamTestList {
     topicName: string;
     total: number;
     exams: {
@@ -45,11 +68,80 @@ interface WritingTestList {
         code: string,
     }[]
 }
-type QuestionList = {
+
+export interface MiniTestList {
+    total: number;
+    cards: MiniTestCardItem[];
+}
+
+export interface MiniTestCardItem extends MiniTestQuestionItem {
+    isQuestionGroup: boolean,
+    childCards?: MiniTestQuestionItem[]
+    score?: number,
+    code?: string,
+    createdDate: number;
+
+}
+
+export interface MiniTestQuestionItem {
+    id: string;
+    index?: string;
+    question: {
+        image?: string;
+        sound?: string;
+        text?: string;
+    },
+    answer: {
+        choices?: MiniTestChoiceItem[];
+        text?: string;
+    },
+    type?: number;
+}
+
+export interface MiniTestChoiceItem {
+    content: string,
+    isCorrect: boolean
+}
+
+export interface UserAnswerItem {
+    content: string,
+    id: string
+}
+
+export interface UserAnswerList {
+    [id: string]: string
+}
+
+
+export type QuestionList = {
     cards: {
         id: string,
         question: { sound: string, text: string, image: string },
         checked: boolean
     }[]
 }
-export type { Example, WritingFeedback, WritingTestList , QuestionList }
+
+export type QuestionItemProps = Question & {
+    onChange: (id: string, answer: string) => void;
+    value?: string;
+    isGroup?: boolean;
+};
+
+export type Question = {
+    id: string;
+    index?: string;
+    questionTitle?: string;
+    isFinish?: boolean;
+    audioSrc?: string;
+    imageSrc?: string;
+    questionText?: string;
+    answers: MiniTestChoiceItem[];
+    correctAnswer?: string;
+    selected?: string | null;
+    type?: number;
+};
+
+export interface InvokeTimmer {
+    invokeCountDown: () => void;
+    forceFinish: () => void;
+}

@@ -23,6 +23,9 @@ type User = {
     email: string;
     address: string;
     phone: string;
+    homework: string;
+    attendance: string;
+    dob: string;
 }
 
 interface Creator {
@@ -50,10 +53,9 @@ interface Topic {
     id: string,
     name: string,
     creator: User,
-    "createdDate": number,
-    "lastModifiedDate": number
+    createdDate: number,
+    lastModifiedDate: number
 }
-
 
 interface Question {
     sound: string;

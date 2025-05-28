@@ -1,22 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { Example, WritingFeedback } from "@/types/exam";
+import { ExamType, InvokeTimmer, WritingFeedback } from "@/types/exam";
 import React, { useEffect, useId, useRef, useState } from "react";
 import CountdownTimer from "../count-down";
 import { useModal } from "@/hooks/useModal";
 import ConfirmModal from "../ui/confirm-modal";
 import parser from 'html-react-parser';
 import { toast } from 'react-toastify';
-import { getHistoryDetail, submitWritingTest } from "@/api/writing-test/fetches";
+import { getHistoryDetail, submitWritingTest } from "@/api/exam/fetches";
 import { useSession } from "next-auth/react";
 import { useEventSourceWithAutoReconnect } from "@/hooks/useEventSource";
+import ImageWithHide from "../fallback-image";
 
-export interface InvokeTimmer {
-    invokeCountDown: () => void;
-    forceFinish: () => void;
-}
-const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
+
+const Writing = ({ exam, examId }: { exam: ExamType, examId: string }) => {
     const [content, setContent] = useState('');
     const { isOpen, closeModal, openModal } = useModal();
     const { isOpen: isOpenWaiting, closeModal: closeModalWaiting, openModal: openModalWaiting } = useModal();
@@ -32,6 +30,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
     const url = session ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/stream/scoreResult/${session.data?.user.userId}` : undefined;
 
     const { data, error } = useEventSourceWithAutoReconnect(url);
+
     useEffect(() => {
         if ((error as any)?.error) {
             closeModalWaiting();
@@ -67,7 +66,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                 toast.error(`You haven't entered any content. Please add content before submitting.`);
             } else {
                 openModalWaiting();
-                const resp = await submitWritingTest(examId, content);
+                const resp = await submitWritingTest(examId, content.replace(/\n/g, " "));
                 if (resp.responseData) {
                     // closeModalWaiting();
                 } else {
@@ -103,7 +102,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
 
         },
     }) : '';
-    console.log(isStart);
+    console.log(content.replace(/\n/g, " "));
     return (
         <>
             <div className="flex">
@@ -121,6 +120,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                         response={response as WritingFeedback}
                         onRetake={() => setResponse(null)}
                         alertFinish={() => setIsFinish(true)}
+                        baseHref="/writing-test"
                     />
                 </div>
                 <div className="gap-6 grid grid-cols-12 w-full">
@@ -130,11 +130,13 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                             <p className="text-sm lg:text-base 4xl:text-lg mb-4 font-medium text-[#262626]">
                                 {exam?.cards?.[0]?.question?.text}
                             </p>
+                            {/* {exam?.cards?.[0]?.question} */}
                             <div className="px-10 flex justify-center">
-                                {exam?.cards?.[0]?.question?.image ?
+                                <ImageWithHide src={exam?.cards?.[0]?.question?.image} alt="Graph" className="w-full h-full max-h-[756px]" />
+                                {/* {exam?.cards?.[0]?.question?.image ?
                                     <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
                                     : null
-                                }
+                                } */}
                             </div>
                         </div >
                         <div className="bg-white p-10 rounded-lg shadow">
@@ -160,10 +162,8 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                                             {exam?.cards?.[0]?.question?.text}
                                         </p>
                                         <div className="px-10 flex justify-center">
-                                            {exam?.cards?.[0]?.question?.image ? 
-                                            <img src={exam?.cards?.[0]?.question?.image} alt="Graph" className="h-[360px] w-[756px] max-h-[756px] object-cover" />
-                                             : null
-                                            }
+
+                                            <ImageWithHide src={exam?.cards?.[0]?.question?.image} alt="Graph" className="w-full h-full  max-h-[756px]" />
                                         </div>
                                     </div>
                                 </div >
@@ -177,7 +177,7 @@ const Writing = ({ exam, examId }: { exam: Example, examId: string }) => {
                                         placeholder={exam?.cards?.[0]?.question?.hint}
                                         value={content}
                                         disabled={!isStart || !!response}
-                                        onChange={(event) => setContent(event.target.value)}
+                                        onChange={(event) => { setContent(event.target.value) }}
                                     />
                                 </div>
                             </div> : null

@@ -3,7 +3,7 @@ import Input from "../form/input/InputField"
 import Select from "../form/Select"
 import CustomModal from "../ui/custom-modal"
 import { useGetAllClass } from "@/api/admin/query";
-import { useGetAllAdminTopic } from "@/api/writing-test/query";
+import { useGetAllAdminTopic } from "@/api/exam/query";
 import { createExam, getQuestionByTopicId } from "@/api/admin/fetches";
 import ArrowSelect from '@/public/images/icons/arrow-select.svg';
 import { Dropdown } from "../ui/dropdown/Dropdown";
@@ -22,17 +22,18 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
     const [topic, setTopic] = useState('');
     const router = useRouter();
     const { data: classResp } = useGetAllClass();
-    const { data: topicResp } = useGetAllAdminTopic();
+    const { data: topicResp,isSuccess } = useGetAllAdminTopic();
     const [questions, setQuestions] = useState<any>([]);
     const [tempQuestions, setTempQuestions] = useState<any>([]);
     const [isSelectAll, setIsSelectAll] = useState(false);
     const [displayQuestionText, setDisplayQuestionText] = useState('');
     const [name, setName] = useState('');
     const [classroomId, setClassroomId] = useState('');
-  
+
     const [topics, setTopics] = useState<{ id: string, name: string }[]>([]);
     const [isSelectAllTopics, setIsSelectAllTopics] = useState(false);
     const [displayTopics, setDisplayTopics] = useState('');
+
     useEffect(() => {
         if (topicResp?.topics) {
             setTopics(topicResp.topics)
@@ -94,12 +95,11 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
             setDisplayQuestionText('');
         }
     }
-    console.log(displayQuestionText);
     const onCreateExam = async () => {
         try {
             const body = {
                 name,
-                "topicIds":  topics?.filter((item: any) => item.checked === true)?.map(item => item.id),
+                "topicIds": topics?.filter((item: any) => item.checked === true)?.map(item => item.id),
                 "classroomId": classroomId,
                 "cardIds": tempQuestions?.filter((item: any) => item.checked)?.map((item: any) => item.id)
             }
@@ -157,7 +157,6 @@ const AddExam = ({ isOpen, closeModal }: { isOpen: boolean, closeModal: () => vo
         const countActive = topics?.filter((item: any) => item.checked === true);
         if (countActive?.length) {
             setDisplayTopics(`${countActive.length} ${countActive.length > 1 ? 'topics' : 'topic'}` as string);
-            console.log(countActive.map(item => item.id));
             getQuestionByTopics(countActive.map(item => item.id))
         } else {
             setDisplayTopics('');

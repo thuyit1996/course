@@ -62,7 +62,7 @@ const Teachers = () => {
                         className="px-5 py-3 text-[#757575] text-xs font-semibold text-start"
                       >
                         <div className='flex'>
-                          <Checkbox onChange={console.log} checked={true} className="mr-2" />
+                          {/* <Checkbox onChange={console.log} checked={true} className="mr-2" /> */}
                           <span>Name</span>
                         </div>
                       </TableCell>
@@ -122,7 +122,7 @@ const Teachers = () => {
                       {data?.users.map((user) => (
                         <TableRow key={user.userId}>
                           <TableCell className="px-5 py-3 text-gray-500 flex text-start text-theme-sm dark:text-gray-400">
-                            <Checkbox onChange={console.log} checked={true} className="mr-2" />
+                            {/* <Checkbox onChange={console.log} checked={true} className="mr-2" /> */}
                             <span>{user.displayName}</span>
                           </TableCell>
                           <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -153,7 +153,7 @@ const Teachers = () => {
                           </TableCell>
                           <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                             {/* DATE OF BIRTH */}
-                            <>-</>
+                                                        {user.dob ?? '-'}
                           </TableCell>
                           <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                             {session?.data?.user?.roles?.includes(ROLES.ADMIN) && (

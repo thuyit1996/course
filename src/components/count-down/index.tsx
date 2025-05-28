@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef, forwardRef, Ref, useImperativeHandle } from 'react';
-import { InvokeTimmer } from '../writing';
-import { WritingFeedback } from '@/types/exam';
+import { InvokeTimmer, WritingFeedback } from '@/types/exam';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 interface CountdownTimerProps {
@@ -14,10 +13,12 @@ interface CountdownTimerProps {
   isReview?: boolean;
   examId?: string
   alertFinish?: () => void;
+  isHideTryAgain?: boolean;
+  baseHref: string;
 }
 
-const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
-  ({ submitExample, onCancel, onUpdateStatus, onStop, response, onRetake, isReview = false, examId, alertFinish }, ref: Ref<InvokeTimmer>) => {
+const CountdownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
+  ({ submitExample, onCancel, onUpdateStatus, onStop, response, onRetake, isReview = false, examId, alertFinish, isHideTryAgain, baseHref }, ref: Ref<InvokeTimmer>) => {
     const duration = 20 * 60; // 20 minutes
     const radius = 90;
     const strokeWidth = 15;
@@ -94,7 +95,7 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
     };
 
     const resetCountdown = () => {
-      clearInterval(intervalRef.current as unknown as number );
+      clearInterval(intervalRef.current as unknown as number);
       intervalRef.current = null;
       setIsRunning(false);
       setIsPaused(false);
@@ -120,13 +121,13 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
     };
 
     useEffect(() => {
-      if(timeLeft === 0) {
+      if (timeLeft === 0) {
         alertFinish?.();
       }
     }, [timeLeft])
 
     useEffect(() => {
-      if(isFinishTest) {
+      if (isFinishTest) {
         alertFinish?.();
       }
     }, [isFinishTest])
@@ -170,28 +171,28 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
         {
           (isFinishTest || isReview) ?
             <div className='flex flex-col'>
-              <button
+              {isHideTryAgain ? <></> : <button
                 className="mt-10 mr-4 w-full px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
                 onClick={() => {
-                  if(isReview) {
-                    router.push(`/writing-test/start/${examId}`)
-                  }else {
+                  if (isReview) {
+                    router.push(`${baseHref}/start/${examId}`)
+                  } else {
                     window.location.reload()
                   }
                 }}
-              >Try the Test Again</button>
-              <Link href={'/writing-test'}>
-<button
-                className="mt-4 px-4 py-2.5 w-full border border-indigo-100 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
-              >
-                Choose Another Test</button>
+              >Try the Test Again</button>}
+              <Link href={baseHref}>
+                <button
+                  className="mt-4 px-4 py-2.5 w-full border border-indigo-100 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
+                >
+                  Choose Another Test</button>
               </Link>
-              
+
             </div>
             : (isRunning || timeLeft === 0) ? <div>
               <button
                 className="mt-10 mr-4 px-4 py-2.5 border border-gray-100 bg-white text-[#2c2c2c] text-sm font-semibold rounded-lg transition"
-                onClick={() => router.push('/writing-test')}
+                onClick={() => router.push(baseHref)}
               >Cancel</button>
               <button
                 className="mt-10 px-4 py-2.5 border border-indigo-100 bg-indigo-50 text-indigo-600 text-sm font-semibold rounded-lg transition"
@@ -210,5 +211,5 @@ const CoundownTimer = forwardRef<InvokeTimmer, CountdownTimerProps>(
     );
   })
 
-export default CoundownTimer;
-CoundownTimer.displayName = 'CountDownTimer'
+export default CountdownTimer;
+CountdownTimer.displayName = 'CountDownTimer'

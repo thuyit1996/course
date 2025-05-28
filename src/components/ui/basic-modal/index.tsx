@@ -2,6 +2,7 @@ import { Modal } from "../modal"
 import Button from "../button/Button";
 import { ReactNode } from "react";
 import SpinnerIcon from '@/public/images/icons/spinner.svg';
+import { twMerge } from "tailwind-merge";
 interface ConfirmModalProps {
     isShowFooter?: boolean;
     buttonLabel?: [string, string],
@@ -11,14 +12,16 @@ interface ConfirmModalProps {
     handleSave?: () => void;
     title: string,
     children: ReactNode,
-    isLoading?: boolean
+    isLoading?: boolean,
+    isDisabledSubmit?: boolean;
+    rootClassName?: string
 }
-const BasicModal = ({ isOpen, closeModal, handleSave, isShowFooter = true, buttonLabel, showButton, title, children, isLoading = false }: ConfirmModalProps) => {
+const BasicModal = ({ isOpen, closeModal, handleSave, isShowFooter = true, buttonLabel, showButton, title, children, isLoading = false, isDisabledSubmit = false, rootClassName }: ConfirmModalProps) => {
     return (
         <Modal
             isOpen={isOpen}
             onClose={closeModal}
-            className="max-w-[600px] p-5 lg:p-8"
+            className={`${twMerge(`max-w-[600px] p-5 lg:p-8`, rootClassName)}`}
         >
             <h4 className="font-semibold text-[#2c2c2c] mb-3 text-[24px] leading-8">
                 {title}
@@ -27,10 +30,10 @@ const BasicModal = ({ isOpen, closeModal, handleSave, isShowFooter = true, butto
             {
                 isShowFooter ? <div className="mt-6 flex items-center">
                     <div className={`flex items-center justify-end w-full gap-3`}>
-                        <Button size="md" className={`${showButton?.[0] && 'hidden'}`} variant="outline" onClick={closeModal}>
+                        <Button size="md" className={`${showButton?.[0] && 'hidden'} `} variant="outline" onClick={closeModal}>
                             {buttonLabel?.[0] ?? 'Cancel'}
                         </Button>
-                        <Button size="md" className={`${showButton?.[1] && 'hidden'}`} variant="secondary" onClick={handleSave} startIcon={isLoading ? <SpinnerIcon /> : <></>}>
+                        <Button size="md" disabled={isDisabledSubmit} className={`${showButton?.[1] && 'hidden'} `} variant="secondary" onClick={handleSave} startIcon={isLoading ? <SpinnerIcon /> : <></>}>
                             {buttonLabel?.[1] ?? 'Save'}
                         </Button>
                     </div>

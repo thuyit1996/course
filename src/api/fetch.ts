@@ -70,6 +70,7 @@ export class API {
 
     private async fetchRequest<T>(options: FetchOptions<T>): Promise<Response> {
         const { body, ...restOptions } = options;
+        console.log('Where am I running?', typeof window === 'undefined' ? 'Server' : 'Client');
         console.log(this.buildURL(), this.token);
         const session = await (typeof window !== 'undefined'
             ? getSession()

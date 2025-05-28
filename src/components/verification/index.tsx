@@ -35,7 +35,6 @@ const Verification = () => {
             inputs.current[index - 1]?.focus();
         }
     };
-    console.log(searchParams.get('email'));
     const handleVerify = async (e: React.FormEvent) => {
         e.preventDefault();
         const code = otp.join('');

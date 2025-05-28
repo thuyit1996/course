@@ -23,10 +23,8 @@ const Sidebar: React.FC = () => {
             staffId: session.data?.user.userId
         }),
     });
-    console.log(data, "data");
     const params = useParams();
     const pathname = usePathname();
-    console.log(params);
     return (
         <aside className="hidden md:flex flex-col w-[276px] shadow rounded-3xl bg-white py-4 h-[calc(100vh-2rem)] fixed inset-4 z-30">
             <div className='pb-4 border-b border-gray-100  px-4.5'>

@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { QueryKeys } from "../queryKeys"
-import { getAllClass, getExams, getQuestions, getStaff, getTeachers, getTopics, getUserInClass } from "./fetches"
+import { getAllClass, getAttendanceDetail, getExams, getQuestions, getStaff, getTeachers, getTopics, getUserInClass } from "./fetches"
 
 export const useGetAllClass = (params = {}) => {
     return useQuery({
@@ -52,6 +52,14 @@ export const useGetStudent = (params: Record<string, string>) => {
     return useQuery({
         queryKey: [QueryKeys.getStudents, params],
         queryFn: () => getUserInClass(params),
+        placeholderData: keepPreviousData
+    })
+}
+
+export const useGetAttendanceDetail = (userId: string) => {
+    return useQuery({
+        queryKey: [QueryKeys.getAttendaceDetail, userId],
+        queryFn: () => getAttendanceDetail(userId),
         placeholderData: keepPreviousData
     })
 }

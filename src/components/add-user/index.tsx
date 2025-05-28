@@ -51,6 +51,8 @@ const UserRoleSchema = AdminRoleSchema.extend({
             message: 'Confirm password does not match',
         }),
 })
+const phonePattern = /^\d{10}$/;
+
 type FormFields = z.infer<typeof UserRoleSchema | typeof AdminRoleSchema>;
 const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, closeModal: (isSuccess?: boolean) => void, role: 'TEACHER' | 'STAFF' | 'USER', gradeId?: string }) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -70,13 +72,22 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
     const onCreateUser = async () => {
         try {
             startTransition(async () => {
+                // tODO: validate form later
+                if(!dob) {
+                    toast.error("Dob is required", {autoClose: 2000})
+                    return 
+                }
+                if(phone && !phonePattern.test(phone)) {
+                    toast.error("Phone is invalid");
+                    return;
+                }
                 const body = {
                     firstName,
                     lastName,
                     gender,
                     password: 'Abcd1234@',
                     classroomId,
-                    email,
+                    email: email ? email : 'default@gmail.com',
                     address,
                     phone,
                     dob: moment(dob).format('DD/MM/YYYY'),
@@ -143,6 +154,7 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                                 })) ?? []}
                                 placeholder="Choose class"
                                 defaultValue={classroomId}
+                                disabled={role === 'USER'}
                                 className="bg-gray-50 text-base"
                                 onChange={(value) => setClassroomId(value)}
                             />
@@ -161,7 +173,9 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                             />
                         </div>
                     </div>
-                    <div className="mt-6">
+                    {
+                        role !== 'USER' ? 
+<div className="mt-6">
                         <div>
                             <label className="mb-2 block text-base text-[#2c2c2c]">
                                 Email
@@ -172,7 +186,9 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                             />
                         </div>
 
-                    </div>
+                    </div> : null
+                    }
+                    
                     <div className="mt-6">
                         <div>
                             <label className="mb-2 block text-base text-[#2c2c2c]">

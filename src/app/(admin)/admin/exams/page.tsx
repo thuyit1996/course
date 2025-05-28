@@ -19,7 +19,6 @@ const ExamPage = async ({ searchParams }: { searchParams: Record<string, string>
         orderDirection: 'desc',
         ...searchParams,
     })
-    console.log("serever", queryParams);
     const queryClient = new QueryClient();
     await queryClient.prefetchQuery({
         queryKey: [QueryKeys.getExams, queryParams],

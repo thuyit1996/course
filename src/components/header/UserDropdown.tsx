@@ -11,9 +11,11 @@ import ChangePassword from '@/public/images/icons/change-password.svg';
 import Logout from '@/public/images/icons/logout.svg';
 import { alert } from "@/libs/alert";
 import { ACCESS_ADMIN_SITE_ROLES, ROLES } from "@/libs/constant";
+import ChangePasswordModal from "../change-password";
 
 export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenChangePassword, setIsOpenChangePassword] = useState(false);
   const session = useSession();
   const roles = session?.data?.user?.roles ?? [];
   function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -24,6 +26,14 @@ export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean })
   function closeDropdown() {
     setIsOpen(false);
   }
+  const onClickChangePass = () => {
+    closeDropdown();
+    setIsOpenChangePassword(true)
+  }
+  const onCloseModalChangePassword = () => {
+    setIsOpenChangePassword(false)
+  }
+
   const displayRole = roles?.includes(ROLES.ADMIN) ? 'Admin' : roles?.includes(ROLES.TEACHER) ? 'Teacher' : roles?.includes(ROLES.STAFF) ? 'Staff' : 'User'
   const showAlert = () => {
     setTimeout(() => {
@@ -101,20 +111,9 @@ export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean })
               </DropdownItem>
               : null
             }
-            <DropdownItem
-              onItemClick={closeDropdown}
-              tag="a"
-              href="/profile"
-              className="flex justify-between items-center gap-3 px-3 py-2 rounded-lg group text-sm hover:bg-gray-100 !text-[#2c2c2c]"
-            >
-              Change Avatar
-              <ChangeAvatar />
-            </DropdownItem>
 
             <DropdownItem
-              onItemClick={closeDropdown}
-              tag="a"
-              href="/profile"
+              onItemClick={onClickChangePass}
               className="flex justify-between items-center gap-3 px-3 py-2 rounded-lg group text-sm hover:bg-gray-100 !text-[#2c2c2c]"
             >
               Change Password
@@ -131,6 +130,7 @@ export default function UserDropdown({ isAdminSite }: { isAdminSite?: boolean })
           <Logout />
         </Link>
       </Dropdown>
+      <ChangePasswordModal onClose={onCloseModalChangePassword} isOpen={isOpenChangePassword} />
     </div>
   );
 }

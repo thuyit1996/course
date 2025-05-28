@@ -24,7 +24,14 @@ export const createExam = (body: {
     return api.addPathName(`${END_POINTS.CREATE_EXAM}`).post(body).then(res => res.json());
 }
 
-export const getUserInClass = (params: Record<string, string>): Promise<{ total: number, users: User[] }> => {
+export const createTopic = (body: {
+    name: string;
+}): Promise<ResponseData<Topic>> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.CREATE_TOPIC}`).post(body).then(res => res.json());
+}
+
+export const getUserInClass = (params: Record<string, string>): Promise<{ total: number, users: User[], staff?: User, teacher?: User }> => {
     const api = new API();
     return api.addPathName(`${END_POINTS.GET_USER_IN_CLASS}`).addQueryParams(params).get().then(res => res.json());
 }
@@ -60,9 +67,18 @@ export const createUser = (body: any) => {
     const api = new API();
     return api.addPathName(`${END_POINTS.REGISER_USER}`).post(body).then(res => res.json());
 }
+export const createAttendance = (body: any): Promise<ResponseData<boolean>> => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.ATTENDANCE}`).post(body).then(res => res.json());
+}
 
 
 export const verifyUser = (params: any): Promise<ResponseData<boolean>> => {
     const api = new API();
     return api.addPathName(`${END_POINTS.VERIFY_USER}`).addQueryParams(params).post().then(res => res.json());
 } 
+
+export const getAttendanceDetail = (userId: string) => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.ATTENDANCE_DETAIL}/${userId}`).get().then(res => res.json());
+}

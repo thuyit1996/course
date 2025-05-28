@@ -1,4 +1,4 @@
-import { getHistoryDetail, getWritingTest } from "@/api/writing-test/fetches";
+import { getHistoryDetail, getExamTest } from "@/api/exam/fetches";
 import { authOptions } from "@/libs/auth";
 import { getServerSession } from "next-auth";
 import CaretRight from '@/public/images/icons/CaretRight.svg';
@@ -7,7 +7,7 @@ import Writing from "@/components/writing-history";
 
 const ReviewWritingTest = async ({ params }: { params: { id: string } }) => {
     const session = await getServerSession(authOptions);
-    const testResp = await getWritingTest(params.id);
+    const testResp = await getExamTest(params.id);
     const historyDetail = await getHistoryDetail(params.id, session?.user?.userId ?? '');
 
     return (

@@ -8,4 +8,5 @@ export const QueryKeys = {
     getTeachers: 'GET_TEACHERS',
     getStaffs: 'GET_STAFF',
     getStudents: 'GET_STUDENT',
+    getAttendaceDetail: 'GET_ATTENDANCE_DETAIL'
 }

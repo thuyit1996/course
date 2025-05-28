@@ -1,5 +1,5 @@
 import { ResponseData } from "@/types/api";
-import { LoginResponse } from "@/types/auth";
+import { ChangePasswordResponse, LoginResponse } from "@/types/auth";
 import { API } from "../fetch";
 import { END_POINTS } from "../endpoint";
 
@@ -19,3 +19,14 @@ export const validateToken = async (): Promise<ResponseData<boolean>> => {
         .post()
         .then((res) => res.json());
 }
+
+export const changePassword = async (payload: {
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}): Promise<ResponseData<ChangePasswordResponse>> => {
+    const api = new API();
+    return api.addPathName(END_POINTS.CHANGE_PASSWORD)
+        .post(payload)
+        .then((res) => res.json());
+};

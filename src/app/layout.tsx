@@ -96,7 +96,7 @@ export default function RootLayout({
           zIndex={1600}
           showAtBottom={false}
         />
-        <ToastContainer position="top-center" />
+        <ToastContainer position="top-center" style={{zIndex: 99999}}/>
       </body>
     </html>
   );

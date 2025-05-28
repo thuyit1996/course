@@ -35,7 +35,6 @@ const SignInForm = ({ callbackUrl }: { callbackUrl: string }) => {
                     identifier: email,
                     password: password,
                 });
-                console.log(resp, 3232);
                 if (resp?.ok) {
                     const session = await getSession();
                     if (ACCESS_ADMIN_SITE_ROLES.some(role => session?.user?.roles?.includes(role))) {

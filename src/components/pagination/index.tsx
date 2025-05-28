@@ -4,7 +4,7 @@ const Pagination = ({ onChange, total, initPageIndex }: { onChange: (pageIndex: 
     const [pageIndex, setPageIndex] = useState(initPageIndex ?? 0);
     const pageSize = 10;
     return (
-        <div className="px-6 py-4 flex justify-center relative flex">
+        <div className="flex justify-center relative">
             {total > pageSize ?
                 <ReactPaginate
                     breakLabel="..."

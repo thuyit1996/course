@@ -12,20 +12,36 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { decodeQueryParams } from 'serialize-query-params';
 import { createQueryString, parseSearchParams, topicsPramConfig } from '@/libs/params';
 import { useGetTopics } from '@/api/admin/query';
+import { useModal } from '@/hooks/useModal';
+import AddTopic from '../add-topic';
+import { useEffect, useState } from 'react';
+import { Topic } from '@/types/admin';
 
 const Topics = () => {
     const router = useRouter();
+    const { isOpen, closeModal, openModal } = useModal();
+    const [listTopic, setListTopic] = useState<Topic[]>([])
     const searchParams = useSearchParams();
     const decodedParams = decodeQueryParams(
         topicsPramConfig,
         parseSearchParams(searchParams)
     );
+
     const { data } = useGetTopics({
         ...decodedParams,
         pageSize: parseInt(searchParams.get('pageSize') ?? '10'),
         pageIndex: parseInt(searchParams.get('pageIndex') ?? '0'),
         orderDirection: 'desc',
     } as any);
+
+    const onSuccess = (topic: Topic) => {
+        setListTopic(prev => [topic, ...prev]);
+    }
+
+    useEffect(() => {
+        setListTopic(data?.topics ?? []);
+    }, [data])
+
     return (
         <main className="md:ml-[288px]">
             <div className='shadow rounded-3xl bg-white  h-[calc(100vh-2rem)]'>
@@ -34,9 +50,9 @@ const Topics = () => {
                         <span className='text-semibold text-lg'>Topic list</span>
                         <div className='border rounded-2xl ml-3 border-gray-200 text-[#2c2c2c] text-sm text-center px-2 py-1 text-medium'>{data?.total} {data?.total as number > 1 ? 'topics' : 'topic'}</div>
                     </div>
-                    <Button variant='primary' onClick={console.log} startIcon={<PlusIcon className="fill-rose-600" />}>Create Topic</Button>
+                    <Button variant='primary' onClick={openModal} startIcon={<PlusIcon className="fill-rose-600" />}>Create Topic</Button>
                 </div>
-                <div className=''>
+                <div>
                     <div className="overflow-hidden border-t border-gray-100 bg-white ">
                         <div className="max-w-full overflow-x-auto max-h-[70vh] overflow-y-auto">
                             <div className="min-w-[1102px]">
@@ -77,8 +93,8 @@ const Topics = () => {
                                     {/* Table Body */}
                                     <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
 
-                                        {data?.topics?.length ? <>
-                                            {data?.topics.map((topic) => (
+                                        {listTopic?.length ? <>
+                                            {listTopic.map((topic) => (
                                                 <TableRow key={topic.id}>
                                                     <TableCell className="px-5 py-3 text-gray-500 flex text-start text-theme-sm dark:text-gray-400">
                                                         <Checkbox onChange={console.log} checked={true} className="mr-2" />
@@ -129,6 +145,9 @@ const Topics = () => {
             <Pagination onChange={(pageIndex: number) => {
                 router.push(`/admin/topics?${createQueryString(topicsPramConfig, { ...decodedParams, pageIndex })}`)
             }} total={data?.total ?? 0} initPageIndex={parseInt(searchParams.get('pageIndex') ?? '0')} />
+            {
+                isOpen && <AddTopic closeModal={closeModal} isOpen={isOpen} onSuccess={onSuccess} />
+            }
         </main>
     )
 }
