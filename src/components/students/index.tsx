@@ -424,7 +424,10 @@ const Students = ({ gradeId }: { gradeId: string }) => {
         content={modalMessage}
       />
       {
-        attendanceDetailModal.isOpen && <AttendanceDetail isOpen={attendanceDetailModal.isOpen} closeModal={attendanceDetailModal.closeModal} userId={selectUserId}/>
+        attendanceDetailModal.isOpen && <AttendanceDetail isOpen={attendanceDetailModal.isOpen} closeModal={() => {
+          attendanceDetailModal.closeModal();
+          router.refresh();
+        }} userId={selectUserId} />
       }
     </main>
   )

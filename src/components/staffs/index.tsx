@@ -145,7 +145,7 @@ const Staffs = () => {
                                                         <span>{user.displayName}</span>
                                                     </TableCell>
                                                     <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                        <span>{(user as any)?.classroom?.name}</span>
+                                                        <span>{(user as any)?.classrooms?.map((item : {name: string}) => item.name ?? '')?.join(', ')}</span>
                                                     </TableCell>
                                                     <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                         <span>-</span>

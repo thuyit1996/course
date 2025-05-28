@@ -119,8 +119,8 @@ export class API {
         return this.fetchRequest({ method: ApiMethod.PUT, body });
     }
 
-    async delete(): Promise<Response> {
-        return this.fetchRequest({ method: ApiMethod.DELETE });
+    async delete<T>(body?: T): Promise<Response> {
+        return this.fetchRequest({ method: ApiMethod.DELETE, body });
     }
 
     async patch<T>(body?: T): Promise<Response> {

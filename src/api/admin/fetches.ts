@@ -76,9 +76,14 @@ export const createAttendance = (body: any): Promise<ResponseData<boolean>> => {
 export const verifyUser = (params: any): Promise<ResponseData<boolean>> => {
     const api = new API();
     return api.addPathName(`${END_POINTS.VERIFY_USER}`).addQueryParams(params).post().then(res => res.json());
-} 
+}
 
 export const getAttendanceDetail = (userId: string) => {
     const api = new API();
     return api.addPathName(`${END_POINTS.ATTENDANCE_DETAIL}/${userId}`).get().then(res => res.json());
+}
+
+export const deleteAttendance = (body: { userId: string, month: number, year: number, date: string }) => {
+    const api = new API();
+    return api.addPathName(`${END_POINTS.ATTENDANCE}`).delete(body).then(res => res.json());
 }

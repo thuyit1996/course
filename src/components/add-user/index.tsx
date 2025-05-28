@@ -10,6 +10,7 @@ import { useGetAllClass } from "@/api/admin/query";
 import { createUser } from "@/api/admin/fetches";
 import { toast } from "react-toastify";
 import moment from "moment";
+import MultiSelect from "../form/MultiSelect";
 
 
 const AdminRoleSchema = z.object({
@@ -62,6 +63,7 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [classroomId, setClassroomId] = useState(gradeId);
+    const [classroomIds, setClassroomIds] = useState<string[]>([]);
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
@@ -73,11 +75,11 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
         try {
             startTransition(async () => {
                 // tODO: validate form later
-                if(!dob) {
-                    toast.error("Dob is required", {autoClose: 2000})
-                    return 
+                if (!dob) {
+                    toast.error("Dob is required", { autoClose: 2000 })
+                    return
                 }
-                if(phone && !phonePattern.test(phone)) {
+                if (phone && !phonePattern.test(phone)) {
                     toast.error("Phone is invalid");
                     return;
                 }
@@ -86,7 +88,11 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                     lastName,
                     gender,
                     password: 'Abcd1234@',
-                    classroomId,
+                    ...(role === 'USER' ? {
+                        classroomId,
+                    } : {
+                        classroomIds
+                    }),
                     email: email ? email : 'default@gmail.com',
                     address,
                     phone,
@@ -110,6 +116,13 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
             console.error(error);
         }
     }
+    // const multiOptions = [
+    //     { value: "1", text: "Option 1", selected: false },
+    //     { value: "2", text: "Option 2", selected: false },
+    //     { value: "3", text: "Option 3", selected: false },
+    //     { value: "4", text: "Option 4", selected: false },
+    //     { value: "5", text: "Option 5", selected: false },
+    // ];
 
     return (
         <BasicModal
@@ -140,6 +153,12 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                                 Enter last name
                             </label>
                             <Input placeholder={`Last name`} wrapperClass='w-full' value={lastName} onChange={(event) => setLastName(event.target.value)} />
+                            {/* <MultiSelect
+                                label="Multiple Select Options"
+                                options={multiOptions}
+                                defaultSelected={["1", "3"]}
+                                onChange={console.log}
+                            /> */}
                         </div>
                     </div>
                     <div className={`w-full grid grid-cols-1 md:grid-cols-2 mt-6 gap-3 lg:gap-6`}>
@@ -147,18 +166,30 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                             <label className="mb-2 block text-base text-[#2c2c2c]">
                                 Class
                             </label>
-                            <Select
-                                options={data?.responseData?.classroom?.map(item => ({
-                                    label: item.name,
-                                    value: item.id
-                                })) ?? []}
-                                placeholder="Choose class"
-                                defaultValue={classroomId}
-                                disabled={role === 'USER'}
-                                className="bg-gray-50 text-base"
-                                onChange={(value) => setClassroomId(value)}
-                            />
-                            {/* <span className="text-rose-600 text-xs">This filed is required</span> */}
+                            {role === 'USER' ?
+                                <>
+                                    <Select
+                                        options={data?.responseData?.classroom?.map(item => ({
+                                            label: item.name,
+                                            value: item.id
+                                        })) ?? []}
+                                        placeholder="Choose class"
+                                        defaultValue={classroomId}
+                                        disabled
+                                        className="bg-gray-50 text-base"
+                                        onChange={(value) => setClassroomId(value)}
+                                    />
+                                </>
+                                : <MultiSelect
+                                    options={data?.responseData?.classroom?.map(item => ({
+                                        text: item.name,
+                                        value: item.id,
+                                        selected: false,
+                                    })) ?? []}
+                                    defaultSelected={classroomIds}
+                                    onChange={setClassroomIds}
+                                />
+                            }
                         </div>
                         <div>
                             <label className="mb-2 block text-base text-[#2c2c2c]">
@@ -174,21 +205,21 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                         </div>
                     </div>
                     {
-                        role !== 'USER' ? 
-<div className="mt-6">
-                        <div>
-                            <label className="mb-2 block text-base text-[#2c2c2c]">
-                                Email
-                            </label>
-                            <Input placeholder="Enter email" wrapperClass='w-full'
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                            />
-                        </div>
+                        role !== 'USER' ?
+                            <div className="mt-6">
+                                <div>
+                                    <label className="mb-2 block text-base text-[#2c2c2c]">
+                                        Email
+                                    </label>
+                                    <Input placeholder="Enter email" wrapperClass='w-full'
+                                        value={email}
+                                        onChange={(event) => setEmail(event.target.value)}
+                                    />
+                                </div>
 
-                    </div> : null
+                            </div> : null
                     }
-                    
+
                     <div className="mt-6">
                         <div>
                             <label className="mb-2 block text-base text-[#2c2c2c]">
@@ -217,65 +248,6 @@ const AddUser = ({ isOpen, closeModal, role, gradeId }: { isOpen: boolean, close
                         </div>
 
                     </div>
-                    {/* {role === 'USER' ?
-                        <>
-                            <div className="mt-6">
-                                <div>
-                                    <label className="mb-1 block text-base text-[#2c2c2c]">
-                                        Password
-                                    </label>
-                                    <p className="text-[#757575] mb-2 text-sm">Minimum 8 Characters. Must contain 1 uppercase letter and 1 number.</p>
-                                    <div className="relative">
-                                        <Input
-                                            type={showPassword ? "text" : "password"}
-                                            value={password}
-                                            placeholder="Enter your password"
-                                            className="w-full border border-gray-200 rounded-md "
-                                            onChange={(event) => setPassword(event.target.value)}
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                                        >
-                                            {showPassword ? (
-                                                <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                                            ) : (
-                                                <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-                                            )}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="mt-6">
-                                <div>
-                                    <label className="mb-2 block text-base text-[#2c2c2c]">
-                                        Confirm Password
-                                    </label>
-                                    <div className="relative">
-                                        <Input
-                                            type={showConfirmPassword ? "text" : "password"}
-                                            value={confirmPassword}
-                                            placeholder="Enter your confirm password"
-                                            className="w-full border border-gray-200 rounded-md "
-                                            onChange={(event) => setConfirmPassword(event.target.value)}
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                            className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                                        >
-                                            {showConfirmPassword ? (
-                                                <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                                            ) : (
-                                                <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-                                            )}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </> : null
-                    } */}
                 </div>
             </form>
         </BasicModal>

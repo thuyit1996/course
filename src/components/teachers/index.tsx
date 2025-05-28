@@ -36,6 +36,7 @@ const Teachers = () => {
     orderDirection: 'desc',
     roles: 'ROLE_TEACHER'
   } as any);
+  console.log(data);
   const { openModal, isOpen, closeModal } = useModal();
   return (
     <main className="md:ml-[288px]">
@@ -126,7 +127,7 @@ const Teachers = () => {
                             <span>{user.displayName}</span>
                           </TableCell>
                           <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                            <span>{(user as any)?.classroom?.name}</span>
+                            <span>{(user as any)?.classrooms?.map((item: {name: string}) => item.name ?? '')?.join(', ')}</span>
                           </TableCell>
                           <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                             {(user as any)?.gender === 'Male' ? <div className='gap-1 bg-success-50 border border-[#ABEFC6] text-[#079455] text-xs font-medium flex rounded-2xl justify-center items-center px-1.5 py-0.5'>
